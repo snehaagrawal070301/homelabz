@@ -1,25 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// ignore: camel_case_types
-class login extends StatefulWidget {
+class Login extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return loginState();
+    return LoginState();
   }
+
 }
 
-// ignore: camel_case_types
-class loginState extends State<login> {
+class LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
   TextEditingController mobileNo = TextEditingController();
   TextEditingController otp = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isChecked =false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -153,7 +151,25 @@ class loginState extends State<login> {
                     SizedBox(
                       width: 25,
                     ),
-                    Expanded(
+                    if(isChecked==false)
+                      Expanded(
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(30.0)),
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
+                            child: Text(
+                              "SIGN IN",
+                              textAlign: TextAlign.center,
+                              
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                      ),
+                    if(isChecked==true)
+                      Expanded(
                       child: GestureDetector(
                         onTap: () {
                         },
@@ -255,4 +271,5 @@ class loginState extends State<login> {
       ),
     );
   }
+  
 }
