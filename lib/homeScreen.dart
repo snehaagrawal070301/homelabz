@@ -1,6 +1,7 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -10,27 +11,34 @@ class HomeScreen extends StatefulWidget{
 
 }
 
-class HomeScreenState extends State<HomeScreen>{
+class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff21C8BE),
       body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height,
-            maxWidth: MediaQuery.of(context).size.width,
+        child:Stack(
+          children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 160, 0, 0),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    color: Color(0xffFFFFFF),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50.0),
+                        topRight: Radius.circular(50.0))),
           ),
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.cyan[500],Colors.cyan[600]],begin: Alignment.topLeft,end: Alignment.topRight)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child:Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40.0),
+          Positioned(
+            left: 5,
+            top: 5,
+            width: MediaQuery.of(context).size.width,
+            height: 100,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
               child:Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,11 +61,27 @@ class HomeScreenState extends State<HomeScreen>{
                 child:Image(image: AssetImage('assets/profile.png'),height: 44,width: 44,),),
                  ),
                 ],)
-                ,),
-                ),
-              Expanded(
-                flex:7,
-                child:Container(
+              
+            ),
+          ),
+          Positioned(
+            left: 30,
+            top:89,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 56),
+              height: 157,
+              width: 339,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xffFFFFFF),
+                borderRadius: BorderRadius.circular(10),
+                
+              ),
+              child: Image.asset('assets/homeScreenLogo.png'),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top:325,left: 25),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -65,11 +89,9 @@ class HomeScreenState extends State<HomeScreen>{
                       topLeft: Radius.circular(70)),
                     color: Colors.white,
                   ),
-                  child:Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+
                   child: 
                       Column(children: [
-                        SizedBox(height: 100,),
                         Row(
                           children: [
                             Expanded(
@@ -260,25 +282,29 @@ class HomeScreenState extends State<HomeScreen>{
                         ),
                     
                       ])      
-                ),
+                
         ),
-        ),
-            ],),
-        ),),
+          ]
+          ) 
+        ,),
         bottomNavigationBar: ConvexAppBar(
           items:[
         TabItem(icon: Icons.home,title: "Home"),]
         ),
     );
   }
-
-_bottomSheet(context){
+  _bottomSheet(context){
   showModalBottomSheet(context: context, builder: (BuildContext c){
     return Container(
+      decoration: BoxDecoration(
+          color: Color(0xffFFFFFF), 
+            borderRadius: BorderRadius.only(topLeft:Radius.circular(10),
+            topRight:Radius.circular(10)
+            )),
       height: 228,
       width: 375,
       child: SingleChildScrollView(
-        child:Column(
+          child:Column(
           children: [
             Container(
               alignment: Alignment.topLeft,
