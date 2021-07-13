@@ -36,16 +36,22 @@ class HomeScreenState extends State<HomeScreen>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
                  
-                Expanded(flex:2,child: Image(image: AssetImage('assets/Menu.png'),height: 20,)),
+                Expanded(flex:2,child: Image(image: AssetImage('assets/Menu.png'),height: 15.7,width: 26,)),
                 Expanded(
                   flex: 10,
                    child: Text("Welcome to HomeLabz!",
                    textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white,
-                      fontSize: 20.0,),),
+                      fontSize: 18.0,),),
                  ),
-                 Expanded(flex:2,child:Image(image: AssetImage('assets/profile.png'),),),
-                 
+                Expanded(flex:2,
+                child:
+                GestureDetector(
+                  onTap: (){
+                    _bottomSheet(context);
+                  },
+                child:Image(image: AssetImage('assets/profile.png'),height: 44,width: 44,),),
+                 ),
                 ],)
                 ,),
                 ),
@@ -74,8 +80,8 @@ class HomeScreenState extends State<HomeScreen>{
                                     onTap: () {
                                     },
                                     child: Container(
-                                      height: 140,
-                                      width: 170,
+                                      height: 128,
+                                      width: 150,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20.0),
                                         color: Colors.cyan,
@@ -119,8 +125,8 @@ class HomeScreenState extends State<HomeScreen>{
                                   onTap: () {
                                   },
                                   child: Container(
-                                    height: 140,
-                                    width: 170,
+                                    height: 128,
+                                      width: 150,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.0),
                                       color: Colors.cyan,
@@ -167,8 +173,8 @@ class HomeScreenState extends State<HomeScreen>{
                                     onTap: () {
                                     },
                                     child: Container(
-                                      height: 140,
-                                      width: 170,
+                                      height: 128,
+                                      width: 150,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20.0),
                                         color: Colors.cyan,
@@ -213,8 +219,8 @@ class HomeScreenState extends State<HomeScreen>{
                                 
                                     },
                                     child: Container(
-                                      height: 140,
-                                      width: 170,
+                                      height: 128,
+                                      width: 150,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20.0),
                                         color: Colors.cyan,
@@ -265,4 +271,57 @@ class HomeScreenState extends State<HomeScreen>{
         ),
     );
   }
+
+_bottomSheet(context){
+  showModalBottomSheet(context: context, builder: (BuildContext c){
+    return Container(
+      height: 228,
+      width: 375,
+      child: SingleChildScrollView(
+        child:Column(
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(top:20,left: 17,bottom: 15),
+              child: Text("Login or Register",style: TextStyle(fontSize: 12,color: Color(0xff000000)),),
+            ),
+            Divider(
+              height: 2,color: Color(0xff000000),),
+            Container(
+              margin: EdgeInsets.only(top: 24),
+              padding: EdgeInsets.symmetric(horizontal: 27),
+              height: 33,
+              width: 321,
+              decoration: BoxDecoration(
+                color: Color(0xff21C8BE),
+                borderRadius: BorderRadius.circular(10.0)),
+                child: Center(child: Text("Continue with Phone",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)),
+              ),
+              SizedBox(height: 15,),
+              Container(
+              padding: EdgeInsets.symmetric(horizontal: 27),
+              height: 33,
+              width: 321,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xff000000)),
+                borderRadius: BorderRadius.circular(10.0)),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 52),
+                      child:Image(image: AssetImage("assets/googleIcon.png"),height: 14,width: 14,),),
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text("Continue with Google",style: TextStyle(color: Color(0xff000000),fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)), 
+                  ],
+                ),
+              ),
+              SizedBox(height: 29,),
+              Text("Cancel",style:TextStyle(fontSize: 14,color: Color(0xff707070)) ,textAlign: TextAlign.center,)
+          ],
+        ) ,),
+    );
+  }
+  );
+}
 }
