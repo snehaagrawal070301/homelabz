@@ -51,6 +51,8 @@ class HomeScreenState extends State<HomeScreen> {
                    child: Text("Welcome to HomeLabz!",
                    textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white,
+                      fontFamily: "Regular",
+                      fontWeight: FontWeight.bold,
                       fontSize: 18.0,),),
                  ),
                 Expanded(flex:2,
@@ -127,6 +129,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                 "Make an\nAppointment ",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
+                                                  fontFamily: "Regular",
                                                     color: Colors.white,
                                                     fontSize: 14.0,
                                                     ),
@@ -172,6 +175,7 @@ class HomeScreenState extends State<HomeScreen> {
                                               "Call for\nAppointment",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
+                                                fontFamily: "Regular",
                                                   color: Colors.white,
                                                   fontSize: 14.0,
                                                   ),
@@ -220,6 +224,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                 "Vault",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
+                                                  fontFamily: "Regular",
                                                     color: Colors.white,
                                                     fontSize: 14.0,
                                                     ),
@@ -266,6 +271,7 @@ class HomeScreenState extends State<HomeScreen> {
                                                 "History",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
+                                                  fontFamily: "Regular",
                                                     color: Colors.white,
                                                     fontSize: 14.0,
                                                     ),
@@ -310,7 +316,7 @@ class HomeScreenState extends State<HomeScreen> {
             Container(
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.only(top:20,left: 17,bottom: 15),
-              child: Text("Login or Register",style: TextStyle(fontSize: 12,color: Color(0xff000000)),),
+              child: Text("Login or Register",style: TextStyle(fontSize: 12,color: Color(0xff000000),fontFamily: "Regular",),),
             ),
             Divider(
               height: 2,color: Color(0xff000000),),
@@ -322,7 +328,8 @@ class HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Color(0xff21C8BE),
                 borderRadius: BorderRadius.circular(10.0)),
-                child: Center(child: Text("Continue with Phone",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)),
+                child: Center(child: Text("Continue with Phone",style: TextStyle(color: Color(0xffFFFFFF),
+                fontFamily: "Regular",fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)),
               ),
               Container(
                 margin: EdgeInsets.only(top:23),
@@ -339,13 +346,14 @@ class HomeScreenState extends State<HomeScreen> {
                       child:Image(image: AssetImage("assets/googleIcon.png"),height: 14,width: 14,),),
                     Container(
                       padding: EdgeInsets.only(left: 10),
-                      child: Text("Continue with Google",style: TextStyle(color: Color(0xff000000),fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)), 
+                      child: Text("Continue with Google",style: TextStyle(color: Color(0xff000000),
+                      fontFamily: "Regular",fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,)), 
                   ],
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(top:29),
-                child: Text("Cancel",style:TextStyle(fontSize: 14,color: Color(0xff707070)) ,textAlign: TextAlign.center,))
+                child: Text("Cancel",style:TextStyle(fontSize: 14,color: Color(0xff707070),fontFamily: "Regular",) ,textAlign: TextAlign.center,))
           ],
         ) ,),
     );
@@ -366,7 +374,7 @@ _bottomSheet1(context){
           children: [
             Container(
               margin: EdgeInsets.only(top: 38),
-              child: Text("Register",style: TextStyle(fontSize: 20,color: Color(0xff21C8BE)),),
+              child: Text("Register",style: TextStyle(fontSize: 20,color: Color(0xff21C8BE),fontFamily: "Regular",),),
             ),
             Container(
               margin: EdgeInsets.only(top: 50),
@@ -374,11 +382,11 @@ _bottomSheet1(context){
             ),
             Container(
               margin: EdgeInsets.only(top: 17.1),
-              child: Text("Enter Your Mobile Number",style: TextStyle(fontSize: 14,color: Color(0xff000000)),),
+              child: Text("Enter Your Mobile Number",style: TextStyle(fontSize: 14,color: Color(0xff000000),fontFamily: "Black",),),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
-              child: Center(child: Text("We will send you one time\npassword(OTP)",style: TextStyle(fontSize: 14,color: Color(0xff707070)),textAlign: TextAlign.center,)),
+              child: Center(child: Text("We will send you one time\npassword(OTP)",style: TextStyle(fontSize: 14,color: Color(0xff707070),fontFamily: "Regular",),textAlign: TextAlign.center,)),
             ),
             Container(
               margin: EdgeInsets.only(left: 111,right: 111,),
@@ -391,7 +399,8 @@ _bottomSheet1(context){
                             hintText: "Enter Mobile Number",
                             hintStyle: TextStyle(
                                 color: Color(0xffBDBDBD),
-                                fontSize: 12.0,),
+                                fontSize: 12.0,
+                                fontFamily: "Regular",),
                                 
                                 ),
                 
@@ -405,7 +414,7 @@ _bottomSheet1(context){
                 color: Color(0xff21C8BE),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Center(child: Text("SEND",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14),)),
+              child: Center(child: Text("SEND",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontFamily: "Bold",),)),
             )
           ],
         ) ,
@@ -430,7 +439,7 @@ _bottomSheet2(context){
             Container(
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.only(top:20,left: 17,bottom: 15),
-              child: Text("Login or Register",style: TextStyle(fontSize: 12,color: Color(0xff000000)),),
+              child: Text("Login or Register",style: TextStyle(fontSize: 12,color: Color(0xff000000),fontFamily: "Regular",),),
             ),
             Divider(
               height: 2,color: Color(0xff000000),),
@@ -443,7 +452,7 @@ _bottomSheet2(context){
                  border: Border.all(color: Color(0xff000000)),
                 color: Color(0xffF9F8F8),
                 borderRadius: BorderRadius.circular(10.0)),
-                child: Text("Full Name",style: TextStyle(color: Color(0xff707070),fontSize: 12,fontWeight: FontWeight.bold,),textAlign:TextAlign.left ,),
+                child: Text("Full Name",style: TextStyle(color: Color(0xff707070),fontSize: 12,fontFamily: "Regular",),textAlign:TextAlign.left ,),
               ),
               Container(
                 margin: EdgeInsets.only(top: 22),
@@ -453,7 +462,7 @@ _bottomSheet2(context){
               decoration: BoxDecoration(
                 color: Color(0xff21C8BE),
                 borderRadius: BorderRadius.circular(10.0)),
-                      child: Center(child: Text("Continue",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,))
+                      child: Center(child: Text("Continue",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontFamily: "Regular",fontWeight: FontWeight.bold,),textAlign:TextAlign.center ,))
                   
               ),
               Container(
@@ -481,15 +490,15 @@ _bottomSheet3(context){
               children: [
                 Container(
                   margin: EdgeInsets.only(top: 32),
-                  child: Text("Verify Account",style: TextStyle(fontSize: 20,color: Color(0xff21C8BE)),),
+                  child: Text("Verify Account",style: TextStyle(fontSize: 20,fontFamily: "Regular",color: Color(0xff21C8BE)),),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 33),
-                  child: Text("Mobile Verification has\nsuccessfully done",style: TextStyle(fontSize: 13,color: Color(0xff000000)),textAlign: TextAlign.center,),
+                  child: Text("Mobile Verification has\nsuccessfully done",style: TextStyle(fontSize: 13,color: Color(0xff000000),fontFamily: "Black",),textAlign: TextAlign.center,),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
-                  child: Center(child: Text("To complete your registration, we have sent\nan OTP to 9988776655 to verify",style: TextStyle(fontSize: 12,color: Color(0xff707070)),textAlign: TextAlign.center,)),
+                  child: Center(child: Text("To complete your registration, we have sent\nan OTP to 9988776655 to verify",style: TextStyle(fontSize: 12,fontFamily: "Regular",color: Color(0xff707070)),textAlign: TextAlign.center,)),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 30,left: 117,right: 120),
@@ -508,8 +517,8 @@ _bottomSheet3(context){
                   width: 186,
                   child: Row(
                     children: [
-                      Text("If you didn’t recieve your code ?",style: TextStyle(fontSize: 10,color: Color(0xff707070)),textAlign: TextAlign.center,),
-                      Text("Resend",style: TextStyle(fontSize: 10,color: Color(0xff21C8BE)),textAlign: TextAlign.center)
+                      Text("If you didn’t recieve your code ?",style: TextStyle(fontSize: 10,fontFamily: "Regular",color: Color(0xff707070)),textAlign: TextAlign.center,),
+                      Text("Resend",style: TextStyle(fontSize: 10,fontFamily: "Regular",color: Color(0xff21C8BE)),textAlign: TextAlign.center)
                     ],
                   ),
                   
@@ -522,7 +531,7 @@ _bottomSheet3(context){
                     color: Color(0xff21C8BE),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Center(child: Text("VERIFY",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14),)),
+                  child: Center(child: Text("VERIFY",style: TextStyle(color: Color(0xffFFFFFF),fontFamily: "Regular",fontSize: 14),)),
                 )
               ],
         ),
