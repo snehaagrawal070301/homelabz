@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+//import 'package:homelabz/MakeAnAppointmentScreen.dart';
 import 'package:homelabz/homeScreen.dart';
+//import 'package:homelabz/homeScreen.dart';
 //import 'package:homelabz/login1.dart';
 
 
@@ -16,7 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        canvasColor: Colors.transparent
       ),
+      
       home:HomeScreen(),
     );
   }

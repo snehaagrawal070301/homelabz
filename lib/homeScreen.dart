@@ -45,7 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
                  
-                Expanded(flex:2,child: Image(image: AssetImage('assets/Menu.png'),height: 15.7,width: 26,)),
+                Expanded(flex:2,child: Image(image: AssetImage('assets/images/Menu.png'),height: 15.7,width: 26,)),
                 Expanded(
                   flex: 10,
                    child: Text("Welcome to HomeLabz!",
@@ -61,7 +61,7 @@ class HomeScreenState extends State<HomeScreen> {
                   onTap: (){
                     _bottomSheet3(context);
                   },
-                child:Image(image: AssetImage('assets/profile.png'),height: 44,width: 44,),),
+                child:Image(image: AssetImage('assets/images/profile.png'),height: 44,width: 44,),),
                  ),
                 ],)
               
@@ -78,9 +78,15 @@ class HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Color(0xffFFFFFF),
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 7.0,
+                  spreadRadius: 0.0,
+                )]
                 
               ),
-              child: Image.asset('assets/homeScreenLogo.png'),
+              child: Image.asset('assets/images/homeScreenLogo.png'),
             ),
           ),
           Container(
@@ -118,7 +124,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                             MainAxisAlignment.center,
                                             children: [
-                                              Image(image: AssetImage('assets/Appointment.png'),height: 40,)
+                                              Image(image: AssetImage('assets/images/Appointment.png'),height: 40,)
                                             ],
                                           ),
                                           Row(
@@ -164,7 +170,7 @@ class HomeScreenState extends State<HomeScreen> {
                                           mainAxisAlignment:
                                           MainAxisAlignment.center,
                                           children: [
-                                            Image(image: AssetImage('assets/call.png'),height: 40,)
+                                            Image(image: AssetImage('assets/images/call.png'),height: 40,)
                                           ],
                                         ),
                                         Row(
@@ -213,7 +219,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                             MainAxisAlignment.center,
                                             children: [
-                                              Image(image: AssetImage('assets/vault.png'),height: 50,)
+                                              Image(image: AssetImage('assets/images/vault.png'),height: 50,)
                                             ],
                                           ),
                                           Row(
@@ -260,7 +266,7 @@ class HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                             MainAxisAlignment.center,
                                             children: [
-                                              Image(image: AssetImage('assets/history.png'),height: 40,)
+                                              Image(image: AssetImage('assets/images/history.png'),height: 40,)
                                             ],
                                           ),
                                           Row(
@@ -343,7 +349,7 @@ class HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: EdgeInsets.only(left: 52),
-                      child:Image(image: AssetImage("assets/googleIcon.png"),height: 14,width: 14,),),
+                      child:Image(image: AssetImage("assets/images/googleIcon.png"),height: 14,width: 14,),),
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Text("Continue with Google",style: TextStyle(color: Color(0xff000000),
@@ -378,7 +384,7 @@ _bottomSheet1(context){
             ),
             Container(
               margin: EdgeInsets.only(top: 50),
-              child: Image(image: AssetImage("assets/RegisterIcon.png"),height: 66,width: 66,),
+              child: Image(image: AssetImage("assets/images/RegisterIcon.png"),height: 66,width: 66,),
             ),
             Container(
               margin: EdgeInsets.only(top: 17.1),
