@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:homelabz/MakeAnAppointmentScreen.dart';
-import 'package:homelabz/appointmentScreen.dart';
-//import 'package:homelabz/MakeAnAppointmentScreen.dart';
-import 'package:homelabz/bookingScreen.dart';
 import 'package:homelabz/homeScreen.dart';
-import 'package:homelabz/paymentScreen.dart';
-//import 'package:homelabz/bookingSuccess.dart';
-//import 'package:homelabz/homeScreen.dart';
-//import 'package:homelabz/homeScreen.dart';
-//import 'package:homelabz/login1.dart';
 
 
 void main() {
