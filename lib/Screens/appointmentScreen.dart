@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/paymentScreen.dart';
+import 'package:homelabz/Screens/paymentScreen.dart';
+import 'package:homelabz/components/colorValues.dart';
 
 class AppointmentScreen extends StatefulWidget{
   @override
@@ -18,20 +19,20 @@ class AppointmentScreenState extends State<AppointmentScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFFFFF),
+      backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
-        backgroundColor: Color(0xffFFFFFF),
+        backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading: IconButton(
             icon: Icon(
             Icons.arrow_back,
-            color: Color(0xff21C8BE),
+            color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
             Navigator.pop(context);
           },
     ),
         title: Text("Appointment",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-        color: Color(0xff21C8BE)),),
+        color: Color(ColorValues.THEME_COLOR)),),
       ),
       body:
       SingleChildScrollView(
@@ -39,10 +40,10 @@ class AppointmentScreenState extends State<AppointmentScreen>{
         Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 500),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*68),
               width: MediaQuery.of(context).size.width,
-              height: 162,
-              color: Color(0xff21C8BE),   
+              height: MediaQuery.of(context).size.height*0.21,
+              color: Color(ColorValues.THEME_COLOR),   
           ),
           Positioned(
               left: 17,
@@ -50,11 +51,11 @@ class AppointmentScreenState extends State<AppointmentScreen>{
               top:98,
               bottom: 40,
               child: Container(
-                height: 645,
+                height: MediaQuery.of(context).size.height*0.58,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -68,21 +69,21 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       margin: EdgeInsets.only(top: 31,right: 20,left: 20),
                       padding: EdgeInsets.only(left: 18),
                       height: 38,
-                      width: 301,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                      color: Color(0xffF9F8F8),
-                      border: Border.all(color: Color(0xff000000),width: 1),
+                      color: Color(ColorValues.LIGHT_GRAY),
+                      border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                       borderRadius: BorderRadius.circular(10),
                         ),
                       child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: type,
                         iconSize: 24,
-                        dropdownColor: Color(0xffFFFFFF),
-                        iconEnabledColor: Color(0xff000000),
-                        focusColor: Color(0xffFFFFFF),
+                        dropdownColor: Color(ColorValues.WHITE_COLOR),
+                        iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                        focusColor: Color(ColorValues.WHITE_COLOR),
                         elevation: 16,
-                        style: TextStyle(color: Color(0xff707070),fontSize: 12,fontFamily: "Regular"),
+                        style: TextStyle(color: Color(ColorValues.BLACK_TEXT_COL),fontSize: 12,fontFamily: "Regular"),
                         onChanged: (String newValue) {
                           setState(() {
                             type = newValue;
@@ -101,10 +102,10 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       margin: EdgeInsets.only(top: 24,right: 20,left: 20),
                       padding: EdgeInsets.only(left: 18),
                       height: 38,
-                      width: 301,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                      color: Color(0xffF9F8F8),
-                      border: Border.all(color: Color(0xff000000),width: 1),
+                      color: Color(ColorValues.LIGHT_GRAY),
+                      border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                       borderRadius: BorderRadius.circular(10),
                         ),
                       child: TextFormField(
@@ -116,7 +117,7 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                             border: OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: "Address",
                             hintStyle: TextStyle(
-                                color: Color(0xff707070),
+                                color: Color(ColorValues.BLACK_TEXT_COL),
                                 fontSize: 12.0,
                                 fontFamily: "Regular")),
                       ),
@@ -125,10 +126,10 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       margin: EdgeInsets.only(top: 24,right: 20,left: 20),
                       padding: EdgeInsets.only(left: 18),
                       height: 38,
-                      width: 301,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                      color: Color(0xffF9F8F8),
-                      border: Border.all(color: Color(0xff000000),width: 1),
+                      color: Color(ColorValues.LIGHT_GRAY),
+                      border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                       borderRadius: BorderRadius.circular(10),
                         ),
                       child: TextFormField(
@@ -143,17 +144,18 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                           enabledBorder: InputBorder.none,
                             hintText: "Date of Birth",
                             hintStyle: TextStyle(
-                                color: Color(0xff707070),
+                                color: Color(ColorValues.BLACK_TEXT_COL),
                                 fontSize: 12.0,
                                 fontFamily: "Regular")),
                       ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 14,left: 20,right: 20),
-                        child: Text("Gender",style: TextStyle(fontFamily: "Black",fontSize: 12,color: Color(0xff000000)),),
+                        child: Text("Gender",style: TextStyle(fontFamily: "Black",fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
                       ),
                       Container(
                         height: 36,
+                        width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(top: 11,left: 20,right: 20),
                           child: Row(
                             children: [
@@ -165,12 +167,12 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xff21C8BE),
+                                      color: Color(ColorValues.THEME_COLOR),
                                        borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(10),
                                         topLeft: Radius.circular(10)),
                                     ),
-                                    child: Center(child: Text("Male",style: TextStyle(fontFamily: "Regular",fontSize: 12,color: Color(0xffFFFFFF),fontWeight: FontWeight.bold),textAlign: TextAlign.center,)),
+                                    child: Center(child: Text("Male",style: TextStyle(fontFamily: "Regular",fontSize: 12,color: Color(ColorValues.WHITE_COLOR),fontWeight: FontWeight.bold),textAlign: TextAlign.center,)),
                                   ),
                                 )
                                 ),
@@ -182,13 +184,13 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xffF9F8F8),
+                                      color: Color(ColorValues.LIGHT_GRAY),
                                        borderRadius: BorderRadius.only(
                                         bottomRight: Radius.circular(10),
                                         topRight: Radius.circular(10)),
-                                      border: Border.all(color: Color(0xff000000),width: 1),
+                                      border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                                     ),
-                                    child: Center(child: Text("Female",style: TextStyle(fontFamily: "Regular",fontSize: 12,color: Color(0xff21C8BE),fontWeight: FontWeight.bold),textAlign: TextAlign.center,)),
+                                    child: Center(child: Text("Female",style: TextStyle(fontFamily: "Regular",fontSize: 12,color: Color(ColorValues.THEME_COLOR),fontWeight: FontWeight.bold),textAlign: TextAlign.center,)),
                                   ),
                                 )
                                 ),
@@ -199,10 +201,10 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       margin: EdgeInsets.only(top: 18,right: 20,left: 20),
                       padding: EdgeInsets.only(left: 18),
                       height: 74,
-                      width: 301,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                      color: Color(0xffF9F8F8),
-                      border: Border.all(color: Color(0xff000000),width: 1),
+                      color: Color(ColorValues.LIGHT_GRAY),
+                      border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                       borderRadius: BorderRadius.circular(10),
                         ),
                       child: Column(
@@ -221,7 +223,7 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                             ),
                           ),
                           Container(
-                          child: Text("Upload your prescription",style: TextStyle(fontFamily: "Regular",fontWeight: FontWeight.bold,fontSize: 12,color: Color(0xff707070)),textAlign:TextAlign.center,),
+                          child: Text("Upload your prescription",style: TextStyle(fontFamily: "Regular",fontWeight: FontWeight.bold,fontSize: 12,color: Color(ColorValues.BLACK_TEXT_COL)),textAlign:TextAlign.center,),
                       ),
                         ],
                       ),
@@ -237,14 +239,14 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                     child: Container(
                       margin: EdgeInsets.only(top:20,left: 20,right: 20),
                     height: 38,
-                    width: 301,
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Color(0xff21C8BE),
+                      color: Color(ColorValues.THEME_COLOR),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Center(
                       child: Text("CONTINUE",style: TextStyle(fontFamily: "Regular",fontSize: 15,
-                      color: Color(0xffFFFFFF)),textAlign: TextAlign.center,),),
+                      color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),),
                 ),
                     ),
                   SizedBox(
@@ -255,7 +257,7 @@ class AppointmentScreenState extends State<AppointmentScreen>{
             ),
             Positioned(
               top: 15,
-              right: 15,left: 257,
+              right: 15,left: MediaQuery.of(context).size.width*0.73,
               child: Image(
                 height: 57,
                 width: 103,

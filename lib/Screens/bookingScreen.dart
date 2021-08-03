@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/appointmentScreen.dart';
+import 'package:homelabz/Screens/appointmentScreen.dart';
+import 'package:homelabz/components/colorValues.dart';
 
 class BookingScreen extends StatefulWidget{
   @override
@@ -14,20 +15,20 @@ class BookingScreenState extends State<BookingScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFFFFF),
+      backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
-        backgroundColor: Color(0xffFFFFFF),
+        backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading: IconButton(
             icon: Icon(
             Icons.arrow_back,
-            color: Color(0xff21C8BE),
+            color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
             Navigator.pop(context);
           },
     ),
         title: Text("Booking",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-        color: Color(0xff21C8BE)),),
+        color: Color(ColorValues.THEME_COLOR)),),
       ),
       body:
       SingleChildScrollView(
@@ -35,10 +36,10 @@ class BookingScreenState extends State<BookingScreen>{
         Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 300),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.68),
               width: MediaQuery.of(context).size.width,
-              height: 137,
-              color: Color(0xff21C8BE),   
+              height: MediaQuery.of(context).size.height*0.18,
+              color: Color(ColorValues.THEME_COLOR),   
           ),
             Positioned(
               left: 19,
@@ -48,14 +49,14 @@ class BookingScreenState extends State<BookingScreen>{
                           },
               child: Container(
                 height: 36,
-                width: 159,
+                width: MediaQuery.of(context).size.width*0.41,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(0xff21C8BE)),textAlign: TextAlign.center,),
+                  color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
                 ),
               ),
              ),
@@ -68,15 +69,15 @@ class BookingScreenState extends State<BookingScreen>{
                           },
               child: Container(
                 height: 36,
-                width: 159,
+                width: MediaQuery.of(context).size.width*0.41,
                 decoration: BoxDecoration(
-                  color: Color(0xff21C8BE),
-                  border: Border.all(color: Color(0xffFFFFFF)),
+                  color: Color(ColorValues.THEME_COLOR),
+                  border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(0xffFFFFFF)),textAlign: TextAlign.center,),
+                  color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
                 ),
               ),
              ),
@@ -86,10 +87,10 @@ class BookingScreenState extends State<BookingScreen>{
               left: 20,
               right: 20,
               child: Container(
-                height: 155,
-                width: 348,
+                height: MediaQuery.of(context).size.height*0.21,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -116,20 +117,20 @@ class BookingScreenState extends State<BookingScreen>{
                             ),
                             Container(
                               margin: EdgeInsets.only(left: 17),
-                              child: Text("Lorem Ipsum is simply",style: TextStyle(color: Color(0xffFFFFFF),fontFamily: "Poppins",fontSize: 14),))
+                              child: Text("Lorem Ipsum is simply",style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontFamily: "Poppins",fontSize: 14),))
                           ],
                         ),
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(21, 19, 21, 20),
-                      child: Text("Get your labs done within 24hours by paying extra \n10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(0xff000000)),),
+                      child: Text("Get your labs done within 24hours by paying extra \n10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
                       ),
                   ],
                 ),
               ),
             ),
             Positioned(
-              top:254,
+              top:MediaQuery.of(context).size.height*0.36,
               right: 37,
               left: 37,
                 child:GestureDetector(
@@ -141,15 +142,16 @@ class BookingScreenState extends State<BookingScreen>{
                                       AppointmentScreen()));
                   },
                     child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     height: 38,
-                    width: 301,
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Color(0xff21C8BE),
+                      color: Color(ColorValues.THEME_COLOR),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
                       child: Text("BOOK NOW",style: TextStyle(fontFamily: "Regular",fontSize: 15,
-                      color: Color(0xffFFFFFF)),textAlign: TextAlign.center,),),
+                      color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),),
                 ),
   
              ),

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/bookingScreen.dart';
-
+import 'package:homelabz/Screens/bookingScreen.dart';
+import 'package:homelabz/components/colorValues.dart';
 
 class MakeAnAppointScreeen extends StatefulWidget{
   @override
@@ -11,23 +11,23 @@ class MakeAnAppointScreeen extends StatefulWidget{
 }
 
 class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
-  int dollars=42;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFFFFF),
+      backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
-        backgroundColor: Color(0xffFFFFFF),
+        backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading:Container(
           margin: EdgeInsets.only(left: 17,top: 20,bottom: 20),
           child:Image(image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),height: 19.52,width: 26,),),
         title: Text("Make an Appointment",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-        color: Color(0xff21C8BE)),),
+        color: Color(ColorValues.THEME_COLOR)),),
         actions: <Widget>[
           IconButton(
             icon: Icon(
             Icons.notifications,
-            color: Color(0xff21C8BE),
+            color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
             Navigator.pop(context);
@@ -40,10 +40,10 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
         child: Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 586),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.72),
               width: MediaQuery.of(context).size.width,
-              height: 116,
-              color: Color(0xff21C8BE), 
+              height: MediaQuery.of(context).size.height*0.16,
+              color: Color(ColorValues.THEME_COLOR), 
             ),
             Positioned(
               left: 10,
@@ -51,11 +51,11 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
               top:66,
               bottom: 30,
               child: Container(
-                height: 586,
+                height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -67,12 +67,12 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
                 child: ListView(children: [
                   Container(
                     margin: EdgeInsets.only(left: 18,top: 18),
-                    child: Text("Upcoming",style: TextStyle(color: Color(0xff000000),fontSize: 12,fontFamily: "Regular"),))
+                    child: Text("Upcoming",style: TextStyle(color: Color(ColorValues.BLACK_COLOR),fontSize: 12,fontFamily: "Regular"),))
                 ],),
               ),
             ),
             Positioned(
-              left: 200,
+              left: MediaQuery.of(context).size.width*0.51,
               right: 17,
               top:20,
               child:GestureDetector(
@@ -87,32 +87,32 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
                 height: 29,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Text("BOOK APPOINTMENT",style: TextStyle(fontFamily: "Regular",fontSize: 10,
-                  color: Color(0xff21C8BE)),textAlign: TextAlign.center,),
+                  color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
                 ),
               ),
             ),
             ),
             Positioned(
-            top: 118,  
+            top: MediaQuery.of(context).size.height*0.16,  
             right: 28,
             left: 28,
             child:
             Container(
-                        height: 238,
-                        width: 321,
+                        height: MediaQuery.of(context).size.height*0.32,
+                        width: MediaQuery.of(context).size.width*0.85,
                         decoration: BoxDecoration(
-                        color: Color(0xffFFFFFF),
+                        color: Color(ColorValues.WHITE_COLOR),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                         BoxShadow(
                           color: Colors.grey,
-                          blurRadius: 7.0,
-                          spreadRadius: 1.0,
+                          blurRadius: 5.0,
+                          spreadRadius: 0.5,
                           )]
                           ),
                           child: Column(
@@ -130,47 +130,51 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
                                       color: Color(0xff21C07D),
                                       borderRadius:BorderRadius.circular(10) 
                                     ),
-                                    child: Center(child: Text("Confirmed",style: TextStyle(fontSize: 9,color: Color(0xffFFFFFF),fontFamily: "Regular"),textAlign: TextAlign.center,)),
+                                    child: Center(child: Text("Confirmed",style: TextStyle(fontSize: 9,color: Color(ColorValues.WHITE_COLOR),fontFamily: "Regular"),textAlign: TextAlign.center,)),
                                   ),
                                 ],
                               ),
                               Container(
-                                margin: EdgeInsets.only(left: 11.98),
+                                //margin: EdgeInsets.only(left: 11.98),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    Container(
-                                      child: Image(
-                                        height: 60,
-                                        width: 60,
-                                        image: AssetImage("assets/images/profileImage.png"),
-                                      ),),
+                                    Row(
+                                      children: [
+                                      Container(
+                                          child: Image(
+                                            height: 60,
+                                            width: 60,
+                                            image: AssetImage("assets/images/profileImage.png"),
+                                          ),),
+                                      
                                       Container(
                                         margin: EdgeInsets.only(left: 7.55),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Container(child: Text("Union Laboratory",style: TextStyle(color: Color(0xff21C8BE),fontFamily: "Regular",fontSize: 12),)),
+                                            Container(child: Text("Union Laboratory",style: TextStyle(color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular",fontSize: 12),)),
                                             Container(
                                               margin: EdgeInsets.only(top: 5,bottom: 8),
-                                              child: Text("Dr. Ruby khan",style: TextStyle(color: Color(0xff707070),fontFamily: "Regular",fontSize: 9),)),
+                                              child: Text("Dr. Ruby khan",style: TextStyle(color: Color(ColorValues.BLACK_TEXT_COL),fontFamily: "Regular",fontSize: 9),)),
                                             Row(
                                               children: [
                                                 Image(image: AssetImage("assets/images/star.png"),height: 8.43,width:49 ),
                                                 SizedBox(width: 4,),
-                                                Text("(47)",style: TextStyle(fontFamily: "Regular",fontSize: 8,color: Color(0xff767676)),)
+                                                Text("(47)",style: TextStyle(fontFamily: "Regular",fontSize: 8,color: Color(ColorValues.LIGHT_TEXT_COLOR)),)
                                               ],
                                             )
                                           ],
                                         ),
                                       ),
-                                      Expanded(
-                                        child: Container(
-                                          margin: EdgeInsets.only(right: 12,left: 146),
+                                      ],
+                                    ),
+                                    Container(
+                                          
                                           child: Text(r"$ 50",style: TextStyle(fontWeight: FontWeight.bold,
-                                          fontSize: 11,color: Color(0xff21C8BE),fontFamily: "Regular"),),
-                                        ),
-                                      )
+                                          fontSize: 11,color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular"),),
+                                        ), 
                                   ],
                                 ),
                               ),
@@ -193,27 +197,27 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
                                     Container(
                                       width: 72,
                                       height: 86,
-                                      color: Color(0xffF9F9F9),
+                                      color: Color(ColorValues.DATE_BG),
                                       child: Center(
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Text("TUE",style: TextStyle(color: Color(0xff767676),fontSize: 11),),
+                                            Text("TUE",style: TextStyle(color: Color(ColorValues.LIGHT_TEXT_COLOR),fontSize: 11),),
                                             Text("25",style: TextStyle(fontSize: 21,color: Color(0xff21CDC0),fontWeight: FontWeight.bold),),
-                                            Text("Feb",style: TextStyle(color: Color(0xff767676),fontSize: 11),),
+                                            Text("Feb",style: TextStyle(color: Color(ColorValues.LIGHT_TEXT_COLOR),fontSize: 11),),
                                           ],
                                         ),
                                       ),
                                     ),
                                   Container(
                                   margin: EdgeInsets.symmetric(vertical: 0,horizontal: 7),
-                                  height: 67, child: VerticalDivider(color: Color(0xff707070))),
+                                  height: 67, child: VerticalDivider(color: Color(ColorValues.GREY))),
                                   Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Container(child: Text("Phelbotomist Name",style: TextStyle(color: Color(0xff707070),fontFamily: "Regular",fontSize: 12),)),
+                                          Container(child: Text("Phelbotomist Name",style: TextStyle(color: Color(ColorValues.BLACK_TEXT_COL),fontFamily: "Regular",fontSize: 12),)),
                                           Container(
                                             margin: EdgeInsets.only(top: 6,bottom: 9),
                                             child: Row(
@@ -233,25 +237,7 @@ class MakeAnAppointScreeenState extends State<MakeAnAppointScreeen> {
                           ),
                      ),
             ),
-            Positioned(
-              top: 376,
-              left: 28,
-              right: 28,
-              child:
-            Container(
-                        height: 238,
-                        width: 321,
-                        decoration: BoxDecoration(
-                        color: Color(0xffFFFFFF),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 7.0,
-                          spreadRadius: 1.0,
-                          )]
-                          ),
-                     ),) 
+           
         ],),
       ),
     );
