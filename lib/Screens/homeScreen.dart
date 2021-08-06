@@ -306,6 +306,8 @@ class HomeScreenState extends State<HomeScreen> {
           ) 
         ,),
         bottomNavigationBar: ConvexAppBar(
+          color: Color(ColorValues.THEME_COLOR),
+          backgroundColor: Color(ColorValues.THEME_COLOR),
           items:[
         TabItem(icon: Icons.home,title: "Home"),]
         ),
@@ -319,7 +321,7 @@ class HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.only(topLeft:Radius.circular(10),
             topRight:Radius.circular(10)
             )),
-      //height: MediaQuery.of(context).size.height*0.3,
+      
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
           child:Column(
@@ -391,7 +393,7 @@ _bottomSheet1(context){
               borderRadius: BorderRadius.only(topLeft:Radius.circular(10),
               topRight:Radius.circular(10)
               )),
-        // height: MediaQuery.of(context).size.height*0.56,
+        
         width: MediaQuery.of(context).size.width,
             child:Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -414,7 +416,7 @@ _bottomSheet1(context){
                 child: Center(child: Text("We will send you one time\npassword(OTP)",style: TextStyle(fontSize: 14,color: Color(ColorValues.BLACK_TEXT_COL),fontFamily: "Regular",),textAlign: TextAlign.center,)),
               ),
               Container(
-                //margin: EdgeInsets.only(left: 111,right: 111,),
+                
                 padding: EdgeInsets.symmetric(horizontal: 100),
                 child:TextFormField(
                   keyboardType: TextInputType.phone,
@@ -465,7 +467,7 @@ _bottomSheet2(context){
             borderRadius: BorderRadius.only(topLeft:Radius.circular(10),
             topRight:Radius.circular(10)
             )),
-      //height: MediaQuery.of(context).size.height*0.31,
+      
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
           child:Column(
@@ -551,7 +553,7 @@ _bottomSheet3(context){
             borderRadius: BorderRadius.only(topLeft:Radius.circular(10),
             topRight:Radius.circular(10)
             )),
-      //height: MediaQuery.of(context).size.height*0.5,
+      
       width: MediaQuery.of(context).size.width,
           child:SingleChildScrollView(
             child:Column(

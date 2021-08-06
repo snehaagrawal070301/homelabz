@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/paymentScreen.dart';
@@ -8,7 +10,6 @@ class AppointmentScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return AppointmentScreenState();
   }
-
 }
 
 class AppointmentScreenState extends State<AppointmentScreen>{
@@ -16,6 +17,24 @@ class AppointmentScreenState extends State<AppointmentScreen>{
   String gender="male";
   TextEditingController address = TextEditingController();
   TextEditingController dob = TextEditingController();
+  File imageFile;
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> selectDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+        initialDate: selectedDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2022),
+        fieldLabelText: 'Date of Birth',
+        initialDatePickerMode: DatePickerMode.year,
+        context: context);
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +143,6 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       ),
                       Container(
                       margin: EdgeInsets.only(top: 24,right: 20,left: 20),
-                      padding: EdgeInsets.only(left: 18),
                       height: 38,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -132,7 +150,7 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       border: Border.all(color: Color(ColorValues.BLACK_COLOR),width: 1),
                       borderRadius: BorderRadius.circular(10),
                         ),
-                      child: TextFormField(
+                      /*child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: dob,
                         validator: (value) {
@@ -147,7 +165,32 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                                 fontSize: 12.0,
                                 fontFamily: "Regular")),
-                      ),
+                      ),*/
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          if(selectedDate == DateTime.now())
+                            Text("Date of Birth",
+                              style:TextStyle(
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                                fontSize: 12.0,
+                                fontFamily: "Regular"))
+                          else
+                             Text( 
+                                "${selectedDate.toLocal()}".split(' ')[0],
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                          GestureDetector(
+                              onTap: () {
+                                selectDate(context);
+                                print(selectedDate.toString());
+                              },
+                              child: Icon(Icons.calendar_today)),
+                        ],
+                        ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 14,left: 20,right: 20),
@@ -208,24 +251,41 @@ class AppointmentScreenState extends State<AppointmentScreen>{
                       borderRadius: BorderRadius.circular(10),
                         ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          GestureDetector(
-                            onTap: (){
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(top: 8),
-                              child: Image(
-                                image: AssetImage("assets/images/uploadLogo.png"),
-                                height: 28,
-                                width: 25,
-                                alignment: Alignment.center,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  _showPicker(context);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 8,left: 5,right: 5),
+                                  child: Image(
+                                    image: AssetImage("assets/images/uploadLogo.png"),
+                                    height: 28,
+                                    width: 25,
+                                    alignment: Alignment.center,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Container(
-                          child: Text("Upload your prescription",style: TextStyle(fontFamily: "Regular",fontWeight: FontWeight.bold,fontSize: 12,color: Color(ColorValues.BLACK_TEXT_COL)),textAlign:TextAlign.center,),
+                      if(imageFile!=null)  
+                      ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.file(
+                        imageFile,
+                        width: 30,
+                        height: 30,
+                        fit: BoxFit.fitHeight,
                       ),
-                        ],
+                    )
+                            ],
+                          ),
+                      Container(
+                              child: Text("Upload your prescription",style: TextStyle(fontFamily: "Regular",fontWeight: FontWeight.bold,fontSize: 12,color: Color(ColorValues.BLACK_TEXT_COL)),textAlign:TextAlign.center,),
+                          ),        
+                        ]
                       ),
                       ),
                      GestureDetector(
@@ -273,4 +333,55 @@ class AppointmentScreenState extends State<AppointmentScreen>{
       )
     );
   }
+  void _showPicker(context) {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Container(
+            color: Color(ColorValues.WHITE_COLOR),
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Photo Library'),
+                    onTap: () {
+                      _imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text('Camera'),
+                  onTap: () {
+                    _imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+}
+   /// Get from gallery
+  _imgFromCamera() async {
+  File image = await ImagePicker.pickImage(
+    source: ImageSource.camera, imageQuality: 50
+  );
+
+  setState(() {
+    imageFile = image;
+  });
+}
+
+_imgFromGallery() async {
+  File image = await  ImagePicker.pickImage(
+      source: ImageSource.gallery, imageQuality: 50
+  );
+
+  setState(() {
+    imageFile = image;
+  });
+}
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/BookingChooseDate.dart';
 import 'package:homelabz/Screens/appointmentScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
@@ -66,6 +67,11 @@ class BookingScreenState extends State<BookingScreen>{
               top:25,
                child:GestureDetector(
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      BookingChooseDate()));
                           },
               child: Container(
                 height: 36,
