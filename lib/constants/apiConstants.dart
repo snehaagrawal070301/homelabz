@@ -6,5 +6,6 @@ class ApiConstants{
   static final String VERIFY_OTP_API = BaseURL+"user/verifyOTP";
   static final String SIGN_UP_API = BaseURL+"user/signInMobile";
   static final String UPDATE_USER_DETAILS = BaseURL+"user/update";
+  static final String BOOKING_LIST_BY_CRITERIA = BaseURL+"booking/findAllByCriteria";
 
 }

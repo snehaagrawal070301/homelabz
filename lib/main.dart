@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/BookingChooseDate.dart';
+import 'package:homelabz/Screens/MakeAnAppointmentScreen.dart';
+import 'package:homelabz/Screens/MakeAppointment.dart';
 import 'package:homelabz/Screens/homeScreen.dart';
+
+import 'Screens/bookingScreen.dart';
 
 
 void main() {
@@ -18,10 +23,12 @@ class MyApp extends StatelessWidget {
         
         canvasColor: Colors.transparent
       ),
-      
-      home:HomeScreen(),
+     // home: BookingChooseDate(),
+       home:MakeAppointment(),
+   //  home:BookingScreen(),
     );
   }
 }
+
 
 

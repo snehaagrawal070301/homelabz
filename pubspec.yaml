@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   table_calendar: ^2.0.1
   image_picker: ^0.6.6+5
+  shared_preferences: ^2.0.5
+  fluttertoast: ^8.0.7
   http: ^0.13.3
   convex_bottom_bar:
   intl: 0.15.7

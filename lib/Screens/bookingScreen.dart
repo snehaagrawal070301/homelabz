@@ -36,58 +36,66 @@ class BookingScreenState extends State<BookingScreen>{
         child:
         Stack(
           children: [
-            Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.68),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.18,
-              color: Color(ColorValues.THEME_COLOR),   
-          ),
-            Positioned(
-              left: 19,
-              top:25,
-               child:GestureDetector(
-                          onTap: () {
-                          },
-              child: Container(
-                height: 36,
-                width: MediaQuery.of(context).size.width*0.41,
-                decoration: BoxDecoration(
-                  color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
-                ),
-              ),
-             ),
-             ),
-            Positioned(
-              right: 19,
-              top:25,
-               child:GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      BookingChooseDate()));
-                          },
-              child: Container(
-                height: 36,
-                width: MediaQuery.of(context).size.width*0.41,
-                decoration: BoxDecoration(
+            Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.18,
+                  width: MediaQuery.of(context).size.width,
                   color: Color(ColorValues.THEME_COLOR),
-                  border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
-                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                            },
+                            child: Container(
+                              height: 36,
+                              width: MediaQuery.of(context).size.width*0.41,
+                              decoration: BoxDecoration(
+                                color: Color(ColorValues.WHITE_COLOR),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                    color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BookingChooseDate()));
+                            },
+                            child: Container(
+                              height: 36,
+                              width: MediaQuery.of(context).size.width*0.41,
+                              decoration: BoxDecoration(
+                                color: Color(ColorValues.THEME_COLOR),
+                                border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                    color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: Center(
-                  child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
-                ),
-              ),
-             ),
-             ),
+                Container(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  height: MediaQuery.of(context).size.height,
+                )
+              ],
+            ),
             Positioned(
               top:71,
               left: 20,

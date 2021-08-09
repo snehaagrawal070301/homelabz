@@ -20,6 +20,8 @@ class ConstantMsg{
   static final String DOB = "mobileNumber";
   static final String EDUCATION = "education";
   static final String ADDRESS = "address";
+  static final String PATIENT_ID="patientId";
+  static final String LIST_TYPE="typeList";
 
 
 

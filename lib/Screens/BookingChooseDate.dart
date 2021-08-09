@@ -43,123 +43,133 @@ class BookingChooseDateState extends State<BookingChooseDate>{
         child:
         Stack(
           children: [
-            Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.68),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.18,
-              color: Color(ColorValues.THEME_COLOR),   
-          ),
-            Positioned(
-              left: 19,
-              top:25,
-               child:GestureDetector(
+            Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.18,
+                  width: MediaQuery.of(context).size.width,
+                  color: Color(ColorValues.THEME_COLOR),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
-              child: Container(
-                height: 36,
-                width: MediaQuery.of(context).size.width*0.41,
-                decoration: BoxDecoration(
-                  color: Color(ColorValues.THEME_COLOR),
-                  border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
-                ),
-              ),
-             ),
-             ),
-            Positioned(
-              right: 19,
-              top:25,
-               child:GestureDetector(
+                          child: Container(
+                            height: 36,
+                            width: MediaQuery.of(context).size.width*0.41,
+                            decoration: BoxDecoration(
+                              color: Color(ColorValues.THEME_COLOR),
+                              border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                  color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
                           onTap: () {
                           },
-              child: Container(
-                height: 36,
-                width: MediaQuery.of(context).size.width*0.41,
-                decoration: BoxDecoration(
+                          child: Container(
+                            height: 36,
+                            width: MediaQuery.of(context).size.width*0.41,
+                            decoration: BoxDecoration(
+                              color: Color(ColorValues.WHITE_COLOR),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                  color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
                   color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                  color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
-                ),
-              ),
-             ),
-             ),
+                  height: MediaQuery.of(context).size.height,
+                )
+              ],
+            ),
             Positioned(
               top:71,
               left: 20,
               right: 20,
-              child: Container(
-                height: MediaQuery.of(context).size.height*0.20,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 5.0,
-                    spreadRadius: 0.5,
-                  )]
-                ),
-                child: TableCalendar( 
-                  startDay: DateTime.now(),
-                  
-                  initialCalendarFormat: CalendarFormat.week,
-                  calendarStyle: CalendarStyle(
-                    highlightToday: false,
-                    
-                    holidayStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
-                    weekdayStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
-                    weekendStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
-                    selectedColor: Color(ColorValues.THEME_COLOR),
-                    selectedStyle: TextStyle(color: Color(ColorValues.WHITE_COLOR))
-                  ),
-                  headerStyle: HeaderStyle(
-                    headerPadding: EdgeInsets.symmetric(vertical: 1),
-                    titleTextStyle: TextStyle(color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular",fontSize: 16),
+              child: Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.20,
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0)),
-                      color: Color(ColorValues.LIGHT_GRAY)
+                      color: Color(ColorValues.WHITE_COLOR),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5.0,
+                        spreadRadius: 0.5,
+                      )]
                     ),
-                    centerHeaderTitle: true,
-                    formatButtonVisible: false,
-                    ),
-                    builders: CalendarBuilders(
-                      dayBuilder: (context,date,events)=>
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xffF1F2F6),
-                        ),
-                        child: Center(
-                          child: Text(date.day.toString(),
-                          style: TextStyle(color: Color(ColorValues.BLACK_COLOR),fontSize: 17,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                        ),
+                    child: TableCalendar(
+                      startDay: DateTime.now(),
+
+                      initialCalendarFormat: CalendarFormat.week,
+                      calendarStyle: CalendarStyle(
+                        highlightToday: false,
+
+                        holidayStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
+                        weekdayStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
+                        weekendStyle: TextStyle(color: Color(ColorValues.BLACK_COLOR)),
+                        selectedColor: Color(ColorValues.THEME_COLOR),
+                        selectedStyle: TextStyle(color: Color(ColorValues.WHITE_COLOR))
                       ),
-                      selectedDayBuilder:(context,date,events)=>
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                      headerStyle: HeaderStyle(
+                        headerPadding: EdgeInsets.symmetric(vertical: 1),
+                        titleTextStyle: TextStyle(color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular",fontSize: 16),
                         decoration: BoxDecoration(
-                          color: Color(ColorValues.THEME_COLOR),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0)),
+                          color: Color(ColorValues.LIGHT_GRAY)
                         ),
-                        child: Center(
-                          child: Text(date.day.toString(),
-                          style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontSize: 17,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                        centerHeaderTitle: true,
+                        formatButtonVisible: false,
                         ),
-                      )
-                    ),
-                   onDaySelected:(date,events,context){
-                     print(date.toString());
-                   },
+                        builders: CalendarBuilders(
+                          dayBuilder: (context,date,events)=>
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Color(0xffF1F2F6),
+                            ),
+                            child: Center(
+                              child: Text(date.day.toString(),
+                              style: TextStyle(color: Color(ColorValues.BLACK_COLOR),fontSize: 17,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                          selectedDayBuilder:(context,date,events)=>
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Color(ColorValues.THEME_COLOR),
+                            ),
+                            child: Center(
+                              child: Text(date.day.toString(),
+                              style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontSize: 17,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            ),
+                          )
+                        ),
+                       onDaySelected:(date,events,context){
+                         print(date.toString());
+                       },
         /*firstDay: DateTime.utc(2010, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
         focusedDay: DateTime.now(),
@@ -169,11 +179,59 @@ class BookingChooseDateState extends State<BookingChooseDate>{
           _calendarFormat = format;
   });
 },*/ calendarController: _controller,
-              
-                ),
+
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 26),
+                    height: MediaQuery.of(context).size.height*0.36,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Color(ColorValues.WHITE_COLOR),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 5.0,
+                            spreadRadius: 0.5,
+                          )]
+                    ),
+                    child: ListView(
+                      children: [
+                        Container(
+                          height: 42,
+                          color: Color(0xffF6F6F6),
+                          child: Center(child: Text("Available Time",style: TextStyle(color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular",fontSize: 16),textAlign: TextAlign.center,)),
+                        ),
+                      ],),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AppointmentScreen()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 36),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.THEME_COLOR),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text("CONTINUE",style: TextStyle(fontFamily: "Regular",fontSize: 15,
+                            color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),),
+                    ),
+
+                  ),
+                ],
               ),
             ),
-            Positioned(
+            /*Positioned(
               top:MediaQuery.of(context).size.height*0.35,
               left: 20,
               right: 20,
@@ -201,7 +259,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
               ),
             ),
             Positioned(
-              bottom: 45,
+
               right: 37,
               left: 37,
                 child:GestureDetector(
@@ -226,7 +284,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                 ),
   
              ),
-             ),
+             ),*/
         ]),
       ),);
   }
