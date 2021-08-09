@@ -172,7 +172,7 @@ class MakeAppointmentState extends State<MakeAppointment>{
                         )]
                   ),
                   child:
-                    Column(
+                    Column(                                                                          
                       children: [
                         Container(
                             margin: EdgeInsets.only(left: 18,top: 18),
@@ -299,7 +299,7 @@ class MakeAppointmentState extends State<MakeAppointment>{
 //                                                _list[pos].date,
     "25",
     style: TextStyle(fontSize: 21,color: Color(0xff21CDC0),fontWeight: FontWeight.bold),),
-    Text("Feb",style: TextStyle(color: Color(ColorValues.LIGHT_TEXT_COLOR),fontSize: 11),),
+    Text("Feb",style: TextStyle(color: Color(ColorValues.LIGHT_TEXT_COLOR),fontSize: 12),),
     ],
     ),
     ),
