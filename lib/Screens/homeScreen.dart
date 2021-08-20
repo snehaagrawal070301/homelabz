@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:homelabz/Screens/MakeAnAppointmentScreen.dart';
+import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -450,7 +450,6 @@ _bottomSheet1(context){
                   child: Center(child: Text("SEND",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 14,fontFamily: "Bold",),)),
                 ),
               ),
-              
             ],
           ) ,
       ),
@@ -656,7 +655,7 @@ _bottomSheet3(context){
         Navigator.pushReplacement(
           context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => MakeAnAppointScreeen()));
+                builder: (BuildContext context) => MakeAppointmentScreen()));
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
