@@ -31,6 +31,7 @@ class ConstantMsg{
   static final String REMARKS="notes";
   static final String LOGIN_STATUS = "loginStatus";
 
+
   //_________________VALIDATION MESSAGES___________________
   static final String ADDRESS_VALIDATION = "Please enter Address";
   static final String GENDER_VALIDATION = "Please select Gender";

@@ -12,8 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'bookingScreen.dart';
 
 class MakeAppointmentScreen extends StatefulWidget {
+
   @override
   _MakeAppointmentScreenState createState() => _MakeAppointmentScreenState();
+
 }
 
 class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {

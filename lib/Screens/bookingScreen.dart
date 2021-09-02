@@ -9,7 +9,6 @@ class BookingScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return BookingScreenState();
   }
-
 }
 
 class BookingScreenState extends State<BookingScreen>{

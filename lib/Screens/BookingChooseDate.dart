@@ -9,8 +9,7 @@ class BookingChooseDate extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return BookingChooseDateState();
-  }
-  
+  } 
 }
 
 class BookingChooseDateState extends State<BookingChooseDate>{

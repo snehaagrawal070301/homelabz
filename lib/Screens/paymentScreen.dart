@@ -58,11 +58,13 @@ class PaymentScreenState extends State<PaymentScreen>{
                 image: AssetImage("assets/images/PaymentScreen.png"),
               ),
             ),
+
             Container(
               margin: EdgeInsets.only(top: 39,left: 30),
               child: Text("Select payment method",style: 
               TextStyle(fontFamily:"Poppins",fontSize: 13,color:Color(ColorValues.BLACK_TEXT_COL) ),),
             ),
+            
             Container(
                       margin: EdgeInsets.only(top: 16,right: 30,left: 30),
                       padding: EdgeInsets.only(left: 16),

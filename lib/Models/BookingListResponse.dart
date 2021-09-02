@@ -149,4 +149,5 @@ class Lab {
     data['longitude'] = this.longitude;
     return data;
   }
+  
 }

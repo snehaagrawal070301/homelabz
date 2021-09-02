@@ -11,6 +11,7 @@ class ApiConstants{
   static final String BOOK_APPOINTMENT = BaseURL+"booking/create";
 }
 
+
 //{"oAuthResponse":{"access_token":"246c45ae-f57c-40a6-95f8-cd8d5d761adf",
 //"token_type":"bearer","refresh_token":"9c0391f3-bcc1-4920-a436-a02a9fbbfe04","expires_in":996820,"scope":"read write"},
 //"userModel":{"id":32,"name":"Patient4","mobileNumber":"1111111110"}}

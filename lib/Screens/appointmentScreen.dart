@@ -91,7 +91,6 @@ class AppointmentScreenState extends State<AppointmentScreen> {
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
       };
-
       // make POST request
       Response response = await get(
         url,
