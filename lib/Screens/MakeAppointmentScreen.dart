@@ -41,12 +41,11 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
       var url = Uri.parse(ApiConstants.BOOKING_LIST_BY_CRITERIA);
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH: "bearer 246c45ae-f57c-40a6-95f8-cd8d5d761adf",
-//        ConstantMsg.HEADER_AUTH: "bearer "+ preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        ConstantMsg.HEADER_AUTH: "bearer "+ preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
       Map map = {
-        // ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-        ConstantMsg.PATIENT_ID: 32,
+         ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
+//        ConstantMsg.PATIENT_ID: 32,
         ConstantMsg.LIST_TYPE: ["UPCOMING"],
       };
       // make POST request

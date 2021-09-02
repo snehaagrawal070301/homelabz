@@ -28,9 +28,15 @@ class ConstantMsg{
   static final String GENDER="gender";
   static final String LIST_TYPE="typeList";
   static final String PATIENT="patient";
+  static final String REMARKS="notes";
+  static final String LOGIN_STATUS = "loginStatus";
 
-
-
-
+  //_________________VALIDATION MESSAGES___________________
+  static final String ADDRESS_VALIDATION = "Please enter Address";
+  static final String GENDER_VALIDATION = "Please select Gender";
+  static final String DOB_VALIDATION = "Please enter Date of Birth";
+  static final String MOB_VALIDATION = "Please enter Phone No.";
+  static final String OTP_VALIDATION = "Please enter Code";
+  static final String NMAE_VALIDATION = "Please enter Name";
 
 }

@@ -69,5 +69,5 @@ class ColorValues {
   static const int LIGHT_GRAY= 0xffF9F8F8;
   static const int DATE_BG=0xffF9F9F9;
   static const int LIGHT_TEXT_COLOR=0xff767676;
-
+  static const int CELL_COLOR=0xff1D2A4D;
 }

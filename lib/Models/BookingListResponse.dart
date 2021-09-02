@@ -9,6 +9,7 @@ class BookingListResponse {
         upcomingBookingList.add(new UpcomingBookingList.fromJson(v));
       });
     }
+
   }
 
   Map<String, dynamic> toJson() {

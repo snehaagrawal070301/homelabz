@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -9,8 +10,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/components/colorValues.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppointmentScreen extends StatefulWidget {
+  final String date;
+  final String slot;
+
+  const AppointmentScreen(this.date, this.slot);
+
   @override
   State<StatefulWidget> createState() {
     return AppointmentScreenState();
@@ -18,18 +25,29 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class AppointmentScreenState extends State<AppointmentScreen> {
+//  final AppointmentScreen obj;
+//  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
   String labName;
-  String gender = "MALE";
+  String doctor;
+  String gender;
   TextEditingController address = TextEditingController();
+  TextEditingController remarks = TextEditingController();
   TextEditingController dob = TextEditingController();
   File imageFile;
+
 //  DateTime selectedDate;
   String convertedDateTime;
   List<LabResponse> _labs;
+  SharedPreferences preferences;
+
+  getSharedPreferences() async {
+    preferences = await SharedPreferences.getInstance();
+  }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    getSharedPreferences();
     callAllLabsApi();
   }
 
@@ -62,7 +80,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     if (pickedDate != null) {
       setState(() {
         convertedDateTime =
-        "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+            "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
       });
     }
   }
@@ -75,14 +93,16 @@ class AppointmentScreenState extends State<AppointmentScreen> {
       };
 
       // make POST request
-      Response response =
-          await get(url, headers: headers,);
+      Response response = await get(
+        url,
+        headers: headers,
+      );
       // check the status code for the result
       String body = response.body;
       print(body);
 
       if (response.statusCode == 200) {
-        _labs =[];
+        _labs = [];
         LabResponse model = LabResponse.fromJson(json.decode(body));
         _labs.add(model);
       }
@@ -91,20 +111,52 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     }
   }
 
+  void validateData() {
+    String addrs = address.text;
+
+//    if(labId==null){
+//    showToast();
+//    return;
+//  }else
+    if (addrs != null && addrs.length > 0) {
+      if (convertedDateTime != null && convertedDateTime.length > 0) {
+        if (gender != null && gender.length > 0) {
+          if (widget.date == null) {
+            callBookAppointmentApi();
+          } else {
+            callBookAppointmentApiByDate();
+          }
+        } else {
+          showToast(ConstantMsg.GENDER_VALIDATION);
+        }
+      } else {
+        showToast(ConstantMsg.DOB_VALIDATION);
+      }
+    } else {
+      showToast(ConstantMsg.ADDRESS_VALIDATION);
+    }
+  }
+
   void callBookAppointmentApi() async {
     try {
       var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH: "bearer 246c45ae-f57c-40a6-95f8-cd8d5d761adf",
-//        ConstantMsg.HEADER_AUTH: "bearer "+ preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        ConstantMsg.HEADER_AUTH:
+            "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
 
-      Map patient = {ConstantMsg.ID: 32,};
-      Map bookedBy = {ConstantMsg.ID: 32,};
-      Map lab = {ConstantMsg.ID: 1,};
+      Map patient = {
+        ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
+      };
+      Map bookedBy = {
+        ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
+      };
+      Map lab = {
+        ConstantMsg.ID: 1,
+      };
       Map mapBody = {
-        ConstantMsg.PATIENT : patient,
+        ConstantMsg.PATIENT: patient,
         ConstantMsg.BOOKED_BY: bookedBy,
         ConstantMsg.LAB: lab,
         ConstantMsg.ADDRESS: address.text,
@@ -112,11 +164,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         ConstantMsg.GENDER: gender,
         //ConstantMsg.ID: 0,
         ConstantMsg.IS_ASAP: "true",
-        ConstantMsg.DOB: dob.text,
+        ConstantMsg.DOB: convertedDateTime,
       };
+      print(mapBody);
       // make POST request
       Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+          await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       var data = json.decode(body);
@@ -130,15 +183,64 @@ class AppointmentScreenState extends State<AppointmentScreen> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => MakeAppointmentScreen()));
-
-
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
 
+  void callBookAppointmentApiByDate() async {
+    try {
+      var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
+      Map<String, String> headers = {
+        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+        ConstantMsg.HEADER_AUTH:
+            "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+      };
 
+      Map patient = {
+        ConstantMsg.ID: preferences.get(ConstantMsg.ID),
+      };
+      Map bookedBy = {
+        ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
+      };
+      Map lab = {
+        ConstantMsg.ID: 1,
+      };
+      Map mapBody = {
+        ConstantMsg.PATIENT: patient,
+        ConstantMsg.BOOKED_BY: bookedBy,
+        ConstantMsg.LAB: lab,
+        ConstantMsg.ADDRESS: address.text,
+        ConstantMsg.DATE: widget.date,
+        ConstantMsg.GENDER: gender,
+        //ConstantMsg.ID: 0,
+        ConstantMsg.REMARKS: remarks.text,
+        ConstantMsg.IS_ASAP: "false",
+        ConstantMsg.DOB: convertedDateTime,
+      };
+      print(mapBody);
+      // make POST request
+      Response response =
+          await post(url, headers: headers, body: json.encode(mapBody));
+
+      String body = response.body;
+      var data = json.decode(body);
+      print(body);
+
+      if (response.statusCode == 200) {
+        int id = data["id"];
+        print(id);
+
+        Navigator.pushReplacement(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => MakeAppointmentScreen()));
+      } else {}
+    } catch (e) {
+      print("Error+++++" + e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +266,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          child:
-          Container(
+          child: Container(
             color: Color(ColorValues.WHITE_COLOR),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -186,15 +287,15 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               fontFamily: "Regular",
-                              color: Color(0xffFFFFFF)),
+                              color: Color(ColorValues.WHITE_COLOR)),
                         )),
                     Container(
                         margin: EdgeInsets.only(top: 15),
                         child: Image(
                           height: 60,
                           width: 100,
-                          image: AssetImage(
-                              "assets/images/appointmentUndraw.png"),
+                          image:
+                              AssetImage("assets/images/appointmentUndraw.png"),
                         )),
                   ],
                 ),
@@ -203,6 +304,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                 left: 15,
                 right: 15,
                 top: 98,
+                bottom: 10,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
@@ -215,9 +317,9 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           spreadRadius: 0.0,
                         )
                       ]),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView(
+//                      mainAxisAlignment: MainAxisAlignment.start,
+//                      crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                           margin: EdgeInsets.only(top: 30, right: 20, left: 20),
@@ -227,13 +329,15 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           decoration: BoxDecoration(
                             color: Color(ColorValues.LIGHT_GRAY),
                             border: Border.all(
-                                color: Color(ColorValues.BLACK_COLOR), width: 1),
+                                color: Color(ColorValues.BLACK_COLOR),
+                                width: 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-//                              value: type,
+                              value: labName,
                               iconSize: 24,
+                              hint: Text(" Preferred Lab"),
                               dropdownColor: Color(ColorValues.WHITE_COLOR),
                               iconEnabledColor: Color(ColorValues.BLACK_COLOR),
                               focusColor: Color(ColorValues.WHITE_COLOR),
@@ -244,12 +348,53 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                   fontFamily: "Regular"),
                               onChanged: (String newValue) {
                                 setState(() {
-//                                  type = newValue;
+                                  labName = newValue;
                                 });
                               },
                               items: <String>[
-                                'Preferred Lab',
-                                'Electronic bank transfer'
+                                'Lab 1',
+                                'Lab 2'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          )),
+                      Container(
+                          margin: EdgeInsets.only(top: 30, right: 20, left: 20),
+                          padding: EdgeInsets.only(left: 15),
+                          height: 38,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: Color(ColorValues.LIGHT_GRAY),
+                            border: Border.all(
+                                color: Color(ColorValues.BLACK_COLOR),
+                                width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: doctor,
+                              iconSize: 24,
+                              hint: Text(" Preferred Doctor"),
+                              dropdownColor: Color(ColorValues.WHITE_COLOR),
+                              iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                              focusColor: Color(ColorValues.WHITE_COLOR),
+                              elevation: 16,
+                              style: TextStyle(
+                                  color: Color(ColorValues.BLACK_TEXT_COL),
+                                  fontSize: 12,
+                                  fontFamily: "Regular"),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  doctor = newValue;
+                                });
+                              },
+                              items: <String>[
+                                'Doctor 1',
+                                'Doctor 2'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -272,11 +417,13 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                         child: TextFormField(
                           controller: address,
                           validator: (value) {
-                            return value.isEmpty ? "Please Enter Address" : null;
+                            return value.isEmpty
+                                ? "Please Enter Address"
+                                : null;
                           },
                           decoration: InputDecoration(
-                              border:
-                              OutlineInputBorder(borderSide: BorderSide.none),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none),
                               hintText: "Address",
                               hintStyle: TextStyle(
                                   color: Color(ColorValues.BLACK_TEXT_COL),
@@ -297,20 +444,22 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                         ),
                         child: Container(
                           padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               if (convertedDateTime == null)
                                 Text("Date of Birth",
                                     style: TextStyle(
-                                        color: Color(ColorValues.BLACK_TEXT_COL),
+                                        color:
+                                            Color(ColorValues.BLACK_TEXT_COL),
                                         fontSize: 12.0,
                                         fontFamily: "Regular"))
                               else
                                 Text(convertedDateTime,
                                     style: TextStyle(
-                                        color: Color(ColorValues.BLACK_TEXT_COL),
+                                        color:
+                                            Color(ColorValues.BLACK_TEXT_COL),
                                         fontSize: 12.0,
                                         fontFamily: "Regular")),
                               GestureDetector(
@@ -352,50 +501,51 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                     },
                                     child: gender == "MALE"
                                         ? Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                        Color(ColorValues.THEME_COLOR),
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(10),
-                                            topLeft: Radius.circular(10)),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "Male",
-                                            style: TextStyle(
-                                                fontFamily: "Regular",
-                                                fontSize: 12,
-                                                color: Color(
-                                                    ColorValues.WHITE_COLOR),
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          )),
-                                    )
+                                            decoration: BoxDecoration(
+                                              color: Color(
+                                                  ColorValues.THEME_COLOR),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              "Male",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      ColorValues.WHITE_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                          )
                                         : Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                        Color(ColorValues.LIGHT_GRAY),
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft:
-                                            Radius.circular(10),
-                                            topLeft: Radius.circular(10)),
-                                        border: Border.all(
-                                            color: Color(
-                                                ColorValues.BLACK_COLOR),
-                                            width: 1),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "Male",
-                                            style: TextStyle(
-                                                fontFamily: "Regular",
-                                                fontSize: 12,
-                                                color: Color(
-                                                    ColorValues.THEME_TEXT_COLOR),
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          )),
-                                    ))),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Color(ColorValues.LIGHT_GRAY),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Color(
+                                                      ColorValues.BLACK_COLOR),
+                                                  width: 1),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              "Male",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(ColorValues
+                                                      .THEME_TEXT_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                          ))),
                             Expanded(
                                 flex: 1,
                                 child: GestureDetector(
@@ -406,50 +556,54 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                     },
                                     child: gender == "FEMALE"
                                         ? Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                          Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "Female",
-                                            style: TextStyle(
-                                                fontFamily: "Regular",
-                                                fontSize: 12,
-                                                color: Color(
-                                                    ColorValues.WHITE),
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ))
+                                            decoration: BoxDecoration(
+                                              color: Color(
+                                                  ColorValues.THEME_COLOR),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                  topRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Female",
+                                                style: TextStyle(
+                                                    fontFamily: "Regular",
+                                                    fontSize: 12,
+                                                    color: Color(
+                                                        ColorValues.WHITE),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ))
                                         : Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                        Color(ColorValues.LIGHT_GRAY),
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight:
-                                            Radius.circular(10),
-                                            topRight: Radius.circular(10)),
-                                        border: Border.all(
-                                            color: Color(
-                                                ColorValues.BLACK_COLOR),
-                                            width: 1),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "Female",
-                                            style: TextStyle(
-                                                fontFamily: "Regular",
-                                                fontSize: 12,
-                                                color: Color(
-                                                    ColorValues.THEME_COLOR),
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          )),
-                                    ))),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Color(ColorValues.LIGHT_GRAY),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                  topRight:
+                                                      Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Color(
+                                                      ColorValues.BLACK_COLOR),
+                                                  width: 1),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              "Female",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      ColorValues.THEME_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                          ))),
                           ],
                         ),
                       ),
@@ -523,18 +677,18 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: TextField(
-                          decoration: InputDecoration(
-                              hintText: "Remarks..!!"
-                          ),
+                          controller: remarks,
+                          decoration: InputDecoration(hintText: "Remarks..!!"),
                           maxLines: 3,
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          callBookAppointmentApi();
+                          validateData();
                         },
                         child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                          margin: EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 20),
                           height: 38,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -559,8 +713,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
               ),
             ]),
           ),
-        )
-    );
+        ));
   }
 
   void _showPicker(context) {
@@ -613,4 +766,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     });
   }
 
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+    );
+  }
 }
