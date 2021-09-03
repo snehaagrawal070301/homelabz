@@ -272,11 +272,22 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                           ),
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AppointmentScreen(convertedDateTime,slots[index].startTime)));
+                        if(index==-1) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AppointmentScreen(convertedDateTime,
+                                          null)));
+                        }
+                        else{
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AppointmentScreen(convertedDateTime,
+                                          slots[index].startTime)));
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 36,left: 25,right: 25),

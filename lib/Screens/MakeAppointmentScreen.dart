@@ -375,7 +375,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                   fontSize: 11),
                                             ),
                                             Text(
-//                                                _list[pos].date,
+  //                                              _list[pos].dob[0],
                                               "25",
                                               style: TextStyle(
                                                   fontSize: 21,
