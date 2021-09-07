@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -469,6 +471,13 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
           ),
         ]),
       ),
+//      bottomNavigationBar: ConvexAppBar(
+//          color: Color(ColorValues.THEME_COLOR),
+//          backgroundColor: Color(ColorValues.THEME_COLOR),
+//          items: [
+//            TabItem(icon: Icons.home, title: "Home"),
+//          ]),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 

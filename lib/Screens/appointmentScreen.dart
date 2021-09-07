@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
@@ -712,7 +713,9 @@ class AppointmentScreenState extends State<AppointmentScreen> {
               ),
             ]),
           ),
-        ));
+        ),
+        bottomNavigationBar: BottomNavigation(),
+    );
   }
 
   void _showPicker(context) {

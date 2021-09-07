@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/BookingChooseDate.dart';
 import 'package:homelabz/Screens/appointmentScreen.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 
 class BookingScreen extends StatefulWidget{
@@ -166,6 +167,8 @@ class BookingScreenState extends State<BookingScreen>{
                ),
           ]),
         ),
-      ),);
+      ),
+      bottomNavigationBar: BottomNavigation(),
+    );
   }
 }

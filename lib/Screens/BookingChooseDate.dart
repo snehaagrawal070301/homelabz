@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'appointmentScreen.dart';
@@ -310,6 +311,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                 ),
               ),
         ),
+      bottomNavigationBar: BottomNavigation(),
       );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/bookingSuccess.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 
 class PaymentScreen extends StatefulWidget{
@@ -160,6 +161,7 @@ class PaymentScreenState extends State<PaymentScreen>{
                   )      
                     ]),
             ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

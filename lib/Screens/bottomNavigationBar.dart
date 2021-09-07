@@ -18,12 +18,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
             TabItem(icon: Icons.home, title: "Home"),
           ],
       onTap: (int i){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen()));
+//        Navigator.pushReplacement(
+//            context,
+//            MaterialPageRoute(
+//                builder: (context) => HomeScreen()));
+       // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+        makeRoutePage(context: context, pageRef: HomeScreen());
       },
     );
-
+  }
+  void makeRoutePage({BuildContext context, Widget pageRef}) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => pageRef),
+            (Route<dynamic> route) => false);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -333,12 +334,15 @@ class HomeScreenState extends State<HomeScreen> {
               ])),
         ]),
       ),
-      bottomNavigationBar: ConvexAppBar(
-          color: Color(ColorValues.THEME_COLOR),
-          backgroundColor: Color(ColorValues.THEME_COLOR),
-          items: [
-            TabItem(icon: Icons.home, title: "Home"),
-          ]),
+        bottomNavigationBar: BottomNavigation(),
+//      bottomNavigationBar: ConvexAppBar(
+//          color: Color(ColorValues.THEME_COLOR),
+//          backgroundColor: Color(ColorValues.THEME_COLOR),
+//          items: [
+//            TabItem(icon: Icons.home, title: "Home"),
+//          ],
+//          onTap: (int i) => print('click index=$i'),
+//      ),
     );
   }
 

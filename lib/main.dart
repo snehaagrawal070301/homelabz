@@ -20,11 +20,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffFFFFFF),
-        
+
         canvasColor: Colors.transparent
       ),
-// home:SplashScreen(),
-  home: HomeScreen(),
+ home:SplashScreen(),
+//  home: HomeScreen(),
   //  home: AppointmentScreen(null,null),
      // home: BookingChooseDate(),
     //   home:MakeAppointment(),

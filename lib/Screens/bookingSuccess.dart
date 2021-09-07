@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/Screens/homeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
@@ -92,6 +93,7 @@ class BookingSuccessScreenState extends State<BookingSuccessScreen>{
           ],
         ),
         ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }
