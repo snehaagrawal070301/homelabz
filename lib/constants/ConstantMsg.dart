@@ -30,6 +30,14 @@ class ConstantMsg{
   static final String PATIENT="patient";
   static final String REMARKS="notes";
   static final String LOGIN_STATUS = "loginStatus";
+  static final String USER_ID = "userId";
+  static final String DOC_CATEGORY = "documentCategoryEnum";
+  static final String PRE_SIGNED_LIST = "documentPresignedURLModelList";
+  static final String KEY_NAME = "keyName";
+  static final String KEY_PATH = "keyPath";
+  static final String PRE_SIGNED_URL = "presignedURL";
+  static final String IMAGE_PATH = "imagePath";
+  static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
 
 
   //_________________VALIDATION MESSAGES___________________

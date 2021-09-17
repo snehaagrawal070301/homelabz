@@ -43,7 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Stack(children: [
           Container(
-            margin: EdgeInsets.fromLTRB(0, 160, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 150, 0, 0),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
@@ -138,6 +138,7 @@ class HomeScreenState extends State<HomeScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              // showToast("clicked");
                               if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
                                 print(preferences.getString(ConstantMsg.LOGIN_STATUS));
                                 _bottomSheet(context);
