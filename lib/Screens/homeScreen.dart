@@ -5,6 +5,8 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/callForAppointment.dart';
+import 'package:homelabz/Screens/history.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -190,7 +192,13 @@ class HomeScreenState extends State<HomeScreen> {
                       flex: 1,
                       child: Column(children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CallforAppointment()));
+                          },
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.17,
                             width: MediaQuery.of(context).size.width * 0.4,
@@ -287,7 +295,19 @@ class HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+//                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
+//                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
+//                                showToast("no data available");
+//                              }
+//                              else {
+//                                Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                        builder: (context) =>
+//                                            History()));
+//                              }
+                            },
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.17,
                               width: MediaQuery.of(context).size.width * 0.4,
@@ -335,14 +355,7 @@ class HomeScreenState extends State<HomeScreen> {
         ]),
       ),
         bottomNavigationBar: BottomNavigation(),
-//      bottomNavigationBar: ConvexAppBar(
-//          color: Color(ColorValues.THEME_COLOR),
-//          backgroundColor: Color(ColorValues.THEME_COLOR),
-//          items: [
-//            TabItem(icon: Icons.home, title: "Home"),
-//          ],
-//          onTap: (int i) => print('click index=$i'),
-//      ),
+
     );
   }
 
@@ -524,9 +537,9 @@ class HomeScreenState extends State<HomeScreen> {
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.phone,
                         controller: mobile,
-//                  validator: (value) {
-//                            return value.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-//                          },
+                        validator: (mobile) {
+                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
+                          },
                         decoration: InputDecoration(
                           hintText: "Enter Mobile Number",
                           hintStyle: TextStyle(
@@ -616,14 +629,16 @@ class HomeScreenState extends State<HomeScreen> {
                     child: TextFormField(
                       controller: name,
                       keyboardType: TextInputType.text,
-//                      validator: (value) => value.isEmpty
-//                                    ? 'Enter Your Name'
-//                                    : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
-//                                    .hasMatch(value)
-//                                    ? 'Enter a Valid Name'
-//                                    : value.length < 3
-//                                    ? 'Name must contain more than 3 characters'
-//                                    : null,
+//                      validator: (value) {
+//                        value.isEmpty
+//                            ? 'Enter Your Name'
+//                            : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
+//                            .hasMatch(value)
+//                            ? 'Enter a Valid Name'
+//                            : value.length < 3
+//                            ? 'Name must contain more than 3 characters'
+//                            : null;
+//                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Full Name",

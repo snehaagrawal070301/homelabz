@@ -190,7 +190,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 26),
-                      height: MediaQuery.of(context).size.height*0.36,
+                      height: MediaQuery.of(context).size.height*0.33,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           color: Color(ColorValues.WHITE_COLOR),
@@ -291,7 +291,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                         }
                       },
                       child: Container(
-                        margin: EdgeInsets.only(top: 36,left: 25,right: 25),
+                        margin: EdgeInsets.only(top: 26,left: 25,right: 25),
                         height: 40,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(

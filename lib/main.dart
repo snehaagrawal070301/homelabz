@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/SplashScreen.dart';
 //import 'package:homelabz/Screens/BookingChooseDate.dart';
 import 'package:homelabz/Screens/homeScreen.dart';
+import 'package:homelabz/Screens/profile.dart';
 //import 'package:homelabz/Screens/test.dart';
 //import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
 
         canvasColor: Colors.transparent
       ),
+// home:ProfileScreen(),
  home:SplashScreen(),
 //  home: HomeScreen(),
   //  home: AppointmentScreen(null,null),
