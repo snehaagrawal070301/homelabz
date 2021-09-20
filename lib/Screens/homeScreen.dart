@@ -553,11 +553,13 @@ class HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () {
                       if (mobile.text != null && mobile.text.length>0) {
-                        Navigator.pop(context);
-                        _bottomSheet2(context);
+                        isnewUser();
+//                        Navigator.pop(context);
+//                        _bottomSheet2(context);
                       } else {
                         showToast(ConstantMsg.MOB_VALIDATION);
                       }
+
                     },
                     child: Container(
                       height: 35,
@@ -654,8 +656,7 @@ class HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () {
                       if (name.text != null && name.text.length>0) {
-                        Navigator.pop(context);
-                        _bottomSheet3(context);
+                        signIn();
                       } else {
                         showToast(ConstantMsg.NAME_VALIDATION);
                       }
@@ -898,5 +899,64 @@ class HomeScreenState extends State<HomeScreen> {
         context,
         new MaterialPageRoute(
             builder: (BuildContext context) => MakeAppointmentScreen()));
+  }
+
+  void isnewUser() async {
+    try {
+      var url = Uri.parse(ApiConstants.NEW_USER);
+      Map<String, String> headers = {"Content-type": "application/json"};
+      Map mapBody = {
+        ConstantMsg.MOBILE_NUM: mobile.text,
+      };
+      // make POST request
+      Response response =
+      await post(url, headers: headers, body: json.encode(mapBody));
+
+      String body = response.body;
+      //var data = json.decode(body);
+
+      if(response.statusCode==200) {
+        print(body);
+        if(body=="false"){
+          Navigator.pop(context);
+          _bottomSheet3(context);
+        }
+        else{
+          Navigator.pop(context);
+          _bottomSheet2(context);
+        }
+      }
+    }
+     catch (e) {
+      print("Error+++++" + e.toString());
+    }
+  }
+
+  void signIn() async {
+    try {
+      var url = Uri.parse(ApiConstants.SIGN_IN_API);
+      Map<String, String> headers = {"Content-type": "application/json"};
+      Map mapBody = {
+        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.NAME:name.text,
+        ConstantMsg.USER_ROLE:"ROLE_PATIENT",
+      };
+      // make POST request
+      Response response =
+          await post(url, headers: headers, body: json.encode(mapBody));
+
+      String body = response.body;
+      //var data = json.decode(body);
+
+      if(response.statusCode==200) {
+        print(body);
+        Navigator.pop(context);
+        _bottomSheet3(context);
+      }
+
+    }
+    catch (e) {
+      print("Error+++++" + e.toString());
+    }
   }
 }

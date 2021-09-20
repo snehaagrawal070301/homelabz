@@ -32,6 +32,7 @@ class UpcomingBookingList {
   String address;
   double latitude;
   String bookingStatus;
+  double amount;
 
   UpcomingBookingList(
       {this.id,
@@ -43,7 +44,8 @@ class UpcomingBookingList {
         this.isASAP,
         this.address,
         this.latitude,
-        this.bookingStatus});
+        this.bookingStatus,
+      this.amount});
 
   UpcomingBookingList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -59,6 +61,7 @@ class UpcomingBookingList {
     address = json['address'];
     latitude = json['latitude'];
     bookingStatus = json['bookingStatus'];
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +82,7 @@ class UpcomingBookingList {
     data['address'] = this.address;
     data['latitude'] = this.latitude;
     data['bookingStatus'] = this.bookingStatus;
+    data['amount'] = this.amount;
     return data;
   }
 }

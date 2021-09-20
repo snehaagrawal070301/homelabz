@@ -286,17 +286,17 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                       fontFamily: "Regular",
                                                       fontSize: 12),
                                                 )),
-                                            Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 5, bottom: 8),
-                                                child: Text(
-                                                  "Dr. Ruby khan",
-                                                  style: TextStyle(
-                                                      color: Color(ColorValues
-                                                          .BLACK_TEXT_COL),
-                                                      fontFamily: "Regular",
-                                                      fontSize: 9),
-                                                )),
+//                                            Container(
+//                                                margin: EdgeInsets.only(
+//                                                    top: 5, bottom: 8),
+//                                                child: Text(
+//                                                  "Dr. Ruby khan",
+//                                                  style: TextStyle(
+//                                                      color: Color(ColorValues
+//                                                          .BLACK_TEXT_COL),
+//                                                      fontFamily: "Regular",
+//                                                      fontSize: 9),
+//                                                )),
                                             Row(
                                               children: [
                                                 Image(
@@ -324,8 +324,8 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                   ),
                                   Container(
                                     child: Text(
-                                      //_list[pos].amount,
-                                      r"$ 50",
+                                      "\$"+_list[pos].amount.toString(),
+                                      //r"$ 50",
 
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -357,6 +357,14 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: [
+                                    _list[pos].isASAP==true?
+                                    Container(
+                                      height: 70,
+                                      width: 35,
+                                      color: Color(ColorValues.THEME_COLOR),
+                                      child:Text("A\nS\nA\nP",style:
+                                      TextStyle(color: Color(ColorValues.WHITE_COLOR),fontSize: 14,fontWeight: FontWeight.bold),textAlign: TextAlign.center,)
+                                    ):
                                     Container(
                                       // margin: EdgeInsets.only(bottom: 15),
                                       width: 72,

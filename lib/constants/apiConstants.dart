@@ -10,6 +10,8 @@ class ApiConstants{
   static final String BOOKING_LIST_BY_CRITERIA = BaseURL+"booking/findAllByCriteria";
   static final String BOOK_APPOINTMENT = BaseURL+"booking/create";
   static final String PRE_SIGNED_URL = BaseURL+"document/upload";
+  static final String NEW_USER = BaseURL+"user/isNewUser";
+  static final String SIGN_IN_API = BaseURL+"user/signIn";
 }
 
 

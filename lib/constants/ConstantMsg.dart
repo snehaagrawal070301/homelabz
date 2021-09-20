@@ -38,6 +38,7 @@ class ConstantMsg{
   static final String PRE_SIGNED_URL = "presignedURL";
   static final String IMAGE_PATH = "imagePath";
   static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
+  static final String USER_ROLE= "role";
 
 
   //_________________VALIDATION MESSAGES___________________
