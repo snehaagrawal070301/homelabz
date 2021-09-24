@@ -5,6 +5,7 @@ import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/paymentScreen.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
@@ -92,6 +93,14 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
 /*
 }*/
+
+  void callPaymentScreen(int bookingId) {
+    Navigator.pushReplacement(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) => PaymentScreen(bookingId)));
+  }
+
   void callAllLabsApi() async {
     try {
       var url = Uri.parse(ApiConstants.GET_ALL_LABS);
@@ -129,12 +138,9 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         if (gender != null && gender.length > 0) {
           if (imageFile != null) {
             getPreSignedUrl(fileExt);
+          } else {
+            showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
           }
-          // if (widget.date == null) {
-          //   callBookAppointmentApi();
-          // } else {
-          //   callBookAppointmentApiByDate();
-          // }
         } else {
           showToast(ConstantMsg.GENDER_VALIDATION);
         }
@@ -190,10 +196,8 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         int id = data["id"];
         print(id);
 
-        Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => MakeAppointmentScreen()));
+        callPaymentScreen(id);
+
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -221,8 +225,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
   _imgFromGallery() async {
     File image = await ImagePicker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50);
+        source: ImageSource.gallery, imageQuality: 50);
 
     print(image.path);
 
@@ -351,11 +354,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
       if (response.statusCode == 200) {
         int id = data["id"];
         print(id);
-
-        Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => MakeAppointmentScreen()));
+        callPaymentScreen(id);
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -853,4 +852,5 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           );
         });
   }
+
 }

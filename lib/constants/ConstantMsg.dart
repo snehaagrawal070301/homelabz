@@ -38,8 +38,10 @@ class ConstantMsg{
   static final String PRE_SIGNED_URL = "presignedURL";
   static final String IMAGE_PATH = "imagePath";
   static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
-  static final String USER_ROLE= "role";
-
+  static final String USER_ROLE = "role";
+  static final String BOOKING_ID = "bookingId";
+  static final String STATUS = "status";
+  static final String BALANCE_TRANSACTION = "balanceTransaction";
 
   //_________________VALIDATION MESSAGES___________________
   static final String ADDRESS_VALIDATION = "Please enter Address";
@@ -48,5 +50,6 @@ class ConstantMsg{
   static final String MOB_VALIDATION = "Please enter Phone No.";
   static final String OTP_VALIDATION = "Please enter Code";
   static final String NMAE_VALIDATION = "Please enter Name";
+  static final String PRESCRIPTION_VALIDATION = "Please attach prescription";
 
 }

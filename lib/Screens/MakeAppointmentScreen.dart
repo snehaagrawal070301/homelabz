@@ -359,6 +359,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                   children: [
                                     _list[pos].isASAP==true?
                                     Container(
+                                      padding: EdgeInsets.fromLTRB(0, 3, 0, 0),
                                       height: 70,
                                       width: 35,
                                       color: Color(ColorValues.THEME_COLOR),

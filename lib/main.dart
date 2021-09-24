@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/SplashScreen.dart';
-//import 'package:homelabz/Screens/BookingChooseDate.dart';
-import 'package:homelabz/Screens/homeScreen.dart';
-import 'package:homelabz/Screens/profile.dart';
-//import 'package:homelabz/Screens/test.dart';
-//import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
-
-//import 'Screens/appointmentScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,23 +13,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xffFFFFFF),
-
-        canvasColor: Colors.transparent
-      ),
-// home:ProfileScreen(),
- home:SplashScreen(),
-//  home: HomeScreen(),
-  //  home: AppointmentScreen(null,null),
-     // home: BookingChooseDate(),
-    //   home:MakeAppointment(),
-//   home:MakeAppointmentScreen(),
-//   home:BookingChooseDate(),
-//      home: Test(),
-   //  home:BookingScreen(),
+          scaffoldBackgroundColor: const Color(0xffFFFFFF),
+          canvasColor: Colors.transparent),
+      home: SplashScreen(),
     );
   }
 }
-
-
-

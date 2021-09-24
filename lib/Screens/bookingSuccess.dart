@@ -5,6 +5,11 @@ import 'package:homelabz/Screens/homeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
 class BookingSuccessScreen extends StatefulWidget{
+
+  final int paymentId;
+
+  const BookingSuccessScreen(this.paymentId);
+
   @override
   State<StatefulWidget> createState() {
     return BookingSuccessScreenState();
@@ -17,17 +22,19 @@ class BookingSuccessScreenState extends State<BookingSuccessScreen>{
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
-        leading: IconButton(
-            icon: Icon(
-            Icons.arrow_back,
-            color: Color(ColorValues.THEME_COLOR),
-            ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-    ),
-        title: Text("Booking Success",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-        color: Color(ColorValues.THEME_COLOR)),),
+    //     leading: IconButton(
+    //         icon: Icon(
+    //         Icons.arrow_back,
+    //         color: Color(ColorValues.THEME_COLOR),
+    //         ),
+    //       onPressed: () {
+    //         Navigator.pop(context);
+    //       },
+    // ),
+        title: Center(
+          child: Text("Booking Success",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+          color: Color(ColorValues.THEME_COLOR)),),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -60,11 +67,11 @@ class BookingSuccessScreenState extends State<BookingSuccessScreen>{
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 8),
-                    child: Text("Booking ID - 003221",style: TextStyle(fontSize: 16,color: Color(ColorValues.THEME_COLOR),fontFamily:"Black"),textAlign: TextAlign.center,),
+                    child: Text("Payment ID - ${widget.paymentId}",style: TextStyle(fontSize: 16,color: Color(ColorValues.THEME_COLOR),fontFamily:"Black"),textAlign: TextAlign.center,),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 9),
-                    child: Text("Lorem Ipsum is simply dummy text of the printing \nand typesetting industry. Lorem Ipsum has been \nthe industry's standard dummy text ever since the\n 1500s",style: TextStyle(fontSize: 11,color: Color(ColorValues.BLACK_COLOR),fontFamily:"Medium"),textAlign: TextAlign.center,),
+                    margin: EdgeInsets.only(top: 30),
+                    child: Text("Your Payment was successfully completed.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR),fontFamily:"Medium"),textAlign: TextAlign.center,),
                   )
                 ],
               ),
@@ -78,7 +85,7 @@ class BookingSuccessScreenState extends State<BookingSuccessScreen>{
                                       HomeScreen()));
                         },
                 child: Container(
-                  margin: EdgeInsets.only(top: 33,right: 30,left: 30),
+                  margin: EdgeInsets.only(top: 45,right: 30,left: 30),
                 height: 38,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
