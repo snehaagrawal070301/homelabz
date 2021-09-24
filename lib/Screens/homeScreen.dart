@@ -843,11 +843,11 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.VERIFY_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        // "mobileNumber": _phone.text,
-        // "otp": _otp.text
+        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.OTP: otp.text
 
-        ConstantMsg.MOBILE_NUM: "1111111110",
-        ConstantMsg.OTP: 123456
+//        ConstantMsg.MOBILE_NUM: "1111111110",
+//        ConstantMsg.OTP: 123456
       };
       // make POST request
       Response response =
@@ -878,7 +878,6 @@ class HomeScreenState extends State<HomeScreen> {
         }
 
         callUpcomingScreen();
-
       }
     } catch (e) {
       print("Error+++++" + e.toString());

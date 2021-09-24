@@ -12,6 +12,7 @@ class ApiConstants{
   static final String PRE_SIGNED_URL = BaseURL+"document/upload";
   static final String NEW_USER = BaseURL+"user/isNewUser";
   static final String SIGN_IN_API = BaseURL+"user/signIn";
+  static final String CALL_API = BaseURL+"globalParam/findAllRequired";
 }
 
 
