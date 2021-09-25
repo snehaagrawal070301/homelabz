@@ -118,8 +118,15 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
       if (response.statusCode == 200) {
         _labs = [];
-        LabResponse model = LabResponse.fromJson(json.decode(body));
-        _labs.add(model);
+        var data = json.decode(body);
+        String id = data[0]["id"].toString();
+        // var usersDataFromJson = jso
+        // List<String, dynamic> userData = List<String, dynamic>.from(data);
+        List list = data;
+        for(int i=0; i<list.length; i++) {
+          LabResponse model = LabResponse.fromJson(data[i]);
+          _labs.add(model);
+        }
       }
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
@@ -197,7 +204,6 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         print(id);
 
         callPaymentScreen(id);
-
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -493,7 +499,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           child: DropdownButton<String>(
                             value: doctor,
                             iconSize: 24,
-                            hint: Text(" Preferred Doctor"),
+                            hint: Text("Doctor"),
                             dropdownColor: Color(ColorValues.WHITE_COLOR),
                             iconEnabledColor: Color(ColorValues.BLACK_COLOR),
                             focusColor: Color(ColorValues.WHITE_COLOR),
@@ -852,5 +858,4 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           );
         });
   }
-
 }
