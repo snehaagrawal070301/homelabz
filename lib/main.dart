@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/SplashScreen.dart';
+import 'package:homelabz/Screens/bookingSuccess.dart';
+import 'package:homelabz/Screens/homeScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xffFFFFFF),
           canvasColor: Colors.transparent),
-      home: SplashScreen(),
+      home: HomeScreen(),
     );
   }
 }
