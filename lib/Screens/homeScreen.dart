@@ -129,23 +129,79 @@ class HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child: Column(children: [
-                Row(
+              child: Column(
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // showToast("clicked");
+                                if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
+                                  print(preferences.getString(ConstantMsg.LOGIN_STATUS));
+                                  _bottomSheet(context);
+                                }
+                                else{
+                                  callUpcomingScreen();
+                                }
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/Appointment.png'),
+                                          height: 40,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Make an\nAppointment ",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color: Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+//                    SizedBox(width: 20.0),
+                      Expanded(
+                        flex: 1,
+                        child: Column(children: [
                           GestureDetector(
                             onTap: () {
-                              // showToast("clicked");
-                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
-                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-                                _bottomSheet(context);
-                              }
-                              else{
-                                callUpcomingScreen();
-                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CallforAppointment()));
                             },
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.17,
@@ -161,8 +217,8 @@ class HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Image(
-                                        image: AssetImage(
-                                            'assets/images/Appointment.png'),
+                                        image:
+                                            AssetImage('assets/images/call.png'),
                                         height: 40,
                                       )
                                     ],
@@ -171,7 +227,7 @@ class HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Make an\nAppointment ",
+                                        "Call for\nAppointment",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontFamily: "Regular",
@@ -185,118 +241,69 @@ class HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 20.0),
-                    Expanded(
-                      flex: 1,
-                      child: Column(children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CallforAppointment()));
-                          },
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.17,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Color(ColorValues.THEME_COLOR),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
+                        ]),
+                      )
+                    ],
+                  ),
+                ),
+//                SizedBox(height: 25.0),
+                Container(
+                  margin: EdgeInsets.only(top:25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image(
-                                      image:
-                                          AssetImage('assets/images/call.png'),
-                                      height: 40,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/vault.png'),
+                                          height: 50,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Vault",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color: Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Call for\nAppointment",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: "Regular",
-                                        color: Color(ColorValues.WHITE_COLOR),
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ]),
-                    )
-                  ],
-                ),
-                SizedBox(height: 25.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.17,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Color(ColorValues.THEME_COLOR),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image(
-                                        image: AssetImage(
-                                            'assets/images/vault.png'),
-                                        height: 50,
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Vault",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: "Regular",
-                                          color: Color(ColorValues.WHITE_COLOR),
-                                          fontSize: 14.0,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                    SizedBox(width: 20.0),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
+//                    SizedBox(width: 20.0),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
 //                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
 //                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
 //                                showToast("no data available");
@@ -308,49 +315,50 @@ class HomeScreenState extends State<HomeScreen> {
 //                                        builder: (context) =>
 //                                            History()));
 //                              }
-                            },
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.17,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Color(ColorValues.THEME_COLOR),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image(
-                                        image: AssetImage(
-                                            'assets/images/history.png'),
-                                        height: 40,
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "History",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: "Regular",
-                                          color: Color(ColorValues.WHITE_COLOR),
-                                          fontSize: 14.0,
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/history.png'),
+                                          height: 40,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "History",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color: Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ])),
         ]),

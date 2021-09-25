@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -13,9 +13,10 @@ class CallforAppointment extends StatefulWidget {
 }
 
 class _CallforAppointmentState extends State<CallforAppointment> {
-  String _url= 'tel:+919827510000';
+  String _url = 'tel:+919827510000';
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     callApi();
   }
@@ -23,8 +24,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(ColorValues.WHITE_COLOR),
-    appBar: AppBar(
+      appBar: AppBar(
     backgroundColor: Color(ColorValues.WHITE_COLOR),
     leading: IconButton(
     icon: Icon(
@@ -43,131 +43,244 @@ class _CallforAppointmentState extends State<CallforAppointment> {
     color: Color(ColorValues.THEME_COLOR)),
     ),
     ),
-    body: SingleChildScrollView(
-      child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             Container(
-                width: MediaQuery.of(context).size.width,
-                height: 250.0,
-                color: Colors.transparent,
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: const Color(ColorValues.THEME_TEXT_COLOR),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25.0),
-                            bottomRight: Radius.circular(25.0))),
-                    child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 5,
-                            child: Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                                child: new Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      10.0, 0.0, 0.0, 0.0),
-                                  child: new Wrap(
-                                    children: [
-                                      new Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            5.0, 5.0, 0.0, 3.0),
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Welcome To...',
-                                          style: TextStyle(
-                                            color: Color(ColorValues.WHITE),
-                                            fontSize: 22.0,
-                                          ),
-                                        ),
-                                      ),
-                                      new Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              5.0, 0.0, 0.0, 5.0),
-                                          alignment: Alignment.centerLeft,
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              'Homelabs',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                color:
-                                                Color(ColorValues.WHITE),
-                                                fontSize: 16.0,
-                                                fontFamily: "customLight",
-                                              ),
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          //Add image here
-                          Expanded(
-                              flex: 5,
-                              child: Padding(
-                                  padding: EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                  child: Image.asset(
-                                    'assets/images/signin_icon.png',
-                                  )))
-                        ]))),
-            Container(
-                padding: EdgeInsets.fromLTRB(20, 50, 20, 10),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: new Text(
-                      "Toll Free Number",
-                      style: TextStyle(
-                          color: const Color(ColorValues.THEME_TEXT_COLOR),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ))),
-            Container(
-              padding: EdgeInsets.only(left: 20),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child:Text("number",style: TextStyle(fontSize: 16),)
-                )
+              margin: EdgeInsets.only(top: 25),
+              child: Image(
+                image: AssetImage("assets/images/bookingSuccessLogo.png"),
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.27,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.66,),
             ),
             Container(
-              margin: EdgeInsets.only(top:50),
-                  height: 35,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(ColorValues.THEME_TEXT_COLOR),
+              margin: EdgeInsets.only(top: 25, left: 38, right: 38),
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.19,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 7.0,
+                      spreadRadius: 0,
+                    )
+                  ]
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Text("Toll Free Number", style: TextStyle(
+                        fontSize: 16,
+                        color: Color(ColorValues.BLACK_COLOR),
+                        fontFamily: "Black"), textAlign: TextAlign.center,),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        child: Text(
-                          "CALL",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Regular",
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
-                        ),
-                        onPressed:_launchURL,
-                      ),
-                      Image(
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Text("$_url",
+                      style: TextStyle(fontSize: 14,
+                          color: Color(ColorValues.BLACK_COLOR),
+                          fontFamily: "Medium"), textAlign: TextAlign.center,),
+                  )
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: _launchURL,
+              child: Container(
+                margin: EdgeInsets.only(top: 45, right: 30, left: 30),
+                height: 38,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Color(ColorValues.THEME_COLOR),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                 child:Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Text("CALL  ",
+                        style: TextStyle(fontFamily: "Regular", fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(ColorValues.WHITE_COLOR)),
+                        textAlign: TextAlign.center,),
+                  Image(
                         image: AssetImage("assets/images/contact.png"),
                         color: Color(ColorValues.WHITE_COLOR),
                       )
-                    ],
-                  ),
-                ),
-
-          ]),
-    ),
+                   ],
+                 )
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigation(),
     );
+//    return Scaffold(
+//        backgroundColor: Color(ColorValues.WHITE_COLOR),
+//    appBar: AppBar(
+//    backgroundColor: Color(ColorValues.WHITE_COLOR),
+//    leading: IconButton(
+//    icon: Icon(
+//    Icons.arrow_back,
+//    color: Color(ColorValues.THEME_COLOR),
+//    ),
+//    onPressed: () {
+//    Navigator.pop(context);
+//    },
+//    ),
+//    title: Text(
+//    "Call for Appointment",
+//    style: TextStyle(
+//    fontFamily: "Regular",
+//    fontSize: 18,
+//    color: Color(ColorValues.THEME_COLOR)),
+//    ),
+//    ),
+//    body: SingleChildScrollView(
+//      child: Column(
+//          mainAxisSize: MainAxisSize.max,
+//          mainAxisAlignment: MainAxisAlignment.start,
+//          children: <Widget>[
+//            Container(
+//                width: MediaQuery.of(context).size.width,
+//                height: 250.0,
+//                color: Colors.transparent,
+//                child: Container(
+//                    width: MediaQuery.of(context).size.width,
+//                    decoration: BoxDecoration(
+//                        color: const Color(ColorValues.THEME_TEXT_COLOR),
+//                        borderRadius: BorderRadius.only(
+//                            bottomLeft: Radius.circular(25.0),
+//                            bottomRight: Radius.circular(25.0))),
+//                    child: Row(
+//                        mainAxisSize: MainAxisSize.max,
+//                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                        children: <Widget>[
+//                          Expanded(
+//                            flex: 5,
+//                            child: Padding(
+//                                padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
+//                                child: new Padding(
+//                                  padding: EdgeInsets.fromLTRB(
+//                                      10.0, 0.0, 0.0, 0.0),
+//                                  child: new Wrap(
+//                                    children: [
+//                                      new Container(
+//                                        margin: EdgeInsets.fromLTRB(
+//                                            5.0, 5.0, 0.0, 3.0),
+//                                        alignment: Alignment.centerLeft,
+//                                        child: Text(
+//                                          'Welcome To...',
+//                                          style: TextStyle(
+//                                            color: Color(ColorValues.WHITE),
+//                                            fontSize: 22.0,
+//                                          ),
+//                                        ),
+//                                      ),
+//                                      new Container(
+//                                          margin: EdgeInsets.fromLTRB(
+//                                              5.0, 0.0, 0.0, 5.0),
+//                                          alignment: Alignment.centerLeft,
+//                                          child: Align(
+//                                            alignment: Alignment.centerLeft,
+//                                            child: Text(
+//                                              'Homelabs',
+//                                              textAlign: TextAlign.left,
+//                                              style: TextStyle(
+//                                                color:
+//                                                Color(ColorValues.WHITE),
+//                                                fontSize: 16.0,
+//                                                fontFamily: "customLight",
+//                                              ),
+//                                            ),
+//                                          ))
+//                                    ],
+//                                  ),
+//                                )),
+//                          ),
+//                          //Add image here
+//                          Expanded(
+//                              flex: 5,
+//                              child: Padding(
+//                                  padding: EdgeInsets.fromLTRB(5, 0, 15, 0),
+//                                  child: Image.asset(
+//                                    'assets/images/signin_icon.png',
+//                                  )))
+//                        ]))),
+//            Container(
+//                padding: EdgeInsets.fromLTRB(20, 50, 20, 10),
+//                child: Align(
+//                    alignment: Alignment.centerLeft,
+//                    child: new Text(
+//                      "Toll Free Number",
+//                      style: TextStyle(
+//                          color: const Color(ColorValues.THEME_TEXT_COLOR),
+//                          fontSize: 18,
+//                          fontWeight: FontWeight.bold),
+//                    ))),
+//            Container(
+//              padding: EdgeInsets.only(left: 20),
+//                child: Align(
+//                    alignment: Alignment.centerLeft,
+//                    child:Text("number",style: TextStyle(fontSize: 16),)
+//                )
+//            ),
+//            Container(
+//              margin: EdgeInsets.only(top:50),
+//                  height: 35,
+//                  width: 150,
+//                  decoration: BoxDecoration(
+//                    borderRadius: BorderRadius.circular(10),
+//                    color: Color(ColorValues.THEME_TEXT_COLOR),
+//                  ),
+//                  child: Row(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: [
+//                      TextButton(
+//                        child: Text(
+//                          "CALL",
+//                          style: TextStyle(
+//                              fontSize: 16,
+//                              fontFamily: "Regular",
+//                              fontWeight: FontWeight.w700,
+//                              color: Colors.white),
+//                        ),
+//                        onPressed:_launchURL,
+//                      ),
+//                      Image(
+//                        image: AssetImage("assets/images/contact.png"),
+//                        color: Color(ColorValues.WHITE_COLOR),
+//                      )
+//                    ],
+//                  ),
+//                ),
+//
+//          ]),
+//    ),
+//    );
   }
+
   void _launchURL() async =>
-      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+      await canLaunch(_url)
+          ? await launch(_url)
+          : throw 'Could not launch $_url';
 
   void callApi() async {
     try {
