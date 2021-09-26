@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homelabz/Models/DoctorModel.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
@@ -31,7 +32,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 //  final AppointmentScreen obj;
 //  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
   String labName;
-  String doctor;
+  String doctorName;
   String gender;
   TextEditingController address = TextEditingController();
   TextEditingController remarks = TextEditingController();
@@ -43,9 +44,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
 //  DateTime selectedDate;
   String convertedDateTime;
-  int pos;
+  int posLab;
+  int posDoctor;
   List<LabResponse> _labs;
   List<String> labNameList=[];
+  List<DoctorResponse> _doctor;
+  List<String> doctorNameList=[];
   SharedPreferences preferences;
 
   getSharedPreferences() async {
@@ -57,6 +61,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     super.initState();
     getSharedPreferences();
     callAllLabsApi();
+    callDoctorApi();
   }
 
   Future selectDate(BuildContext context) async {
@@ -102,6 +107,39 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         new MaterialPageRoute(
             builder: (BuildContext context) => PaymentScreen(bookingId)));
   }
+  void callDoctorApi() async{
+    try {
+      var url = Uri.parse(ApiConstants.GET_ALL_DOCTOR);
+      Map<String, String> headers = {
+        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+      };
+      // make POST request
+      Response response = await get(
+        url,
+        headers: headers,
+      );
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+
+      if (response.statusCode == 200) {
+        _doctor = [];
+        doctorNameList =[];
+
+        var data = json.decode(body);
+        List list = data;
+
+        for(int i=0; i<list.length; i++) {
+          DoctorResponse model = DoctorResponse.fromJson(data[i]);
+          _doctor.add(model);
+          doctorNameList.add(model.name.toString());
+        }
+        print(doctorNameList);
+      }
+    } catch (ex) {
+      print("ERROR+++++++++++++  ${ex}");
+    }
+  }
 
   void callAllLabsApi() async {
     try {
@@ -128,7 +166,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         for(int i=0; i<list.length; i++) {
           LabResponse model = LabResponse.fromJson(data[i]);
           _labs.add(model);
-          labNameList.add(model.user.name);
+          labNameList.add(model.user.name.toString());
         }
         print(labNameList);
       }
@@ -476,8 +514,9 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                 fontFamily: "Regular"),
                             onChanged: (String newValue) {
                               setState(() {
-//                                pos=labNameList.indexOf(newValue);
-//                                print(pos);
+                                posLab=labNameList.indexOf(newValue);
+                                print(posLab);
+                                print(_labs[posLab].user.id);
                                 labName = newValue;
                               });
                             },
@@ -503,7 +542,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: doctor,
+                            value: doctorName,
                             iconSize: 24,
                             hint: Text("Doctor"),
                             dropdownColor: Color(ColorValues.WHITE_COLOR),
@@ -516,10 +555,13 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                 fontFamily: "Regular"),
                             onChanged: (String newValue) {
                               setState(() {
-                                doctor = newValue;
+                                posDoctor=doctorNameList.indexOf(newValue);
+                                print(posDoctor);
+                                print(_doctor[posDoctor].id);
+                                doctorName = newValue;
                               });
                             },
-                            items: <String>['Doctor 1', 'Doctor 2']
+                            items: doctorNameList
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -864,4 +906,6 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           );
         });
   }
+
+
 }

@@ -7,6 +7,7 @@ class ApiConstants{
   static final String SIGN_UP_API = BaseURL+"user/signInMobile";
   static final String UPDATE_USER_DETAILS = BaseURL+"user/update";
   static final String GET_ALL_LABS = BaseURL+"lab/findAll";
+  static final String GET_ALL_DOCTOR = BaseURL+"user/findAllDoctor";
   static final String BOOKING_LIST_BY_CRITERIA = BaseURL+"booking/findAllByCriteria";
   static final String BOOK_APPOINTMENT = BaseURL+"booking/create";
   static final String PRE_SIGNED_URL = BaseURL+"document/upload";
