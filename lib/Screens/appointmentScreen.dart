@@ -43,7 +43,9 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
 //  DateTime selectedDate;
   String convertedDateTime;
+  int pos;
   List<LabResponse> _labs;
+  List<String> labNameList=[];
   SharedPreferences preferences;
 
   getSharedPreferences() async {
@@ -118,13 +120,17 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
       if (response.statusCode == 200) {
         _labs = [];
+        labNameList =[];
+
         var data = json.decode(body);
         List list = data;
 
         for(int i=0; i<list.length; i++) {
           LabResponse model = LabResponse.fromJson(data[i]);
           _labs.add(model);
+          labNameList.add(model.user.name);
         }
+        print(labNameList);
       }
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
@@ -470,10 +476,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                 fontFamily: "Regular"),
                             onChanged: (String newValue) {
                               setState(() {
+//                                pos=labNameList.indexOf(newValue);
+//                                print(pos);
                                 labName = newValue;
                               });
                             },
-                            items: <String>['Lab 1', 'Lab 2']
+                            items: labNameList
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,

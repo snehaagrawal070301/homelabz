@@ -14,6 +14,7 @@ class CallforAppointment extends StatefulWidget {
 
 class _CallforAppointmentState extends State<CallforAppointment> {
   String _url = 'tel:+919827510000';
+//  var newString = _url.substring(0, 5);
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
             Container(
               margin: EdgeInsets.only(top: 25),
               child: Image(
-                image: AssetImage("assets/images/bookingSuccessLogo.png"),
+                image: AssetImage("assets/images/call_appointment.png"),
                 height: MediaQuery
                     .of(context)
                     .size
@@ -61,7 +62,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
                     .width * 0.66,),
             ),
             Container(
-              margin: EdgeInsets.only(top: 25, left: 38, right: 38),
+              margin: EdgeInsets.only(top: 30, left: 38, right: 38),
               height: MediaQuery
                   .of(context)
                   .size
@@ -86,18 +87,18 @@ class _CallforAppointmentState extends State<CallforAppointment> {
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: 20),
-                    child: Text("Toll Free Number", style: TextStyle(
+                    child: Text("To book appointment call on the\nToll Free Number",
+                      style: TextStyle(fontSize: 15,
+                          color: Color(ColorValues.BLACK_COLOR),
+                          fontFamily: "Medium"), textAlign: TextAlign.center,),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Text("$_url", style: TextStyle(
                         fontSize: 16,
                         color: Color(ColorValues.BLACK_COLOR),
                         fontFamily: "Black"), textAlign: TextAlign.center,),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Text("$_url",
-                      style: TextStyle(fontSize: 14,
-                          color: Color(ColorValues.BLACK_COLOR),
-                          fontFamily: "Medium"), textAlign: TextAlign.center,),
-                  )
                 ],
               ),
             ),
@@ -114,7 +115,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
                  child:Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
-                     Text("CALL  ",
+                     Text("CALL        ",
                         style: TextStyle(fontFamily: "Regular", fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Color(ColorValues.WHITE_COLOR)),
@@ -130,7 +131,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigation(),
+//      bottomNavigationBar: BottomNavigation(),
     );
 //    return Scaffold(
 //        backgroundColor: Color(ColorValues.WHITE_COLOR),

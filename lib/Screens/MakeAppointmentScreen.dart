@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +9,6 @@ import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'bookingScreen.dart';
 
 class MakeAppointmentScreen extends StatefulWidget {
