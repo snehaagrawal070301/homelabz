@@ -119,10 +119,8 @@ class AppointmentScreenState extends State<AppointmentScreen> {
       if (response.statusCode == 200) {
         _labs = [];
         var data = json.decode(body);
-        String id = data[0]["id"].toString();
-        // var usersDataFromJson = jso
-        // List<String, dynamic> userData = List<String, dynamic>.from(data);
         List list = data;
+
         for(int i=0; i<list.length; i++) {
           LabResponse model = LabResponse.fromJson(data[i]);
           _labs.add(model);
