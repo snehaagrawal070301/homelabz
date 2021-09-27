@@ -237,7 +237,8 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                     child: Center(
                                         child: GestureDetector(
                                           onTap: () {
-                                            onConfirmed();
+                                            //onConfirmed();
+                                            showPopup(context);
                                           },
                                           child: Text(
                                             "Confirmed",
@@ -494,6 +495,47 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
+    );
+  }
+
+  Widget showPopup(BuildContext context) {
+    return RaisedButton(
+        child: Text("Custom"),
+        onPressed:(){
+          showDialog(
+              context: context,
+              builder: (context){
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    height: 300,
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                  }
+                                  ,
+                                  child: Icon(Icons.cancel))
+                            ],
+                          ),
+                          Image(image: AssetImage("assets/images/call_appointment.png"))
+                        ],),
+                    ),
+                  ),
+                );
+              }
+          );
+        }
     );
   }
 }
