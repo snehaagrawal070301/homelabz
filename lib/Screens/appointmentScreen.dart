@@ -31,8 +31,7 @@ class AppointmentScreen extends StatefulWidget {
 class AppointmentScreenState extends State<AppointmentScreen> {
 //  final AppointmentScreen obj;
 //  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
-  String labName;
-  String doctorName;
+
   String gender;
   TextEditingController address = TextEditingController();
   TextEditingController remarks = TextEditingController();
@@ -44,12 +43,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
 //  DateTime selectedDate;
   String convertedDateTime;
-  int posLab;
-  int posDoctor;
+  int selectedLabId;
+  int selectedDoctorId;
   List<LabResponse> _labs;
-  List<String> labNameList=[];
   List<DoctorResponse> _doctor;
-  List<String> doctorNameList=[];
+  LabResponse labName;
+  DoctorResponse doctorName;
   SharedPreferences preferences;
 
   getSharedPreferences() async {
@@ -107,7 +106,8 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         new MaterialPageRoute(
             builder: (BuildContext context) => PaymentScreen(bookingId)));
   }
-  void callDoctorApi() async{
+
+  void callDoctorApi() async {
     try {
       var url = Uri.parse(ApiConstants.GET_ALL_DOCTOR);
       Map<String, String> headers = {
@@ -124,17 +124,15 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
       if (response.statusCode == 200) {
         _doctor = [];
-        doctorNameList =[];
 
         var data = json.decode(body);
         List list = data;
 
-        for(int i=0; i<list.length; i++) {
+        for (int i = 0; i < list.length; i++) {
           DoctorResponse model = DoctorResponse.fromJson(data[i]);
           _doctor.add(model);
-          doctorNameList.add(model.name.toString());
         }
-        print(doctorNameList);
+        setState(() {});
       }
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
@@ -158,18 +156,16 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
       if (response.statusCode == 200) {
         _labs = [];
-        labNameList =[];
 
         var data = json.decode(body);
         List list = data;
 
-        for(int i=0; i<list.length; i++) {
+        for (int i = 0; i < list.length; i++) {
           LabResponse model = LabResponse.fromJson(data[i]);
           _labs.add(model);
-          labNameList.add(model.user.name.toString());
         }
-        print(labNameList);
       }
+      setState(() {});
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
     }
@@ -178,26 +174,26 @@ class AppointmentScreenState extends State<AppointmentScreen> {
   void validateData() {
     String addrs = address.text;
 
-//    if(labId==null){
-//    showToast();
-//    return;
-//  }else
-    if (addrs != null && addrs.length > 0) {
-      if (convertedDateTime != null && convertedDateTime.length > 0) {
-        if (gender != null && gender.length > 0) {
-          if (imageFile != null) {
-            getPreSignedUrl(fileExt);
+    if (selectedLabId != null) {
+      if (addrs != null && addrs.length > 0) {
+        if (convertedDateTime != null && convertedDateTime.length > 0) {
+          if (gender != null && gender.length > 0) {
+            if (imageFile != null) {
+              getPreSignedUrl(fileExt);
+            } else {
+              showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
+            }
           } else {
-            showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
+            showToast(ConstantMsg.GENDER_VALIDATION);
           }
         } else {
-          showToast(ConstantMsg.GENDER_VALIDATION);
+          showToast(ConstantMsg.DOB_VALIDATION);
         }
       } else {
-        showToast(ConstantMsg.DOB_VALIDATION);
+        showToast(ConstantMsg.ADDRESS_VALIDATION);
       }
     } else {
-      showToast(ConstantMsg.ADDRESS_VALIDATION);
+      showToast(ConstantMsg.LAB_VALIDATION);
     }
   }
 
@@ -219,7 +215,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         ConstantMsg.IMG_PRE_SIGNED_URL: urlList[0].presignedURL,
       };
       Map lab = {
-        ConstantMsg.ID: 1,
+        ConstantMsg.ID: selectedLabId,
       };
       Map mapBody = {
         ConstantMsg.PATIENT: patient,
@@ -376,20 +372,40 @@ class AppointmentScreenState extends State<AppointmentScreen> {
         ConstantMsg.IMG_PRE_SIGNED_URL: urlList[0].presignedURL,
       };
       Map lab = {
-        ConstantMsg.ID: 1,
+        ConstantMsg.ID: selectedLabId,
       };
-      Map mapBody = {
+
+      Map mapBody;
+      if(selectedDoctorId!=null){
+      Map doctor = {
+        ConstantMsg.ID: selectedDoctorId,
+      };
+      mapBody = {
         ConstantMsg.PATIENT: patient,
         ConstantMsg.BOOKED_BY: bookedBy,
         ConstantMsg.LAB: lab,
+        ConstantMsg.DOCTOR: doctor,
         ConstantMsg.ADDRESS: address.text,
         ConstantMsg.DATE: widget.date,
         ConstantMsg.GENDER: gender,
-        //ConstantMsg.ID: 0,
         ConstantMsg.REMARKS: remarks.text,
         ConstantMsg.IS_ASAP: "false",
         ConstantMsg.DOB: convertedDateTime,
       };
+      }else{
+        mapBody = {
+          ConstantMsg.PATIENT: patient,
+          ConstantMsg.BOOKED_BY: bookedBy,
+          ConstantMsg.LAB: lab,
+          ConstantMsg.ADDRESS: address.text,
+          ConstantMsg.DATE: widget.date,
+          ConstantMsg.GENDER: gender,
+          ConstantMsg.REMARKS: remarks.text,
+          ConstantMsg.IS_ASAP: "false",
+          ConstantMsg.DOB: convertedDateTime,
+        };
+      }
+
       print(mapBody);
       // make POST request
       Response response =
@@ -489,87 +505,94 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 //                      crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(top: 30, right: 20, left: 20),
-                        padding: EdgeInsets.only(left: 15),
-                        height: 38,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Color(ColorValues.LIGHT_GRAY),
-                          border: Border.all(
-                              color: Color(ColorValues.BLACK_COLOR), width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: labName,
-                            iconSize: 24,
-                            hint: Text(" Preferred Lab"),
-                            dropdownColor: Color(ColorValues.WHITE_COLOR),
-                            iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                            focusColor: Color(ColorValues.WHITE_COLOR),
-                            elevation: 16,
-                            style: TextStyle(
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                                fontSize: 12,
-                                fontFamily: "Regular"),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                posLab=labNameList.indexOf(newValue);
-                                print(posLab);
-                                print(_labs[posLab].user.id);
-                                labName = newValue;
-                              });
-                            },
-                            items: labNameList
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        )),
+                      margin: EdgeInsets.only(top: 30, right: 20, left: 20),
+                      padding: EdgeInsets.only(left: 15),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _labs != null
+                          ? DropdownButtonHideUnderline(
+                              child: DropdownButton<LabResponse>(
+                                value:labName,
+                                iconSize: 24,
+                                hint: Text(" Preferred Lab"),
+                                dropdownColor: Color(ColorValues.WHITE_COLOR),
+                                iconEnabledColor:
+                                    Color(ColorValues.BLACK_COLOR),
+                                focusColor: Color(ColorValues.WHITE_COLOR),
+                                elevation: 16,
+                                style: TextStyle(
+                                    color: Color(ColorValues.BLACK_TEXT_COL),
+                                    fontSize: 12,
+                                    fontFamily: "Regular"),
+                                onChanged: (LabResponse newValue) {
+                                  setState(() {
+                                    selectedLabId = newValue.id;
+                                    print(selectedLabId);
+                                    labName = newValue;
+                                  });
+                                },
+                                items: _labs.map<DropdownMenuItem<LabResponse>>(
+                                    (LabResponse value) {
+                                  return DropdownMenuItem<LabResponse>(
+                                    value: value,
+                                    child: Text(value.user.name),
+                                  );
+                                }).toList(),
+                              ),
+                            )
+                          : Container(),
+                    ),
                     Container(
-                        margin: EdgeInsets.only(top: 30, right: 20, left: 20),
-                        padding: EdgeInsets.only(left: 15),
-                        height: 38,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: Color(ColorValues.LIGHT_GRAY),
-                          border: Border.all(
-                              color: Color(ColorValues.BLACK_COLOR), width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: doctorName,
-                            iconSize: 24,
-                            hint: Text("Doctor"),
-                            dropdownColor: Color(ColorValues.WHITE_COLOR),
-                            iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                            focusColor: Color(ColorValues.WHITE_COLOR),
-                            elevation: 16,
-                            style: TextStyle(
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                                fontSize: 12,
-                                fontFamily: "Regular"),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                posDoctor=doctorNameList.indexOf(newValue);
-                                print(posDoctor);
-                                print(_doctor[posDoctor].id);
-                                doctorName = newValue;
-                              });
-                            },
-                            items: doctorNameList
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        )),
+                      margin: EdgeInsets.only(top: 30, right: 20, left: 20),
+                      padding: EdgeInsets.only(left: 15),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _doctor != null
+                          ? DropdownButtonHideUnderline(
+                              child: DropdownButton<DoctorResponse>(
+                                value: doctorName,
+                                iconSize: 24,
+                                hint: Text("Doctor"),
+                                dropdownColor: Color(ColorValues.WHITE_COLOR),
+                                iconEnabledColor:
+                                    Color(ColorValues.BLACK_COLOR),
+                                focusColor: Color(ColorValues.WHITE_COLOR),
+                                elevation: 16,
+                                style: TextStyle(
+                                    color: Color(ColorValues.BLACK_TEXT_COL),
+                                    fontSize: 12,
+                                    fontFamily: "Regular"),
+                                onChanged: (DoctorResponse newValue) {
+                                  setState(() {
+                                    selectedDoctorId = newValue.id;
+                                    print(selectedDoctorId);
+                                    doctorName = newValue;
+                                  });
+                                },
+                                items: _doctor
+                                    .map<DropdownMenuItem<DoctorResponse>>(
+                                        (DoctorResponse value) {
+                                  return DropdownMenuItem<DoctorResponse>(
+                                    value: value,
+                                    child: Text(value.name),
+                                  );
+                                }).toList(),
+                              ),
+                            )
+                          : Container(),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 24, right: 20, left: 20),
                       padding: EdgeInsets.only(left: 5),
@@ -906,6 +929,4 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           );
         });
   }
-
-
 }

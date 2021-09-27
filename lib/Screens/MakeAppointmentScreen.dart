@@ -47,7 +47,6 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
       };
       Map map = {
          ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
-//        ConstantMsg.PATIENT_ID: 32,
         ConstantMsg.LIST_TYPE: ["UPCOMING"],
       };
       // make POST request
@@ -241,7 +240,10 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                             showPopup(context);
                                           },
                                           child: Text(
-                                            "Confirmed",
+                                            _list[pos].bookingStatus == null
+                                                ? "Pending"
+                                                : _list[pos].bookingStatus,
+                                            // "Confirmed",
                                             style: TextStyle(
                                                 fontSize: 9,
                                                 color: Color(
@@ -418,9 +420,10 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            _list[pos].patient.name == null
-                                                ? ""
-                                                : _list[pos].patient.name,
+                                            _list[pos].phlebotomist==null?"Phlebotomist":
+                                            _list[pos].phlebotomist.name == null
+                                                ? "Phlebotomist"
+                                                : _list[pos].phlebotomist.name,
                                             // "Phelbotomist Name",
                                             style: TextStyle(
                                                 color: Color(ColorValues
@@ -441,7 +444,11 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                 SizedBox(
                                                   width: 7,
                                                 ),
-                                                Text("04:00PM",
+                                                Text(
+                                                    _list[pos].timeFrom == null
+                                                        ? "--:-- "
+                                                        : _list[pos].timeFrom,
+                                                    // "04:00PM",
                                                     style: TextStyle(
                                                       fontFamily: "Regular",
                                                       fontSize: 12,
@@ -491,7 +498,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
 
   void onConfirmed() {
     Fluttertoast.showToast(
-      msg: "Confirmed",
+      msg: "clicked!",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,

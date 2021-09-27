@@ -23,6 +23,7 @@ class ConstantMsg{
   static final String PATIENT_ID="patientId";
   static final String BOOKED_BY="bookedBy";
   static final String LAB="lab";
+  static final String DOCTOR="doctor";
   static final String DATE="date";
   static final String IS_ASAP="isASAP";
   static final String GENDER="gender";
@@ -38,12 +39,13 @@ class ConstantMsg{
   static final String PRE_SIGNED_URL = "presignedURL";
   static final String IMAGE_PATH = "imagePath";
   static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
-  static final String USER_ROLE = "role";
+  static final String ROLE = "role";
   static final String BOOKING_ID = "bookingId";
   static final String STATUS = "status";
   static final String BALANCE_TRANSACTION = "balanceTransaction";
 
   //_________________VALIDATION MESSAGES___________________
+  static final String LAB_VALIDATION = "Please select Lab";
   static final String ADDRESS_VALIDATION = "Please enter Address";
   static final String GENDER_VALIDATION = "Please select Gender";
   static final String DOB_VALIDATION = "Please enter Date of Birth";

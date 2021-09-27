@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homelabz/Models/ErrorModel.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/Screens/callForAppointment.dart';
@@ -925,8 +926,9 @@ class HomeScreenState extends State<HomeScreen> {
       if(response.statusCode==200) {
         print(body);
         if(body=="false"){
-          Navigator.pop(context);
-          _bottomSheet3(context);
+          // Navigator.pop(context);
+          // _bottomSheet3(context);
+          signIn();
         }
         else{
           Navigator.pop(context);
@@ -943,11 +945,22 @@ class HomeScreenState extends State<HomeScreen> {
     try {
       var url = Uri.parse(ApiConstants.SIGN_IN_API);
       Map<String, String> headers = {"Content-type": "application/json"};
-      Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobile.text,
-        ConstantMsg.NAME:name.text,
-        ConstantMsg.USER_ROLE:"ROLE_PATIENT",
-      };
+
+      Map mapBody;
+      String userName = name.text;
+      if(userName!=null && userName.length>0){
+        mapBody = {
+          ConstantMsg.MOBILE_NUM: mobile.text,
+          ConstantMsg.NAME:name.text,
+          ConstantMsg.ROLE:"ROLE_PATIENT",
+        };
+      }else{
+        mapBody = {
+          ConstantMsg.MOBILE_NUM: mobile.text,
+          ConstantMsg.ROLE:"ROLE_PATIENT",
+        };
+      }
+
       // make POST request
       Response response =
           await post(url, headers: headers, body: json.encode(mapBody));
@@ -959,6 +972,10 @@ class HomeScreenState extends State<HomeScreen> {
         print(body);
         Navigator.pop(context);
         _bottomSheet3(context);
+      }else {
+        var data = json.decode(body);
+        ErrorModel model = ErrorModel.fromJson(data);
+        showToast(model.message);
       }
 
     }
