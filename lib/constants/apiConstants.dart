@@ -4,6 +4,7 @@ class ApiConstants{
 
   static final String LOGIN_API = BaseURL+"user/login";
   static final String VERIFY_OTP_API = BaseURL+"user/verifyOTP";
+  static final String GENERATE_OTP_API = BaseURL+"user/generateOTP";
   static final String SIGN_UP_API = BaseURL+"user/signInMobile";
   static final String UPDATE_USER_DETAILS = BaseURL+"user/update";
   static final String GET_ALL_LABS = BaseURL+"lab/findAll";

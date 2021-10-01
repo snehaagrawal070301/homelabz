@@ -803,12 +803,17 @@ class HomeScreenState extends State<HomeScreen> {
                               color: Color(0xff707070)),
                           textAlign: TextAlign.center,
                         ),
-                        Text("Resend",
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontFamily: "Regular",
-                                color: Color(ColorValues.THEME_COLOR)),
-                            textAlign: TextAlign.center)
+                        GestureDetector(
+                          onTap: (){
+                            generateOTP();
+                          },
+                          child: Text("Resend",
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: "Regular",
+                                  color: Color(ColorValues.THEME_COLOR)),
+                              textAlign: TextAlign.center),
+                        )
                       ],
                     ),
                   ),
@@ -957,8 +962,35 @@ class HomeScreenState extends State<HomeScreen> {
 
       if(response.statusCode==200) {
         print(body);
+        showToast("message");
         Navigator.pop(context);
         _bottomSheet3(context);
+      }
+
+    }
+    catch (e) {
+      print("Error+++++" + e.toString());
+    }
+  }
+
+  void generateOTP() async {
+    try {
+      var url = Uri.parse(ApiConstants.GENERATE_OTP_API);
+      Map<String, String> headers = {"Content-type": "application/json"};
+      Map mapBody = {
+        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.USER_ROLE:"ROLE_PATIENT",
+      };
+      // make POST request
+      Response response =
+          await post(url, headers: headers, body: json.encode(mapBody));
+
+      String body = response.body;
+      //var data = json.decode(body);
+
+      if(response.statusCode==200) {
+        print(body);
+        showToast("The code has been sent to your mobile number. Please check!");
       }
 
     }
