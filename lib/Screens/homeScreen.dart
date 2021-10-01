@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -14,6 +16,10 @@ import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
 class HomeScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -26,15 +32,51 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController mobile = TextEditingController();
   TextEditingController otp = TextEditingController();
   SharedPreferences preferences;
+  String fcmToken;
+  FirebaseMessaging _firebaseMessaging;
 
   @override
   void initState() {
     super.initState();
     getSharedPreferences();
+    registerNotification();
   }
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
+  }
+
+  void registerNotification() async {
+    await Firebase.initializeApp();
+    _firebaseMessaging = FirebaseMessaging.instance;
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    getToken();
+
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print(
+            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  void getToken() async {
+    _firebaseMessaging.getToken().then((token) {
+      fcmToken = token;
+      // print("token : "+fcmToken);
+    });
   }
 
   @override
@@ -858,7 +900,8 @@ class HomeScreenState extends State<HomeScreen> {
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         ConstantMsg.MOBILE_NUM: mobile.text,
-        ConstantMsg.OTP: otp.text
+        ConstantMsg.OTP: otp.text,
+        ConstantMsg.ROLE:"ROLE_PATIENT",
 
 //        ConstantMsg.MOBILE_NUM: "1111111110",
 //        ConstantMsg.OTP: 123456
@@ -955,20 +998,21 @@ class HomeScreenState extends State<HomeScreen> {
       String userName = name.text;
       if(userName!=null && userName.length>0){
         mapBody = {
+          ConstantMsg.DEVICE_ID: fcmToken,
           ConstantMsg.MOBILE_NUM: mobile.text,
           ConstantMsg.NAME:name.text,
           ConstantMsg.ROLE:"ROLE_PATIENT",
         };
       }else{
         mapBody = {
+          ConstantMsg.DEVICE_ID: fcmToken,
           ConstantMsg.MOBILE_NUM: mobile.text,
           ConstantMsg.ROLE:"ROLE_PATIENT",
         };
       }
 
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      Response response = await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);

@@ -250,8 +250,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
 
   /// Get from gallery
   _imgFromCamera() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
+    // File image = await ImagePicker.pickImage(
+    //     source: ImageSource.camera, imageQuality: 50);
+
+    PickedFile pickedFile =
+    await ImagePicker.platform.pickImage(source: ImageSource.camera);
+    File image = File(pickedFile.path);
 
     print(image.path);
 
@@ -268,8 +272,12 @@ class AppointmentScreenState extends State<AppointmentScreen> {
   }
 
   _imgFromGallery() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 50);
+    // File image = await ImagePicker.pickImage(
+    //     source: ImageSource.gallery, imageQuality: 50);
+
+    PickedFile pickedFile =
+    await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    File image = File(pickedFile.path);
 
     print(image.path);
 
