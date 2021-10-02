@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
+import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bookingScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
@@ -52,7 +53,9 @@ class BookingChooseDateState extends State<BookingChooseDate>{
             color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(
+                    builder: (context) => MakeAppointmentScreen()));
           },
     ),
         title: Text("Booking",style: TextStyle(fontFamily: "Regular",fontSize: 18,
