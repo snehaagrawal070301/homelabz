@@ -12,6 +12,7 @@ import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -543,22 +544,44 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                       padding: EdgeInsets.symmetric(horizontal: 100),
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.phone,
-                        controller: mobile,
-                        validator: (mobile) {
-                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-                          },
-                        decoration: InputDecoration(
-                          hintText: "Enter Mobile Number",
-                          hintStyle: TextStyle(
-                            color: Color(0xffBDBDBD),
-                            fontSize: 12.0,
-                            fontFamily: "Regular",
+                            child: IntlPhoneField(
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.phone,
+                             controller: mobile,
+                            validator: (mobile) {
+                             return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
+                            },
+                              decoration: InputDecoration(
+                                hintText: "Enter Mobile Number",
+                               hintStyle: TextStyle(
+                               color: Color(0xffBDBDBD),
+                               fontSize: 12.0,
+                               fontFamily: "Regular",
+                             ),
+                              ),
+                              initialCountryCode: 'IN',
+                              onChanged: (phone) {
+                                print(phone.completeNumber);
+                              },
+                            )
                           ),
-                        ),
-                      )),
+
+//                      child: TextFormField(
+//                        textAlign: TextAlign.center,
+//                        keyboardType: TextInputType.phone,
+//                        controller: mobile,
+//                        validator: (mobile) {
+//                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
+//                          },
+//                        decoration: InputDecoration(
+//                          hintText: "Enter Mobile Number",
+//                          hintStyle: TextStyle(
+//                            color: Color(0xffBDBDBD),
+//                            fontSize: 12.0,
+//                            fontFamily: "Regular",
+//                          ),
+//                        ),
+//
                   GestureDetector(
                     onTap: () {
                       if (mobile.text != null && mobile.text.length>0) {
@@ -858,10 +881,8 @@ class HomeScreenState extends State<HomeScreen> {
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         ConstantMsg.MOBILE_NUM: mobile.text,
-        ConstantMsg.OTP: otp.text
-
-//        ConstantMsg.MOBILE_NUM: "1111111110",
-//        ConstantMsg.OTP: 123456
+        ConstantMsg.OTP: otp.text,
+        ConstantMsg.ROLE:"ROLE_PATIENT",
       };
       // make POST request
       Response response =
@@ -872,6 +893,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       if(response.statusCode==200) {
         print(body);
+        print("success");
         if (data["oAuthResponse"].toString() != null) {
           preferences.setString(ConstantMsg.LOGIN_STATUS, "true");
 
@@ -975,7 +997,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       if(response.statusCode==200) {
         print(body);
-        showToast("message");
+        showToast("The code has been sent to your mobile number. Please check!");
         Navigator.pop(context);
         _bottomSheet3(context);
       }else {

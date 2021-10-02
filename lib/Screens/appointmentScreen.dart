@@ -822,14 +822,29 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                   ),
                                 ),
                                 if (imageFile != null)
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.file(
-                                      imageFile,
-                                      width: 30,
-                                      height: 30,
-                                      fit: BoxFit.fitHeight,
-                                    ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                              onTap: (){
+                                                print("pressed");
+                                                imageFile=null;
+                                              },
+                                              child: Icon(Icons.cancel,size: 10,)),
+                                        ],
+                                      ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.file(
+                                          imageFile,
+                                          width: 30,
+                                          height: 30,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                    ],
                                   )
                               ],
                             ),
