@@ -248,6 +248,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     }
   }
 
+
   /// Get from gallery
   _imgFromCamera() async {
     File image = await ImagePicker.pickImage(
@@ -831,6 +832,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                               onTap: (){
                                                 print("pressed");
                                                 imageFile=null;
+                                                //removeImage();l
                                               },
                                               child: Icon(Icons.cancel,size: 10,)),
                                         ],
@@ -943,5 +945,23 @@ class AppointmentScreenState extends State<AppointmentScreen> {
             ),
           );
         });
+  }
+
+  void removeImage() async {
+//      File image = await ImagePicker.pickImage(
+//          source: ImageSource.camera, imageQuality: 50);
+//
+//      print(image.path);
+
+      String fileName = null;
+//      fileExt = "." + (image.path.split('.').last);
+      String filePath = null;
+
+      print("fileName " + fileName);
+      print("fileExt " + fileExt);
+
+      setState(() {
+        imageFile = null;
+      });
   }
 }

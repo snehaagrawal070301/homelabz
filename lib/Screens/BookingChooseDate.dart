@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
+import 'package:homelabz/Screens/bookingScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -77,7 +78,26 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 36,
+                              width: MediaQuery.of(context).size.width*0.41,
+                              decoration: BoxDecoration(
+                                color: Color(ColorValues.WHITE_COLOR),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                    color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookingScreen()));
                             },
                             child: Container(
                               height: 36,
@@ -90,22 +110,6 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                               child: Center(
                                 child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
                                     color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                            },
-                            child: Container(
-                              height: 36,
-                              width: MediaQuery.of(context).size.width*0.41,
-                              decoration: BoxDecoration(
-                                color: Color(ColorValues.WHITE_COLOR),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                                    color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
                               ),
                             ),
                           ),

@@ -50,6 +50,28 @@ class BookingScreenState extends State<BookingScreen>{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BookingChooseDate()));
+                            },
+                            child: Container(
+                              height: 36,
+                              width: MediaQuery.of(context).size.width*0.41,
+                              decoration: BoxDecoration(
+                                color: Color(ColorValues.THEME_COLOR),
+                                border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
+                                    color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
                               onTap: () {
                               },
                               child: Container(
@@ -62,28 +84,6 @@ class BookingScreenState extends State<BookingScreen>{
                                 child: Center(
                                   child: Text("ASAP",style: TextStyle(fontFamily: "Regular",fontSize: 18,
                                       color: Color(ColorValues.THEME_COLOR)),textAlign: TextAlign.center,),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            BookingChooseDate()));
-                              },
-                              child: Container(
-                                height: 36,
-                                width: MediaQuery.of(context).size.width*0.41,
-                                decoration: BoxDecoration(
-                                  color: Color(ColorValues.THEME_COLOR),
-                                  border: Border.all(color: Color(ColorValues.WHITE_COLOR)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text("Chose Date",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-                                      color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),
                                 ),
                               ),
                             ),

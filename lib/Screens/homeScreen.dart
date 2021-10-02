@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
-  TextEditingController mobile = TextEditingController();
+  String mobile;
   TextEditingController otp = TextEditingController();
   SharedPreferences preferences;
 
@@ -547,10 +547,6 @@ class HomeScreenState extends State<HomeScreen> {
                             child: IntlPhoneField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.phone,
-                             controller: mobile,
-                            validator: (mobile) {
-                             return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-                            },
                               decoration: InputDecoration(
                                 hintText: "Enter Mobile Number",
                                hintStyle: TextStyle(
@@ -562,7 +558,11 @@ class HomeScreenState extends State<HomeScreen> {
                               initialCountryCode: 'IN',
                               onChanged: (phone) {
                                 print(phone.completeNumber);
+                                mobile=phone.completeNumber;
                               },
+//                              onCountryChanged: (phone) {
+//                                print('Country code changed to: ' + phone.countryCode);
+//                              },
                             )
                           ),
 
@@ -581,10 +581,12 @@ class HomeScreenState extends State<HomeScreen> {
 //                            fontFamily: "Regular",
 //                          ),
 //                        ),
-//
+//                      ),
+
                   GestureDetector(
                     onTap: () {
-                      if (mobile.text != null && mobile.text.length>0) {
+                      print(mobile);
+                      if (mobile != null && mobile.length>0) {
                         isnewUser();
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
@@ -775,7 +777,7 @@ class HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.only(top: 30),
                     child: Center(
                         child: Text(
-                      "To complete your registration, we have sent\nan OTP to ${this.mobile.text} to verify",
+                      "To complete your registration, we have sent\nan OTP to ${this.mobile} to verify",
                       style: TextStyle(
                           fontSize: 12,
                           fontFamily: "Regular",
@@ -880,7 +882,7 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.VERIFY_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.MOBILE_NUM: mobile,
         ConstantMsg.OTP: otp.text,
         ConstantMsg.ROLE:"ROLE_PATIENT",
       };
@@ -941,7 +943,7 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.NEW_USER);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.MOBILE_NUM: mobile,
       };
       // make POST request
       Response response =
@@ -977,13 +979,13 @@ class HomeScreenState extends State<HomeScreen> {
       String userName = name.text;
       if(userName!=null && userName.length>0){
         mapBody = {
-          ConstantMsg.MOBILE_NUM: mobile.text,
+          ConstantMsg.MOBILE_NUM: mobile,
           ConstantMsg.NAME:name.text,
           ConstantMsg.ROLE:"ROLE_PATIENT",
         };
       }else{
         mapBody = {
-          ConstantMsg.MOBILE_NUM: mobile.text,
+          ConstantMsg.MOBILE_NUM: mobile,
           ConstantMsg.ROLE:"ROLE_PATIENT",
         };
       }
@@ -1017,7 +1019,7 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.GENERATE_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobile.text,
+        ConstantMsg.MOBILE_NUM: mobile,
         ConstantMsg.ROLE:"ROLE_PATIENT",
       };
       // make POST request

@@ -3,6 +3,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
+import 'package:homelabz/Screens/BookingChooseDate.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -126,7 +127,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BookingScreen()));
+                                builder: (context) => BookingChooseDate()));
                       },
                       child: Container(
                         margin:
