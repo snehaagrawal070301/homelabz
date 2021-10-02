@@ -43,6 +43,7 @@ class ConstantMsg{
   static final String BOOKING_ID = "bookingId";
   static final String STATUS = "status";
   static final String BALANCE_TRANSACTION = "balanceTransaction";
+  static final String DEVICE_ID = "deviceId";
 
   //_________________VALIDATION MESSAGES___________________
   static final String LAB_VALIDATION = "Please select Lab";
