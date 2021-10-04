@@ -1,4 +1,4 @@
-package com.example.homelabz
+package com.patient.homelabz
 
 import io.flutter.embedding.android.FlutterActivity
 

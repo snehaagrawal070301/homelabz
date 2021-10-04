@@ -36,9 +36,38 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:20018616061:android:1305417cdc0140bc461094",
+        "mobilesdk_app_id": "1:20018616061:android:454b72c42e771f14461094",
         "android_client_info": {
-          "package_name": "com.home_labz"
+          "package_name": "com.patient.homelabz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkWWEXPD2fKiCQL5aaT-zqG4bX95acync"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20018616061:android:66941c269812923b461094",
+        "android_client_info": {
+          "package_name": "com.phlebotomist.homelabz"
         }
       },
       "oauth_client": [

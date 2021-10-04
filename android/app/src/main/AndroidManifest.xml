@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.homelabz">
+    package="com.patient.homelabz">
    <application
         android:label="homelabz"
        android:usesCleartextTraffic="true"
