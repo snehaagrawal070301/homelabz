@@ -374,111 +374,111 @@ class HomeScreenState extends State<HomeScreen> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext c) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Color(ColorValues.WHITE_COLOR),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 17, bottom: 15),
-                    child: Text(
-                      "Login or Register",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xff000000),
-                        fontFamily: "Regular",
+          return FittedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
+              width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 17, bottom: 15),
+                      child: Text(
+                        "Login or Register",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xff000000),
+                          fontFamily: "Regular",
+                        ),
                       ),
                     ),
-                  ),
-                  Divider(
-                    height: 2,
-                    color: Color(ColorValues.BLACK_COLOR),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      _bottomSheet1(context);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: 30, bottom: 10, left: 25, right: 25),
+                    Divider(
+                      height: 2,
+                      color: Color(ColorValues.BLACK_COLOR),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        _bottomSheet1(context);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 30, bottom: 10, left: 25, right: 25),
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        height: 33,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Color(ColorValues.THEME_COLOR),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Center(
+                            child: Text(
+                          "Continue with Phone",
+                          style: TextStyle(
+                            color: Color(ColorValues.WHITE_COLOR),
+                            fontFamily: "Regular",
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        )),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       height: 33,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          color: Color(ColorValues.THEME_COLOR),
+                          border:
+                              Border.all(color: Color(ColorValues.BLACK_COLOR)),
                           borderRadius: BorderRadius.circular(10.0)),
-                      child: Center(
-                          child: Text(
-                        "Continue with Phone",
-                        style: TextStyle(
-                          color: Color(ColorValues.WHITE_COLOR),
-                          fontFamily: "Regular",
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      )),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    height: 33,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Color(ColorValues.BLACK_COLOR)),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 52),
-                          child: Image(
-                            image: AssetImage("assets/images/googleIcon.png"),
-                            height: 14,
-                            width: 14,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: 52),
+                            child: Image(
+                              image: AssetImage("assets/images/googleIcon.png"),
+                              height: 14,
+                              width: 14,
+                            ),
                           ),
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(left: 10),
+                          Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Continue with Google",
+                                style: TextStyle(
+                                  color: Color(ColorValues.BLACK_COLOR),
+                                  fontFamily: "Regular",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              )),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(top: 10, bottom: 10),
                             child: Text(
-                              "Continue with Google",
+                              "Cancel",
                               style: TextStyle(
-                                color: Color(ColorValues.BLACK_COLOR),
-                                fontFamily: "Regular",
                                 fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                                fontFamily: "Regular",
                               ),
                               textAlign: TextAlign.center,
-                            )),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 10),
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                              fontFamily: "Regular",
-                            ),
-                            textAlign: TextAlign.center,
-                          ))),
-                ],
-              ),
+                            ))),
+                  ],
+                ),
             ),
           );
         });
@@ -486,9 +486,10 @@ class HomeScreenState extends State<HomeScreen> {
 
   _bottomSheet1(context) {
     showModalBottomSheet(
+      isScrollControlled: true,
         context: context,
         builder: (context) {
-          return SingleChildScrollView(
+          return FittedBox(
             child: Container(
               decoration: BoxDecoration(
                   color: Color(ColorValues.WHITE_COLOR),
@@ -614,49 +615,50 @@ class HomeScreenState extends State<HomeScreen> {
 
   _bottomSheet2(context) {
     showModalBottomSheet(
+      isScrollControlled: true,
         context: context,
         builder: (context) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Color(ColorValues.WHITE_COLOR),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 17, bottom: 15),
-                    child: Text(
-                      "Login or Register",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(ColorValues.BLACK_TEXT_COL),
-                        fontFamily: "Regular",
+          return FittedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
+              width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 17, bottom: 15),
+                      child: Text(
+                        "Login or Register",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(ColorValues.BLACK_TEXT_COL),
+                          fontFamily: "Regular",
+                        ),
                       ),
                     ),
-                  ),
-                  Divider(
-                    height: 2,
-                    color: Color(ColorValues.BLACK_COLOR),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.only(left: 27, bottom: 5),
-                    height: 38,
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Color(ColorValues.BLACK_COLOR)),
-                        color: Color(ColorValues.LIGHT_GRAY),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: TextFormField(
-                      controller: name,
-                      keyboardType: TextInputType.text,
+                    Divider(
+                      height: 2,
+                      color: Color(ColorValues.BLACK_COLOR),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 30),
+                      padding: EdgeInsets.only(left: 27, bottom: 5),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Color(ColorValues.BLACK_COLOR)),
+                          color: Color(ColorValues.LIGHT_GRAY),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: TextFormField(
+                        controller: name,
+                        keyboardType: TextInputType.text,
 //                      validator: (value) {
 //                        value.isEmpty
 //                            ? 'Enter Your Name'
@@ -667,61 +669,62 @@ class HomeScreenState extends State<HomeScreen> {
 //                            ? 'Name must contain more than 3 characters'
 //                            : null;
 //                      },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Full Name",
-                        hintStyle: TextStyle(
-                          color: Color(ColorValues.BLACK_TEXT_COL),
-                          fontSize: 12.0,
-                          fontFamily: "Regular",
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Full Name",
+                          hintStyle: TextStyle(
+                            color: Color(ColorValues.BLACK_TEXT_COL),
+                            fontSize: 12.0,
+                            fontFamily: "Regular",
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (name.text != null && name.text.length>0) {
-                        signIn();
-                      } else {
-                        showToast(ConstantMsg.NAME_VALIDATION);
-                      }
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(top: 22),
-                        padding: EdgeInsets.symmetric(horizontal: 27),
-                        height: 33,
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        decoration: BoxDecoration(
-                            color: Color(ColorValues.THEME_COLOR),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Center(
-                            child: Text(
-                          "Continue",
-                          style: TextStyle(
-                            color: Color(ColorValues.WHITE_COLOR),
-                            fontSize: 14,
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ))),
-                  ),
-                  GestureDetector(
+                    GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
-                        _bottomSheet1(context);
+                        if (name.text != null && name.text.length>0) {
+                          signIn();
+                        } else {
+                          showToast(ConstantMsg.NAME_VALIDATION);
+                        }
                       },
                       child: Container(
-                          margin: EdgeInsets.only(top: 12, bottom: 10),
-                          child: Text(
-                            "Cancel",
+                          margin: EdgeInsets.only(top: 22),
+                          padding: EdgeInsets.symmetric(horizontal: 27),
+                          height: 33,
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          decoration: BoxDecoration(
+                              color: Color(ColorValues.THEME_COLOR),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Center(
+                              child: Text(
+                            "Continue",
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Color(ColorValues.BLACK_TEXT_COL)),
+                              color: Color(ColorValues.WHITE_COLOR),
+                              fontSize: 14,
+                              fontFamily: "Regular",
+                              fontWeight: FontWeight.bold,
+                            ),
                             textAlign: TextAlign.center,
-                          )))
-                ],
-              ),
+                          ))),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          _bottomSheet1(context);
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(top: 12, bottom: 10),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(ColorValues.BLACK_TEXT_COL)),
+                              textAlign: TextAlign.center,
+                            )))
+                  ],
+                ),
+
             ),
           );
         });
@@ -729,141 +732,142 @@ class HomeScreenState extends State<HomeScreen> {
 
   _bottomSheet3(context) {
     showModalBottomSheet(
+      isScrollControlled: true,
         context: context,
         builder: (context) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Color(ColorValues.WHITE_COLOR),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 32),
-                    child: Text(
-                      "Verify Account",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: "Regular",
-                          color: Color(ColorValues.THEME_COLOR)),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 33),
-                    child: Text(
-                      "Mobile Verification has\nsuccessfully done",
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(ColorValues.BLACK_COLOR),
-                        fontFamily: "Black",
+          return FittedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
+              width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 32),
+                      child: Text(
+                        "Verify Account",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: "Regular",
+                            color: Color(ColorValues.THEME_COLOR)),
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    child: Center(
-                        child: Text(
-                      "To complete your registration, we have sent\nan OTP to ${this.mobile} to verify",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Regular",
-                          color: Color(ColorValues.BLACK_TEXT_COL)),
-                      textAlign: TextAlign.center,
-                    )),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    margin: EdgeInsets.only(
-                      top: 30,
-                    ),
-                    child: TextField(
-                      controller: otp,
-                      textAlign: TextAlign.center,
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      cursorColor: Colors.black,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Regular",
-                        color: Color(ColorValues.BLACK_TEXT_COL),
-                      ),
-                      decoration: new InputDecoration(
-                        labelStyle: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Regular",
-                          fontWeight: FontWeight.w700,
-                          color: Color(ColorValues.THEME_TEXT_COLOR),
+                    Container(
+                      margin: EdgeInsets.only(top: 33),
+                      child: Text(
+                        "Mobile Verification has\nsuccessfully done",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Color(ColorValues.BLACK_COLOR),
+                          fontFamily: "Black",
                         ),
-                        contentPadding: EdgeInsets.only(
-                            left: 15, bottom: 11, top: 11, right: 15),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 24,
-                    ),
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "If you didn’t recieve your code ?",
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontFamily: "Regular",
-                              color: Color(0xff707070)),
-                          textAlign: TextAlign.center,
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            generateOTP();
-                          },
-                          child: Text("Resend",
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontFamily: "Regular",
-                                  color: Color(ColorValues.THEME_COLOR)),
-                              textAlign: TextAlign.center),
-                        )
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if(otp.text!=null && otp.text.length>0){
-                      callLoginApi();
-                      }
-                      else{
-                        showToast(ConstantMsg.OTP_VALIDATION);
-                      }
-                    },
-                    child: Container(
-                      height: 33,
-                      width: MediaQuery.of(context).size.width * 0.53,
-                      margin: EdgeInsets.only(top: 26, bottom: 15),
-                      decoration: BoxDecoration(
-                        color: Color(ColorValues.THEME_COLOR),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                    Container(
+                      margin: EdgeInsets.only(top: 30),
                       child: Center(
                           child: Text(
-                        "VERIFY",
+                        "To complete your registration, we have sent\nan OTP to ${this.mobile} to verify",
                         style: TextStyle(
-                            color: Color(ColorValues.WHITE_COLOR),
+                            fontSize: 12,
                             fontFamily: "Regular",
-                            fontSize: 14),
+                            color: Color(ColorValues.BLACK_TEXT_COL)),
+                        textAlign: TextAlign.center,
                       )),
                     ),
-                  )
-                ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      margin: EdgeInsets.only(
+                        top: 30,
+                      ),
+                      child: TextField(
+                        controller: otp,
+                        textAlign: TextAlign.center,
+                        autofocus: false,
+                        keyboardType: TextInputType.number,
+                        cursorColor: Colors.black,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: "Regular",
+                          color: Color(ColorValues.BLACK_TEXT_COL),
+                        ),
+                        decoration: new InputDecoration(
+                          labelStyle: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.w700,
+                            color: Color(ColorValues.THEME_TEXT_COLOR),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                              left: 15, bottom: 11, top: 11, right: 15),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 24,
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "If you didn’t recieve your code ?",
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: "Regular",
+                                color: Color(0xff707070)),
+                            textAlign: TextAlign.center,
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              generateOTP();
+                            },
+                            child: Text("Resend",
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: "Regular",
+                                    color: Color(ColorValues.THEME_COLOR)),
+                                textAlign: TextAlign.center),
+                          )
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if(otp.text!=null && otp.text.length>0){
+                        callLoginApi();
+                        }
+                        else{
+                          showToast(ConstantMsg.OTP_VALIDATION);
+                        }
+                      },
+                      child: Container(
+                        height: 33,
+                        width: MediaQuery.of(context).size.width * 0.53,
+                        margin: EdgeInsets.only(top: 26, bottom: 15),
+                        decoration: BoxDecoration(
+                          color: Color(ColorValues.THEME_COLOR),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                            child: Text(
+                          "VERIFY",
+                          style: TextStyle(
+                              color: Color(ColorValues.WHITE_COLOR),
+                              fontFamily: "Regular",
+                              fontSize: 14),
+                        )),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
           );
         });
   }
