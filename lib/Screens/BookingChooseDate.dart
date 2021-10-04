@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
 import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bookingScreen.dart';
@@ -20,7 +21,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
   int index=-1;
   CalendarController _controller;
   List<TimeSlot> slots = [];
-
+  String convertedDateTime;
 
   @override
   void initState(){
@@ -42,7 +43,6 @@ class BookingChooseDateState extends State<BookingChooseDate>{
 
   @override
   Widget build(BuildContext context) {
-    String convertedDateTime;
     return Scaffold(
       backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
@@ -280,22 +280,24 @@ class BookingChooseDateState extends State<BookingChooseDate>{
                           ),
                     GestureDetector(
                       onTap: (){
-                        if(index==-1) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AppointmentScreen(convertedDateTime,
-                                          null)));
-                        }
-                        else{
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AppointmentScreen(convertedDateTime,
-                                          slots[index].startTime)));
-                        }
+                        //call booking Screen here
+                        callBookingScreen();
+                        // if(index==-1) {
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) =>
+                        //               AppointmentScreen(convertedDateTime,
+                        //                   null)));
+                        // }
+                        // else{
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) =>
+                        //               AppointmentScreen(convertedDateTime,
+                        //                   slots[index].startTime)));
+                        // }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 26,left: 25,right: 25),
@@ -320,5 +322,29 @@ class BookingChooseDateState extends State<BookingChooseDate>{
         ),
       bottomNavigationBar: BottomNavigation(),
       );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+    );
+  }
+
+  void callBookingScreen() {
+    if(convertedDateTime!=null && convertedDateTime.length>0){
+      if(index==-1){
+        // Navigator.push(context, MaterialPageRoute(
+        //         builder: (context) => AppointmentScreen(convertedDateTime, null)));
+        showToast("Please choose slot!");
+      }else{
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => AppointmentScreen(convertedDateTime, slots[index].startTime)));
+      }
+    }else{
+      showToast("Please choose date!");
+    }
   }
 }

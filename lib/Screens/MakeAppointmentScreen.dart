@@ -288,17 +288,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                       fontFamily: "Regular",
                                                       fontSize: 12),
                                                 )),
-//                                            Container(
-//                                                margin: EdgeInsets.only(
-//                                                    top: 5, bottom: 8),
-//                                                child: Text(
-//                                                  "Dr. Ruby khan",
-//                                                  style: TextStyle(
-//                                                      color: Color(ColorValues
-//                                                          .BLACK_TEXT_COL),
-//                                                      fontFamily: "Regular",
-//                                                      fontSize: 9),
-//                                                )),
+
                                             Row(
                                               children: [
                                                 Image(

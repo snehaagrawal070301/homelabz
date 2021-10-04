@@ -992,7 +992,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       if(response.statusCode==200) {
         print(body);
-        showToast("message");
+        showToast("Code has been sent to your mobile number");
         Navigator.pop(context);
         _bottomSheet3(context);
       }else {

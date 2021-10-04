@@ -1,22 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
-import 'package:homelabz/Screens/homeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
-class BookingSuccessScreen extends StatefulWidget{
+class PaymentSuccess extends StatefulWidget{
 
   final int paymentId;
 
-  const BookingSuccessScreen(this.paymentId);
+  const PaymentSuccess(this.paymentId);
 
   @override
   State<StatefulWidget> createState() {
-    return BookingSuccessScreenState();
+    return PaymentSuccessState();
   }
 }
 
-class BookingSuccessScreenState extends State<BookingSuccessScreen>{
+class PaymentSuccessState extends State<PaymentSuccess>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +82,7 @@ class BookingSuccessScreenState extends State<BookingSuccessScreen>{
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      HomeScreen()));
+                                      MakeAppointmentScreen()));
                         },
                 child: Container(
                   margin: EdgeInsets.only(top: 45,right: 30,left: 30),

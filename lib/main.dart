@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/SplashScreen.dart';
-import 'package:homelabz/Screens/bookingSuccess.dart';
+import 'package:homelabz/Screens/PaymentSuccess.dart';
 import 'package:homelabz/Screens/homeScreen.dart';
 
 void main() {

@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/PaymentInfo.dart';
-import 'package:homelabz/Screens/bookingSuccess.dart';
+import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
+import 'package:homelabz/Screens/PaymentSuccess.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/Services/payment-service.dart';
 import 'package:homelabz/components/colorValues.dart';
@@ -119,7 +120,7 @@ class PaymentScreenState extends State<PaymentScreen>{
         Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => BookingSuccessScreen(paymentId)));
+                builder: (BuildContext context) => PaymentSuccess(paymentId)));
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -139,7 +140,12 @@ class PaymentScreenState extends State<PaymentScreen>{
             color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            //go to upcoming list screen
+            Navigator.pushReplacement(
+                context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) => MakeAppointmentScreen()));
           },
     ),
         title: Text("Payment",style: TextStyle(fontFamily: "Regular",fontSize: 18,
