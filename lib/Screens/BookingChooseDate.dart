@@ -31,12 +31,18 @@ class BookingChooseDateState extends State<BookingChooseDate>{
   }
 
   void fillDataInList(){
+    slots.add( TimeSlot("07:00","08:00"));
     slots.add( TimeSlot("08:00","09:00"));
     slots.add( TimeSlot("09:00","10:00"));
     slots.add( TimeSlot("10:00","11:00"));
     slots.add( TimeSlot("11:00","12:00"));
-    slots.add( TimeSlot("12:00","01:00"));
-    slots.add( TimeSlot("01:00","02:00"));
+    slots.add( TimeSlot("12:00","13:00"));
+    slots.add( TimeSlot("13:00","14:00"));
+    slots.add( TimeSlot("14:00","15:00"));
+    slots.add( TimeSlot("15:00","16:00"));
+    slots.add( TimeSlot("16:00","17:00"));
+    slots.add( TimeSlot("17:00","18:00"));
+    slots.add( TimeSlot("18:00","19:00"));
 
     print(slots.length);
   }
@@ -70,7 +76,7 @@ class BookingChooseDateState extends State<BookingChooseDate>{
           child: Stack(
             children: [
                   Container(
-                    height: MediaQuery.of(context).size.height*0.18,
+                    // height: MediaQuery.of(context).size.height*0.18,
                     width: MediaQuery.of(context).size.width,
                     color: Color(ColorValues.THEME_COLOR),
                     child: Container(
@@ -335,16 +341,24 @@ class BookingChooseDateState extends State<BookingChooseDate>{
 
   void callBookingScreen() {
     if(convertedDateTime!=null && convertedDateTime.length>0){
+      convertedDateTime = "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+      print(convertedDateTime);
+
       if(index==-1){
         // Navigator.push(context, MaterialPageRoute(
         //         builder: (context) => AppointmentScreen(convertedDateTime, null)));
         showToast("Please choose slot!");
       }else{
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => AppointmentScreen(convertedDateTime, slots[index].startTime)));
+        String slot = slots[index].startTime;
+         validateSlot(slot);
       }
-    }else{
-      showToast("Please choose date!");
     }
+  }
+
+  void validateSlot(String slot) {
+    // validate slot time with current time
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => AppointmentScreen(convertedDateTime, slot)));
   }
 }

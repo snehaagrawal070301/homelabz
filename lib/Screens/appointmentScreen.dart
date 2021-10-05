@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/DoctorModel.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/Screens/PaymentScreen.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -705,45 +704,50 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                               fontFamily: "Regular")),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(20, 24, 20, 10),
-                    // margin: EdgeInsets.only(top: 24, right: 20, left: 20),
-                    height: 38,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Color(ColorValues.LIGHT_GRAY),
-                      border: Border.all(
-                          color: Color(ColorValues.BLACK_COLOR), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  GestureDetector(
+                    onTap: () {
+                      selectDate(context);
+                    },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (convertedDateTime == null)
-                            Text("Date of Birth",
-                                style: TextStyle(
-                                    color: Color(ColorValues.BLACK_TEXT_COL),
-                                    fontSize: 12.0,
-                                    fontFamily: "Regular"))
-                          else
-                            Text(convertedDateTime,
-                                style: TextStyle(
-                                    color: Color(ColorValues.BLACK_TEXT_COL),
-                                    fontSize: 12.0,
-                                    fontFamily: "Regular")),
-                          GestureDetector(
-                            onTap: () {
-                              selectDate(context);
-                            },
-                            child: ImageIcon(
-                              AssetImage('assets/images/calendarImage.png'),
-                              size: 20,
+                      margin: EdgeInsets.fromLTRB(20, 24, 20, 10),
+                      // margin: EdgeInsets.only(top: 24, right: 20, left: 20),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (convertedDateTime == null)
+                              Text("Date of Birth",
+                                  style: TextStyle(
+                                      color: Color(ColorValues.BLACK_TEXT_COL),
+                                      fontSize: 12.0,
+                                      fontFamily: "Regular"))
+                            else
+                              Text(convertedDateTime,
+                                  style: TextStyle(
+                                      color: Color(ColorValues.BLACK_TEXT_COL),
+                                      fontSize: 12.0,
+                                      fontFamily: "Regular")),
+                            GestureDetector(
+                              onTap: () {
+                                selectDate(context);
+                              },
+                              child: ImageIcon(
+                                AssetImage('assets/images/calendarImage.png'),
+                                size: 20,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
