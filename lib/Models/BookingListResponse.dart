@@ -1,5 +1,6 @@
 // class BookingListResponse {
 //   List<UpcomingBookingList> upcomingBookingList;
+//
 //   BookingListResponse({this.upcomingBookingList});
 //
 //   BookingListResponse.fromJson(Map<String, dynamic> json) {
@@ -9,7 +10,6 @@
 //         upcomingBookingList.add(new UpcomingBookingList.fromJson(v));
 //       });
 //     }
-//
 //   }
 //
 //   Map<String, dynamic> toJson() {
@@ -21,16 +21,19 @@
 //     return data;
 //   }
 // }
+//
 // class UpcomingBookingList {
 //   int id;
 //   Patient patient;
 //   BookedBy bookedBy;
+//   Patient phlebotomist;
+//   String date;
 //   Lab lab;
 //   String dob;
 //   String gender;
 //   bool isASAP;
+//   String timeFrom;
 //   String address;
-//   double latitude;
 //   String bookingStatus;
 //   double amount;
 //
@@ -38,14 +41,16 @@
 //       {this.id,
 //         this.patient,
 //         this.bookedBy,
+//         this.phlebotomist,
+//         this.date,
 //         this.lab,
 //         this.dob,
 //         this.gender,
 //         this.isASAP,
+//         this.timeFrom,
 //         this.address,
-//         this.latitude,
 //         this.bookingStatus,
-//       this.amount});
+//         this.amount});
 //
 //   UpcomingBookingList.fromJson(Map<String, dynamic> json) {
 //     id = json['id'];
@@ -54,12 +59,16 @@
 //     bookedBy = json['bookedBy'] != null
 //         ? new BookedBy.fromJson(json['bookedBy'])
 //         : null;
+//     phlebotomist = json['phlebotomist'] != null
+//         ? new Patient.fromJson(json['phlebotomist'])
+//         : null;
+//     date = json['date'];
 //     lab = json['lab'] != null ? new Lab.fromJson(json['lab']) : null;
 //     dob = json['dob'];
 //     gender = json['gender'];
 //     isASAP = json['isASAP'];
+//     timeFrom = json['timeFrom'];
 //     address = json['address'];
-//     latitude = json['latitude'];
 //     bookingStatus = json['bookingStatus'];
 //     amount = json['amount'];
 //   }
@@ -73,14 +82,18 @@
 //     if (this.bookedBy != null) {
 //       data['bookedBy'] = this.bookedBy.toJson();
 //     }
+//     if (this.phlebotomist != null) {
+//       data['phlebotomist'] = this.phlebotomist.toJson();
+//     }
+//     data['date'] = this.date;
 //     if (this.lab != null) {
 //       data['lab'] = this.lab.toJson();
 //     }
 //     data['dob'] = this.dob;
 //     data['gender'] = this.gender;
 //     data['isASAP'] = this.isASAP;
+//     data['timeFrom'] = this.timeFrom;
 //     data['address'] = this.address;
-//     data['latitude'] = this.latitude;
 //     data['bookingStatus'] = this.bookingStatus;
 //     data['amount'] = this.amount;
 //     return data;
@@ -153,7 +166,6 @@
 //     data['longitude'] = this.longitude;
 //     return data;
 //   }
-//
 // }
 
 class BookingListResponse {
@@ -194,6 +206,8 @@ class UpcomingBookingList {
   String address;
   String bookingStatus;
   double amount;
+  Patient doctor;
+  String notes;
 
   UpcomingBookingList(
       {this.id,
@@ -208,7 +222,9 @@ class UpcomingBookingList {
         this.timeFrom,
         this.address,
         this.bookingStatus,
-        this.amount});
+        this.amount,
+        this.doctor,
+        this.notes});
 
   UpcomingBookingList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -229,6 +245,9 @@ class UpcomingBookingList {
     address = json['address'];
     bookingStatus = json['bookingStatus'];
     amount = json['amount'];
+    doctor =
+    json['doctor'] != null ? new Patient.fromJson(json['doctor']) : null;
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -254,6 +273,10 @@ class UpcomingBookingList {
     data['address'] = this.address;
     data['bookingStatus'] = this.bookingStatus;
     data['amount'] = this.amount;
+    if (this.doctor != null) {
+      data['doctor'] = this.doctor.toJson();
+    }
+    data['notes'] = this.notes;
     return data;
   }
 }

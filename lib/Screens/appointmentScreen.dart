@@ -67,6 +67,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     super.initState();
+    print("Date ======== ${widget.date} ======== ${widget.slot}");
     getSharedPreferences();
     callAllLabsApi();
     callDoctorApi();

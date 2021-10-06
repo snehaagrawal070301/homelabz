@@ -340,9 +340,21 @@ class BookingChooseDateState extends State<BookingChooseDate>{
   }
 
   void callBookingScreen() {
-    if(convertedDateTime!=null && convertedDateTime.length>0){
-      convertedDateTime = "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+    if(convertedDateTime==null) {
+      convertedDateTime = "${DateTime
+          .now()
+          .year
+          .toString()}-${DateTime
+          .now()
+          .month
+          .toString()
+          .padLeft(2, '0')}-${DateTime
+          .now()
+          .day
+          .toString()
+          .padLeft(2, '0')}";
       print(convertedDateTime);
+    }
 
       if(index==-1){
         // Navigator.push(context, MaterialPageRoute(
@@ -352,7 +364,6 @@ class BookingChooseDateState extends State<BookingChooseDate>{
         String slot = slots[index].startTime;
          validateSlot(slot);
       }
-    }
   }
 
   void validateSlot(String slot) {
