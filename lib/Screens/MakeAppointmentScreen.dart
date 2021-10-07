@@ -113,7 +113,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
               color: Color(ColorValues.THEME_COLOR),
             ),
             onPressed: () {
-              Navigator.pop(context);
+              // call notification screen here
             },
           )
         ],
@@ -263,7 +263,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                 children: [
                                   Container(
                                     margin: EdgeInsets.all(15),
-                                    height: 20,
+                                    height: 22,
                                     width:
                                     MediaQuery
                                         .of(context)
@@ -286,7 +286,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                 : _list[pos].bookingStatus,
                                             // "Confirmed",
                                             style: TextStyle(
-                                                fontSize: 9,
+                                                fontSize: 10,
                                                 color: Color(
                                                     ColorValues.WHITE_COLOR),
                                                 fontFamily: "Regular"),

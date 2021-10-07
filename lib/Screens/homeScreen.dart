@@ -26,6 +26,7 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController otp = TextEditingController();
   SharedPreferences preferences;
+  String mobile;
 
   @override
   void initState() {
@@ -41,72 +42,110 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(ColorValues.THEME_COLOR),
+      appBar: AppBar(
+        backgroundColor: Color(ColorValues.THEME_COLOR),
+        elevation: 0,
+        title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //Expanded(flex:2,child: Image(image: AssetImage('assets/images/Menu.png'),height: 15.7,width: 26,)),
+                  Expanded(
+                    flex: 10,
+                    child: Text(
+                      "Welcome to HomeLabz!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(ColorValues.WHITE_COLOR),
+                        fontFamily: "Regular",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        //call Profile Screen\
+                        showToast("clicked");
+                      },
+                      child: Image(
+                        image: AssetImage('assets/images/profile.png'),
+                        height: 44,
+                        width: 44,
+                      ),
+                    ),
+                  ),
+                ],)
+        ),
       body:
       // SingleChildScrollView(
       //   child:
         Stack(children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 150, 0, 0),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-                color: Color(ColorValues.WHITE_COLOR),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50.0),
-                    topRight: Radius.circular(50.0))),
-          ),
           Positioned(
-            left: 5,
-            top: 5,
-            width: MediaQuery.of(context).size.width,
-            height: 100,
+            top:MediaQuery.of(context).size.height * 0.125,
             child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Expanded(flex:2,child: Image(image: AssetImage('assets/images/Menu.png'),height: 15.7,width: 26,)),
-                    Expanded(
-                      flex: 10,
-                      child: Text(
-                        "Welcome to HomeLabz!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(ColorValues.WHITE_COLOR),
-                          fontFamily: "Regular",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Image(
-                          image: AssetImage('assets/images/profile.png'),
-                          height: 44,
-                          width: 44,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50.0),
+                      topRight: Radius.circular(50.0))),
+            ),
           ),
+          // Positioned(
+          //   left: 5,
+          //   top: 5,
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 100,
+          //   child: Container(
+          //       alignment: Alignment.center,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //       ),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.start,
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           //Expanded(flex:2,child: Image(image: AssetImage('assets/images/Menu.png'),height: 15.7,width: 26,)),
+          //           Expanded(
+          //             flex: 10,
+          //             child: Text(
+          //               "Welcome to HomeLabz!",
+          //               textAlign: TextAlign.center,
+          //               style: TextStyle(
+          //                 color: Color(ColorValues.WHITE_COLOR),
+          //                 fontFamily: "Regular",
+          //                 fontWeight: FontWeight.bold,
+          //                 fontSize: 18.0,
+          //               ),
+          //             ),
+          //           ),
+          //           Expanded(
+          //             flex: 2,
+          //             child: GestureDetector(
+          //               onTap: () {},
+          //               child: Image(
+          //                 image: AssetImage('assets/images/profile.png'),
+          //                 height: 44,
+          //                 width: 44,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       )),
+          // ),
           Positioned(
-            top: 90,
+            top: 10,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding:
-                      EdgeInsets.only(top: 9, bottom: 24, left: 56, right: 56),
-                  height: MediaQuery.of(context).size.height * 0.23,
+                  padding: EdgeInsets.only(top: 9, bottom: 25, left: 50, right: 50),
+                  height: MediaQuery.of(context).size.height * 0.25,
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                       color: Color(ColorValues.WHITE_COLOR),
@@ -123,35 +162,92 @@ class HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          Container(
-              margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.44,
-                  left: 25,
-                  right: 25),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                  children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Positioned(
+            top: -80,
+            left: 0,
+            right: 0,
+            child: Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.44,
+                    left: 25,
+                    right: 25),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // showToast("clicked");
+                                  if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
+                                    print(preferences.getString(ConstantMsg.LOGIN_STATUS));
+                                    _bottomSheet(context);
+                                  }
+                                  else{
+                                    callUpcomingScreen();
+                                  }
+                                },
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height * 0.17,
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: Color(ColorValues.THEME_COLOR),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                'assets/images/Appointment.png'),
+                                            height: 40,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Make an\nAppointment ",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: "Regular",
+                                              color: Color(ColorValues.WHITE_COLOR),
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+//                    SizedBox(width: 20.0),
+                        Expanded(
+                          flex: 1,
+                          child: Column(children: [
                             GestureDetector(
                               onTap: () {
-                                // showToast("clicked");
-                                if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
-                                  print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-                                  _bottomSheet(context);
-                                }
-                                else{
-                                  callUpcomingScreen();
-                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CallforAppointment()));
                               },
                               child: Container(
                                 height: MediaQuery.of(context).size.height * 0.17,
@@ -167,8 +263,8 @@ class HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Image(
-                                          image: AssetImage(
-                                              'assets/images/Appointment.png'),
+                                          image:
+                                              AssetImage('assets/images/call.png'),
                                           height: 40,
                                         )
                                       ],
@@ -177,7 +273,7 @@ class HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Make an\nAppointment ",
+                                          "Call for\nAppointment",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: "Regular",
@@ -191,122 +287,69 @@ class HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-//                    SizedBox(width: 20.0),
-                      Expanded(
-                        flex: 1,
-                        child: Column(children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CallforAppointment()));
-                            },
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.17,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Color(ColorValues.THEME_COLOR),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
+                          ]),
+                        )
+                      ],
+                    ),
+                  ),
+//                SizedBox(height: 25.0),
+                  Container(
+                    margin: EdgeInsets.only(top:25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height * 0.17,
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: Color(ColorValues.THEME_COLOR),
+                                  ),
+                                  child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image(
-                                        image:
-                                            AssetImage('assets/images/call.png'),
-                                        height: 40,
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                'assets/images/vault.png'),
+                                            height: 50,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Vault",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: "Regular",
+                                              color: Color(ColorValues.WHITE_COLOR),
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Call for\nAppointment",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: "Regular",
-                                          color: Color(ColorValues.WHITE_COLOR),
-                                          fontSize: 14.0,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ]),
-                      )
-                    ],
-                  ),
-                ),
-//                SizedBox(height: 25.0),
-                Container(
-                  margin: EdgeInsets.only(top:25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: MediaQuery.of(context).size.height * 0.17,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: Color(ColorValues.THEME_COLOR),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image(
-                                          image: AssetImage(
-                                              'assets/images/vault.png'),
-                                          height: 50,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Vault",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: "Regular",
-                                            color: Color(ColorValues.WHITE_COLOR),
-                                            fontSize: 14.0,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
 //                    SizedBox(width: 20.0),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
+                        Expanded(
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
 //                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
 //                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
 //                                showToast("no data available");
@@ -318,52 +361,53 @@ class HomeScreenState extends State<HomeScreen> {
 //                                        builder: (context) =>
 //                                            History()));
 //                              }
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height * 0.17,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: Color(ColorValues.THEME_COLOR),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image(
-                                          image: AssetImage(
-                                              'assets/images/history.png'),
-                                          height: 40,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "History",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: "Regular",
-                                            color: Color(ColorValues.WHITE_COLOR),
-                                            fontSize: 14.0,
+                                },
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height * 0.17,
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: Color(ColorValues.THEME_COLOR),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                'assets/images/history.png'),
+                                            height: 40,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "History",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: "Regular",
+                                              color: Color(ColorValues.WHITE_COLOR),
+                                              fontSize: 14.0,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ])),
+                ])),
+          ),
         ]),
       // ),
         bottomNavigationBar: BottomNavigation(),
@@ -411,7 +455,7 @@ class HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.only(
                             top: 30, bottom: 10, left: 25, right: 25),
                         padding: EdgeInsets.symmetric(horizontal: 25),
-                        height: 30,
+                        height: 35,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             color: Color(ColorValues.THEME_COLOR),
@@ -432,7 +476,7 @@ class HomeScreenState extends State<HomeScreen> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       padding: EdgeInsets.symmetric(horizontal: 25),
-                      height: 30,
+                      height: 35,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           border:
@@ -559,8 +603,9 @@ class HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         onChanged: (phone) {
-                          // print(phone.completeNumber);
-                          // mobile=phone.completeNumber;
+
+                          print(phone.completeNumber);
+                          mobile=phone.completeNumber;
                         },
                       ),
 //                      child: TextFormField(
@@ -583,8 +628,8 @@ class HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () {
                       if (mobileController.text.toString() != null && mobileController.text.toString().length>0) {
-                        String mobileNumber = mobileController.text.toString();
-                        isnewUser(mobileNumber);
+                        // String mobileNumber = mobileController.text.toString();
+                        isnewUser(mobile);
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
                       } else {
@@ -776,14 +821,29 @@ class HomeScreenState extends State<HomeScreen> {
                     Container(
                       margin: EdgeInsets.only(top: 30),
                       child: Center(
-                          child: Text(
-                        "To complete your registration, we have sent\nan OTP to ${this.mobileController.text.toString()} to verify",
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: "Regular",
-                            color: Color(ColorValues.BLACK_TEXT_COL)),
-                        textAlign: TextAlign.center,
-                      )),
+                          child:
+                          RichText(
+                            text: new TextSpan(
+                              style: new TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                new TextSpan(text: 'To complete your registration, we have sent\nan OTP to '),
+                                new TextSpan(text: '${this.mobile}', style: new TextStyle(fontWeight: FontWeight.bold)),
+                                new TextSpan(text: ' to verify'),
+                              ],
+                            ),
+                          )
+                      //     Text(
+                      //   "To complete your registration, we have sent\nan OTP to ${this.mobileController.text.toString()} to verify",
+                      //   style: TextStyle(
+                      //       fontSize: 12,
+                      //       fontFamily: "Regular",
+                      //       color: Color(ColorValues.BLACK_TEXT_COL)),
+                      //   textAlign: TextAlign.center,
+                      // )
+                      ),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.4,
@@ -1042,5 +1102,20 @@ class HomeScreenState extends State<HomeScreen> {
     catch (e) {
       print("Error+++++" + e.toString());
     }
+
+    // var text = new RichText(
+    //   text: new TextSpan(
+    //     style: new TextStyle(
+    //       fontSize: 14.0,
+    //       color: Colors.black,
+    //     ),
+    //     children: <TextSpan>[
+    //       new TextSpan(text: 'To complete your registration, we have sent\nan OTP to'),
+    //       new TextSpan(text: '${this.mobileController.text.toString()}', style: new TextStyle(fontWeight: FontWeight.bold)),
+    //       new TextSpan(text: 'to verify'),
+    //     ],
+    //   ),
+    // );
+
   }
 }

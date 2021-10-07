@@ -120,7 +120,7 @@ class PaymentScreenState extends State<PaymentScreen>{
         Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
-                builder: (BuildContext context) => PaymentSuccess(paymentId)));
+                builder: (BuildContext context) => PaymentSuccess(paymentId, widget.bookingId)));
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());

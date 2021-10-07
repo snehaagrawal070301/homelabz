@@ -475,6 +475,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           ConstantMsg.DOCTOR: doctor,
           ConstantMsg.ADDRESS: address.text,
           ConstantMsg.DATE: widget.date,
+          ConstantMsg.TIME_FROM: widget.slot,
           ConstantMsg.GENDER: gender,
           ConstantMsg.REMARKS: remarks.text,
           ConstantMsg.IS_ASAP: "false",
@@ -488,6 +489,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           ConstantMsg.LAB: lab,
           ConstantMsg.ADDRESS: address.text,
           ConstantMsg.DATE: widget.date,
+          ConstantMsg.TIME_FROM: widget.slot,
           ConstantMsg.GENDER: gender,
           ConstantMsg.REMARKS: remarks.text,
           ConstantMsg.IS_ASAP: "false",
@@ -981,10 +983,13 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                                 ),
                               ),
 
-                              Container(
-                                // margin: EdgeInsets.all(5),
-                                height: 35,
-                                width: MediaQuery.of(context).size.width / 3,
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  // margin: EdgeInsets.all(5),
+                                  height: 35,
+                                  width: MediaQuery.of(context).size.width / 3,
+                                ),
                               )
 
                               ///////////////////////////////////////////////////////////
@@ -1015,8 +1020,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 20, right: 20, left: 20),
-                    padding: EdgeInsets.only(left: 10),
-                    // height: 75,
+                    // padding: EdgeInsets.only(left: 5),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Color(ColorValues.LIGHT_GRAY),
@@ -1024,11 +1028,29 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           color: Color(ColorValues.BLACK_COLOR), width: 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: TextField(
-                      controller: remarks,
-                      decoration: InputDecoration(hintText: "Remarks..!!"),
-                      maxLines: 3,
+                    child:
+                    SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: TextFormField(
+                        controller: remarks,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                            border:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                            hintText: "Remarks!",
+                            hintStyle: TextStyle(
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                                fontSize: 12.0,
+                                fontFamily: "Regular")),
+                      ),
                     ),
+                    // TextField(
+                    //   controller: remarks,
+                    //   decoration: InputDecoration(hintText: "Remarks..!!"),
+                    //      style:  TextStyle(fontSize: 12.0,
+                    //       fontFamily: "Regular",),
+                    //   maxLines: 3,
+                    // ),
                   ),
                   GestureDetector(
                     onTap: () {

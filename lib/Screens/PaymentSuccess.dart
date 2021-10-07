@@ -7,8 +7,9 @@ import 'package:homelabz/components/colorValues.dart';
 class PaymentSuccess extends StatefulWidget{
 
   final int paymentId;
+  final int bookingId;
 
-  const PaymentSuccess(this.paymentId);
+  const PaymentSuccess(this.paymentId, this.bookingId);
 
   @override
   State<StatefulWidget> createState() {
@@ -67,7 +68,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 8),
-                    child: Text("Payment ID - ${widget.paymentId}",style: TextStyle(fontSize: 16,color: Color(ColorValues.THEME_COLOR),fontFamily:"Black"),textAlign: TextAlign.center,),
+                    child: Text("Booking ID - ${widget.bookingId}",style: TextStyle(fontSize: 16,color: Color(ColorValues.THEME_COLOR),fontFamily:"Black"),textAlign: TextAlign.center,),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 30),

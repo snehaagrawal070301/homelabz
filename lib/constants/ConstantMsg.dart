@@ -45,6 +45,8 @@ class ConstantMsg{
   static final String BALANCE_TRANSACTION = "balanceTransaction";
   static final String DEVICE_ID = "deviceId";
   static final String DOC_LIST = "documentList";
+  static final String TIME_FROM = "timeFrom";
+
 
   //_________________VALIDATION MESSAGES___________________
   static final String LAB_VALIDATION = "Please select Lab";
