@@ -100,7 +100,7 @@ class BookingChooseDateState extends State<BookingChooseDate> {
                             ),
                             child: Center(
                               child: Text(
-                                "Chose Date",
+                                "Choose Date",
                                 style: TextStyle(
                                     fontFamily: "Regular",
                                     fontSize: 18,
@@ -409,7 +409,7 @@ class BookingChooseDateState extends State<BookingChooseDate> {
             ),
           ),
         ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(""),
     );
   }
 

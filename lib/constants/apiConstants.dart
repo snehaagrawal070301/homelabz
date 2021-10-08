@@ -17,6 +17,9 @@ class ApiConstants{
   static final String GET_PAYMENT_INFO = BaseURL+"payment/getPaymentInfo";
   static final String SUBMIT_PAYMENT_INFO = BaseURL+"payment/submitPayment";
   static final String CALL_API = BaseURL+"globalParam/findAllRequired";
+  static final String GET_USER_DETAILS = BaseURL+"user/findById/";
+  static final String GET_DOWNLOAD_URL = BaseURL+"document/download";
+  static final String LOGOUT = BaseURL+"user/logout";
 }
 
 

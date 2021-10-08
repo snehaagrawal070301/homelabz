@@ -101,7 +101,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
           ],
         ),
         ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(""),
     );
   }
 }

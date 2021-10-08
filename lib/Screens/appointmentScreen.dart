@@ -1083,7 +1083,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(""),
     );
   }
 }

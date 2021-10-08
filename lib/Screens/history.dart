@@ -47,7 +47,7 @@ class _HistoryState extends State<History> {
       Map map = {
         ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
 //        ConstantMsg.PATIENT_ID: 32,
-        ConstantMsg.LIST_TYPE: ["UPCOMING"],
+        ConstantMsg.LIST_TYPE: ["COMPLETED"],
       };
       // make POST request
       Response response =
@@ -498,7 +498,7 @@ class _HistoryState extends State<History> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(""),
     );
   }
 

@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
 import 'package:homelabz/Screens/BookingChooseDate.dart';
+import 'package:homelabz/Screens/MyDrawer.dart';
+import 'package:homelabz/Screens/NotificationScreen.dart';
+import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/bottomNavigationBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -91,14 +94,24 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
       backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
-        leading: Container(
-          margin: EdgeInsets.only(left: 17, top: 20, bottom: 20),
-          child: Image(
-            image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),
-            height: 19.52,
-            width: 26,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: ImageIcon(
+              AssetImage('assets/images/drawer.png'),
+              color: Color(ColorValues.THEME_TEXT_COLOR),
+              size: 50,
+            ),
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
+        // leading: Container(
+        //   margin: EdgeInsets.only(left: 17, top: 20, bottom: 20),
+        //   child: Image(
+        //     image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),
+        //     height: 19.52,
+        //     width: 26,
+        //   ),
+        // ),
         title: Text(
           "Make an Appointment",
           style: TextStyle(
@@ -114,6 +127,10 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
             ),
             onPressed: () {
               // call notification screen here
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => NotificationScreen()));
             },
           )
         ],
@@ -573,7 +590,8 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
 //          items: [
 //            TabItem(icon: Icons.home, title: "Home"),
 //          ]),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(""),
+      drawer: MyDrawer(),
     );
   }
 

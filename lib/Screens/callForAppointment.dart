@@ -27,6 +27,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading: IconButton(
           icon: Icon(
@@ -88,7 +89,7 @@ class _CallforAppointmentState extends State<CallforAppointment> {
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Text(
-                      "Tel: +919876543210",
+                      "Tel:  +919876543210",
                       style: TextStyle(
                           fontSize: 16,
                           color: Color(ColorValues.BLACK_COLOR),

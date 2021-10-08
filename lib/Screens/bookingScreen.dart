@@ -171,7 +171,7 @@ class BookingScreenState extends State<BookingScreen>{
           ]),
         ),
       ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: BottomNavigation("bookingScreen"),
     );
   }
 }
