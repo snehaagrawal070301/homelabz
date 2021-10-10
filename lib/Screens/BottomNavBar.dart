@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:homelabz/Screens/homeScreen.dart';
+import 'package:homelabz/Screens/HomeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
-class BottomNavigation extends StatefulWidget {
+class BottomNavBar extends StatefulWidget {
   final String screenName;
 
-  const BottomNavigation(this.screenName);
+  const BottomNavBar(this.screenName);
 
   @override
-  _BottomNavigationState createState() => _BottomNavigationState();
+  _BottomNavBarState createState() => _BottomNavBarState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/homeScreen.dart';
+import 'package:homelabz/Screens/BookingDetails.dart';
+import 'package:homelabz/Screens/HomeScreen.dart';
 
 void main() {
   runApp(MyApp());

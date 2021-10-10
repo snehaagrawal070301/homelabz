@@ -20,6 +20,7 @@ class ApiConstants{
   static final String GET_USER_DETAILS = BaseURL+"user/findById/";
   static final String GET_DOWNLOAD_URL = BaseURL+"document/download";
   static final String LOGOUT = BaseURL+"user/logout";
+  static final String GET_BOOKING_DETAILS = BaseURL+"booking/findById/";//{id}
 }
 
 

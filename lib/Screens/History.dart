@@ -1,29 +1,22 @@
 import 'dart:convert';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
-import 'package:homelabz/Screens/BookingChooseDate.dart';
-import 'package:homelabz/Screens/MyDrawer.dart';
-import 'package:homelabz/Screens/NotificationScreen.dart';
-import 'package:homelabz/Screens/ProfileScreen.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/AsapScreen.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'bookingScreen.dart';
 
-class MakeAppointmentScreen extends StatefulWidget {
-
+class History extends StatefulWidget {
   @override
-  _MakeAppointmentScreenState createState() => _MakeAppointmentScreenState();
-
+  _HistoryState createState() => _HistoryState();
 }
 
-class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
+class _HistoryState extends State<History> {
+
   SharedPreferences preferences;
   List<UpcomingBookingList> _list;
   BookingListResponse _model;
@@ -53,7 +46,8 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
       };
       Map map = {
         ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
-        ConstantMsg.LIST_TYPE: ["UPCOMING"],
+//        ConstantMsg.PATIENT_ID: 32,
+        ConstantMsg.LIST_TYPE: ["COMPLETED"],
       };
       // make POST request
       Response response =
@@ -80,38 +74,20 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
     }
   }
 
-  String getDayDateMonth(String inputDate){
-    // String to date
-    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(inputDate);
-    final DateFormat formatter = DateFormat('dd MMM yyyy');
-    final String formatted = formatter.format(tempDate);
-    return formatted;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(ColorValues.WHITE_COLOR),
       appBar: AppBar(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: ImageIcon(
-              AssetImage('assets/images/drawer.png'),
-              color: Color(ColorValues.THEME_TEXT_COLOR),
-              size: 50,
-            ),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+        leading: Container(
+          margin: EdgeInsets.only(left: 17, top: 20, bottom: 20),
+          child: Image(
+            image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),
+            height: 19.52,
+            width: 26,
           ),
         ),
-        // leading: Container(
-        //   margin: EdgeInsets.only(left: 17, top: 20, bottom: 20),
-        //   child: Image(
-        //     image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),
-        //     height: 19.52,
-        //     width: 26,
-        //   ),
-        // ),
         title: Text(
           "Make an Appointment",
           style: TextStyle(
@@ -126,11 +102,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
               color: Color(ColorValues.THEME_COLOR),
             ),
             onPressed: () {
-              // call notification screen here
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) => NotificationScreen()));
+              Navigator.pop(context);
             },
           )
         ],
@@ -163,7 +135,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BookingChooseDate()));
+                                builder: (context) => AsapScreen()));
                       },
                       child: Container(
                         margin:
@@ -280,7 +252,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                 children: [
                                   Container(
                                     margin: EdgeInsets.all(15),
-                                    height: 22,
+                                    height: 20,
                                     width:
                                     MediaQuery
                                         .of(context)
@@ -294,16 +266,12 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                     child: Center(
                                         child: GestureDetector(
                                           onTap: () {
-                                            //onConfirmed();
-                                            showPopup(context);
+                                            onConfirmed();
                                           },
                                           child: Text(
-                                            _list[pos].bookingStatus == null
-                                                ? "Pending"
-                                                : _list[pos].bookingStatus,
-                                            // "Confirmed",
+                                            "Confirmed",
                                             style: TextStyle(
-                                                fontSize: 10,
+                                                fontSize: 9,
                                                 color: Color(
                                                     ColorValues.WHITE_COLOR),
                                                 fontFamily: "Regular"),
@@ -345,7 +313,17 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                       fontFamily: "Regular",
                                                       fontSize: 12),
                                                 )),
-
+                                            Container(
+                                                margin: EdgeInsets.only(
+                                                    top: 5, bottom: 8),
+                                                child: Text(
+                                                  "Dr. Ruby khan",
+                                                  style: TextStyle(
+                                                      color: Color(ColorValues
+                                                          .BLACK_TEXT_COL),
+                                                      fontFamily: "Regular",
+                                                      fontSize: 9),
+                                                )),
                                             Row(
                                               children: [
                                                 Image(
@@ -373,8 +351,8 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                   ),
                                   Container(
                                     child: Text(
-                                      "\$" + _list[pos].amount.toString(),
-                                      //r"$ 50",
+                                      //_list[pos].amount,
+                                      r"$ 50",
 
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -406,65 +384,10 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: [
-                                    _list[pos].isASAP == true ?
-                                    _list[pos].date != true ?
                                     Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          5, 10, 5, 10),
-                                      width: 45,
-                                      // height: 85,
-                                      color: Color(ColorValues.DATE_BG),
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "TUE",
-                                              style: TextStyle(
-                                                  color: Color(ColorValues
-                                                      .LIGHT_TEXT_COLOR),
-                                                  fontSize: 11),
-                                            ),
-                                            Text(
-                                              //                                              _list[pos].dob[0],
-                                              "25",
-                                              style: TextStyle(
-                                                  fontSize: 21,
-                                                  color: Color(0xff21CDC0),
-                                                  fontWeight:
-                                                  FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "Feb",
-                                              style: TextStyle(
-                                                  color: Color(ColorValues
-                                                      .LIGHT_TEXT_COLOR),
-                                                  fontSize: 11),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ) :
-                                    Container(
-                                        padding: EdgeInsets.all(5),
-                                        // height: 70,
-                                        width: 35,
-                                        color: Color(ColorValues.DATE_BG),
-                                        child: Text("A\nS\nA\nP", style:
-                                        TextStyle(color: Color(
-                                            ColorValues.THEME_COLOR),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,)
-                                    ) :
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          5, 10, 5, 10),
-                                      width: 45,
-                                      // height: 85,
+                                      // margin: EdgeInsets.only(bottom: 15),
+                                      width: 72,
+                                      height: 85,
                                       color: Color(ColorValues.DATE_BG),
                                       child: Center(
                                         child: Column(
@@ -500,8 +423,6 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                         ),
                                       ),
                                     ),
-
-
                                     Container(
                                         margin: EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 7),
@@ -516,12 +437,9 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            _list[pos].phlebotomist == null
-                                                ? "Phlebotomist"
-                                                :
-                                            _list[pos].phlebotomist.name == null
-                                                ? "Phlebotomist"
-                                                : _list[pos].phlebotomist.name,
+                                            _list[pos].patient.name == null
+                                                ? ""
+                                                : _list[pos].patient.name,
                                             // "Phelbotomist Name",
                                             style: TextStyle(
                                                 color: Color(ColorValues
@@ -542,11 +460,7 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
                                                 SizedBox(
                                                   width: 7,
                                                 ),
-                                                Text(
-                                                    _list[pos].timeFrom == null
-                                                        ? "--:-- "
-                                                        : _list[pos].timeFrom,
-                                                    // "04:00PM",
+                                                Text("04:00PM",
                                                     style: TextStyle(
                                                       fontFamily: "Regular",
                                                       fontSize: 12,
@@ -584,65 +498,16 @@ class _MakeAppointmentScreenState extends State<MakeAppointmentScreen> {
           ),
         ]),
       ),
-//      bottomNavigationBar: ConvexAppBar(
-//          color: Color(ColorValues.THEME_COLOR),
-//          backgroundColor: Color(ColorValues.THEME_COLOR),
-//          items: [
-//            TabItem(icon: Icons.home, title: "Home"),
-//          ]),
-      bottomNavigationBar: BottomNavigation(""),
-      drawer: MyDrawer(),
+      bottomNavigationBar: BottomNavBar(""),
     );
   }
 
   void onConfirmed() {
     Fluttertoast.showToast(
-      msg: "clicked!",
+      msg: "Confirmed",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-    );
-  }
-
-  Widget showPopup(BuildContext context) {
-    return RaisedButton(
-        child: Text("Custom"),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    height: 300,
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  }
-                                  ,
-                                  child: Icon(Icons.cancel))
-                            ],
-                          ),
-                          Image(image: AssetImage(
-                              "assets/images/call_appointment.png"))
-                        ],),
-                    ),
-                  ),
-                );
-              }
-          );
-        }
     );
   }
 }

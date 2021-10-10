@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CallforAppointment extends StatefulWidget {
+class CallForBooking extends StatefulWidget {
   @override
-  _CallforAppointmentState createState() => _CallforAppointmentState();
+  _CallForBookingState createState() => _CallForBookingState();
 }
 
-class _CallforAppointmentState extends State<CallforAppointment> {
+class _CallForBookingState extends State<CallForBooking> {
   String _url = 'tel:+919876543210';
 
 //  var newString = _url.substring(0, 5);

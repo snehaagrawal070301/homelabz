@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/homeScreen.dart';
+import 'package:homelabz/Screens/HomeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 
 

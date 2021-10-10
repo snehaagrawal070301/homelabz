@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/PaymentInfo.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
+import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/PaymentSuccess.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Services/payment-service.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -18,8 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PaymentScreen extends StatefulWidget{
 
   final int bookingId;
+  final String screenName;
 
-  const PaymentScreen(this.bookingId);
+  const PaymentScreen(this.bookingId, this.screenName);
 
   @override
   State<StatefulWidget> createState() {
@@ -140,12 +141,16 @@ class PaymentScreenState extends State<PaymentScreen>{
             color: Color(ColorValues.THEME_COLOR),
             ),
           onPressed: () {
-            // Navigator.pop(context);
-            //go to upcoming list screen
-            Navigator.pushReplacement(
-                context,
-                new MaterialPageRoute(
-                    builder: (BuildContext context) => MakeAppointmentScreen()));
+              if(widget.screenName!=null &&(widget.screenName.compareTo("BookingDetails")==0)) {
+                Navigator.pop(context);
+              }else {
+                //go to upcoming list screen
+                Navigator.pushReplacement(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            BookingsListScreen()));
+              }
           },
     ),
         title: Text("Payment",style: TextStyle(fontFamily: "Regular",fontSize: 18,

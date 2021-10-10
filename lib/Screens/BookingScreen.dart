@@ -4,8 +4,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/DoctorModel.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/PaymentScreen.dart';
+import 'package:homelabz/Screens/address_search.dart';
+import 'package:homelabz/Services/place_service.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class UploadData {
   File imageFile;
@@ -23,19 +26,19 @@ class UploadData {
   UploadData(this.imageFile, this.fileExt, this.imageName);
 }
 
-class AppointmentScreen extends StatefulWidget {
+class BookingScreen extends StatefulWidget {
   final String date;
   final String slot;
 
-  const AppointmentScreen(this.date, this.slot);
+  const BookingScreen(this.date, this.slot);
 
   @override
   State<StatefulWidget> createState() {
-    return AppointmentScreenState();
+    return BookingScreenState();
   }
 }
 
-class AppointmentScreenState extends State<AppointmentScreen> {
+class BookingScreenState extends State<BookingScreen> {
 //  final AppointmentScreen obj;
 //  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
 
@@ -114,7 +117,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     Navigator.pushReplacement(
         context,
         new MaterialPageRoute(
-            builder: (BuildContext context) => PaymentScreen(bookingId)));
+            builder: (BuildContext context) => PaymentScreen(bookingId,"")));
   }
 
   void callDoctorApi() async {
@@ -517,6 +520,36 @@ class AppointmentScreenState extends State<AppointmentScreen> {
     }
   }
 
+  Future<void> callPlacesApi() async {
+    // generate a new token here
+    final sessionToken = Uuid().v4();
+    final Suggestion result =
+    await showSearch(context: context, delegate: AddressSearch(sessionToken)
+      // delegate: AddressSearch(sessionToken),
+    );
+    // This will change the text displayed in the TextField
+    if (result != null) {
+      final placeDetails = await PlaceApiProvider(sessionToken)
+          .getPlaceDetailFromId(result.placeId);
+      setState(() {
+        print(result.description);
+        print(placeDetails.streetNumber);
+        print(placeDetails.street);
+        print(placeDetails.city);
+        print(placeDetails.zipCode);
+
+        if(placeDetails.streetNumber==null){
+          address.text = "${placeDetails.street}, "+"${placeDetails.city}, "+"${placeDetails.state}, "
+              +"${placeDetails.country}";
+        }else{
+          address.text = "${placeDetails.streetNumber}, "+"${placeDetails.street}, "+"${placeDetails.city}, "
+              +"${placeDetails.state}, "+"${placeDetails.country}";
+        }
+
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -681,30 +714,37 @@ class AppointmentScreenState extends State<AppointmentScreen> {
                           )
                         : Container(),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 24, right: 20, left: 20),
-                    padding: EdgeInsets.only(left: 5),
-                    height: 38,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Color(ColorValues.LIGHT_GRAY),
-                      border: Border.all(
-                          color: Color(ColorValues.BLACK_COLOR), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextFormField(
-                      controller: address,
-                      validator: (value) {
-                        return value.isEmpty ? "Please Enter Address" : null;
-                      },
-                      decoration: InputDecoration(
-                          border:
-                              OutlineInputBorder(borderSide: BorderSide.none),
-                          hintText: "Address",
-                          hintStyle: TextStyle(
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                              fontSize: 12.0,
-                              fontFamily: "Regular")),
+                  GestureDetector(
+                    onTap: () {
+                      callPlacesApi();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 24, right: 20, left: 20),
+                      padding: EdgeInsets.only(left: 5),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+                        controller: address,
+                        autofocus: false,
+                        // enabled: false,
+                        validator: (value) {
+                          return value.isEmpty ? "Please Enter Address" : null;
+                        },
+                        decoration: InputDecoration(
+                            border:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            hintText: "Address",
+                            hintStyle: TextStyle(
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                                fontSize: 12.0,
+                                fontFamily: "Regular")),
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -1083,7 +1123,7 @@ class AppointmentScreenState extends State<AppointmentScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavigation(""),
+      bottomNavigationBar: BottomNavBar(""),
     );
   }
 }

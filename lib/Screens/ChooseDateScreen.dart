@@ -2,21 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
-import 'package:homelabz/Screens/bookingScreen.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/BookingsListScreen.dart';
+import 'package:homelabz/Screens/AsapScreen.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'appointmentScreen.dart';
+import 'BookingScreen.dart';
 
-class BookingChooseDate extends StatefulWidget {
+class ChooseDateScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return BookingChooseDateState();
+    return ChooseDateScreenState();
   }
 }
 
-class BookingChooseDateState extends State<BookingChooseDate> {
+class ChooseDateScreenState extends State<ChooseDateScreen> {
   int index = -1;
   CalendarController _controller;
   List<TimeSlot> slots = [];
@@ -61,7 +61,7 @@ class BookingChooseDateState extends State<BookingChooseDate> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MakeAppointmentScreen()));
+                    builder: (context) => BookingsListScreen()));
           },
         ),
         title: Text(
@@ -115,7 +115,7 @@ class BookingChooseDateState extends State<BookingChooseDate> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BookingScreen()));
+                                    builder: (context) => AsapScreen()));
                           },
                           child: Container(
                             height: 36,
@@ -409,7 +409,7 @@ class BookingChooseDateState extends State<BookingChooseDate> {
             ),
           ),
         ),
-      bottomNavigationBar: BottomNavigation(""),
+      bottomNavigationBar: BottomNavBar(""),
     );
   }
 
@@ -445,6 +445,6 @@ class BookingChooseDateState extends State<BookingChooseDate> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AppointmentScreen(convertedDateTime, slot)));
+            builder: (context) => BookingScreen(convertedDateTime, slot)));
   }
 }

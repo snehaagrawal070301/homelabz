@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/BookingChooseDate.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
-import 'package:homelabz/Screens/appointmentScreen.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/ChooseDateScreen.dart';
+import 'package:homelabz/Screens/BookingsListScreen.dart';
+import 'package:homelabz/Screens/BookingScreen.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 
-class BookingScreen extends StatefulWidget{
+class AsapScreen extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return BookingScreenState();
+    return AsapScreenState();
   }
 }
 
-class BookingScreenState extends State<BookingScreen>{
+class AsapScreenState extends State<AsapScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +28,7 @@ class BookingScreenState extends State<BookingScreen>{
           onPressed: () {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(
-                    builder: (context) => MakeAppointmentScreen()));
+                    builder: (context) => BookingsListScreen()));
           },
     ),
         title: Text("Booking",style: TextStyle(fontFamily: "Regular",fontSize: 18,
@@ -58,7 +58,7 @@ class BookingScreenState extends State<BookingScreen>{
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          BookingChooseDate()));
+                                          ChooseDateScreen()));
                             },
                             child: Container(
                               height: 36,
@@ -151,7 +151,7 @@ class BookingScreenState extends State<BookingScreen>{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        AppointmentScreen(null,null)));
+                                        BookingScreen(null,null)));
                     },
                       child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -171,7 +171,7 @@ class BookingScreenState extends State<BookingScreen>{
           ]),
         ),
       ),
-      bottomNavigationBar: BottomNavigation("bookingScreen"),
+      bottomNavigationBar: BottomNavBar("bookingScreen"),
     );
   }
 }

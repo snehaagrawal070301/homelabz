@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
+import 'package:homelabz/Screens/BookingsListScreen.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 
 class PaymentSuccess extends StatefulWidget{
@@ -83,7 +83,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      MakeAppointmentScreen()));
+                                      BookingsListScreen()));
                         },
                 child: Container(
                   margin: EdgeInsets.only(top: 45,right: 30,left: 30),
@@ -101,7 +101,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
           ],
         ),
         ),
-      bottomNavigationBar: BottomNavigation(""),
+      bottomNavigationBar: BottomNavBar(""),
     );
   }
 }

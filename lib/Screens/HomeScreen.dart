@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/ErrorModel.dart';
-import 'package:homelabz/Screens/MakeAppointmentScreen.dart';
+import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/ProfileScreen.dart';
-import 'package:homelabz/Screens/bottomNavigationBar.dart';
-import 'package:homelabz/Screens/callForAppointment.dart';
+import 'package:homelabz/Screens/BottomNavBar.dart';
+import 'package:homelabz/Screens/CallForBooking.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -308,7 +308,7 @@ class HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CallforAppointment()));
+                                              CallForBooking()));
                                 },
                                 child: Container(
                                   height: MediaQuery
@@ -501,7 +501,7 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ]),
       // ),
-      bottomNavigationBar: BottomNavigation("homeScreen"),
+      bottomNavigationBar: BottomNavBar("homeScreen"),
       drawer: MyDrawer(),
     );
   }
@@ -1131,7 +1131,7 @@ class HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacement(
         context,
         new MaterialPageRoute(
-            builder: (BuildContext context) => MakeAppointmentScreen()));
+            builder: (BuildContext context) => BookingsListScreen()));
   }
 
   void isnewUser(String mobileNumber) async {
