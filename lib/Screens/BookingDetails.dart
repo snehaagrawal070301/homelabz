@@ -474,38 +474,38 @@ class _BookingDetailsState extends State<BookingDetails> {
               ),
 
               // payment Code
-              // _model == null
-              //     ? Container()
-              //     : _model.paymentStatus == null
-              //     ? Container()
-              //     :_model.paymentStatus.compareTo("UnPaid")==0?
-              // GestureDetector(
-              //   onTap: () {
-              //     callPaymentScreen();
-              //   },
-              //   child: Container(
-              //     margin: EdgeInsets.only(
-              //         top: 20, bottom: 10, left: 25, right: 25),
-              //     padding: EdgeInsets.symmetric(horizontal: 25),
-              //     height: 35,
-              //
-              //     decoration: BoxDecoration(
-              //         color: Color(ColorValues.THEME_COLOR),
-              //         borderRadius: BorderRadius.circular(10.0)),
-              //     child: Center(
-              //         child: Text(
-              //           "Pay Now",
-              //           style: TextStyle(
-              //             color: Color(ColorValues.WHITE_COLOR),
-              //             fontFamily: "Regular",
-              //             fontSize: 14,
-              //             fontWeight: FontWeight.bold,
-              //           ),
-              //           textAlign: TextAlign.center,
-              //         )),
-              //   ),
-              // )
-              //     :Container(),
+              _model == null
+                  ? Container()
+                  : _model.paymentStatus == null
+                  ? Container()
+                  :_model.paymentStatus.compareTo("UnPaid")==0?
+              GestureDetector(
+                onTap: () {
+                  callPaymentScreen();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: 20, bottom: 10, left: 25, right: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  height: 35,
+
+                  decoration: BoxDecoration(
+                      color: Color(ColorValues.THEME_COLOR),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Center(
+                      child: Text(
+                        "Pay Now",
+                        style: TextStyle(
+                          color: Color(ColorValues.WHITE_COLOR),
+                          fontFamily: "Regular",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
+                ),
+              )
+                  :Container(),
 
               Container(
                 margin: EdgeInsets.fromLTRB(0, 25, 0, 15),

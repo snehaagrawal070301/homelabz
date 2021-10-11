@@ -82,7 +82,9 @@ class PaymentScreenState extends State<PaymentScreen>{
     if(response.success){
       print(response.message);
       // call submit api here
-      submitPaymentStatus("success");
+      submitPaymentStatus("succeeded");
+    }else{
+
     }
     await dialog.hide();
     Scaffold.of(context).showSnackBar(SnackBar(

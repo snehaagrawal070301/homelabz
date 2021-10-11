@@ -43,7 +43,7 @@ class BookingScreenState extends State<BookingScreen> {
 //  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
 
   String gender;
-  TextEditingController address = TextEditingController();
+  // TextEditingController address = TextEditingController();
   TextEditingController remarks = TextEditingController();
   TextEditingController dob = TextEditingController();
   PreSignedUrlResponse responseModel;
@@ -62,6 +62,7 @@ class BookingScreenState extends State<BookingScreen> {
   LabResponse labName;
   DoctorResponse doctorName;
   SharedPreferences preferences;
+  String searchAddress="";
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -186,10 +187,8 @@ class BookingScreenState extends State<BookingScreen> {
   }
 
   void validateData() {
-    String addrs = address.text;
-
     if (selectedLabId != null) {
-      if (addrs != null && addrs.length > 0) {
+      if (searchAddress != null && searchAddress.length > 0) {
         if (convertedDateTime != null && convertedDateTime.length > 0) {
           if (gender != null && gender.length > 0) {
             if (imageList != null && imageList.length>0) {
@@ -246,7 +245,7 @@ class BookingScreenState extends State<BookingScreen> {
         ConstantMsg.PATIENT: patient,
         ConstantMsg.BOOKED_BY: bookedBy,
         ConstantMsg.LAB: lab,
-        ConstantMsg.ADDRESS: address.text,
+        ConstantMsg.ADDRESS: searchAddress,
         ConstantMsg.DATE: "",
         ConstantMsg.GENDER: gender,
         //ConstantMsg.ID: 0,
@@ -476,7 +475,7 @@ class BookingScreenState extends State<BookingScreen> {
           ConstantMsg.BOOKED_BY: bookedBy,
           ConstantMsg.LAB: lab,
           ConstantMsg.DOCTOR: doctor,
-          ConstantMsg.ADDRESS: address.text,
+          ConstantMsg.ADDRESS: searchAddress,
           ConstantMsg.DATE: widget.date,
           ConstantMsg.TIME_FROM: widget.slot,
           ConstantMsg.GENDER: gender,
@@ -490,7 +489,7 @@ class BookingScreenState extends State<BookingScreen> {
           ConstantMsg.PATIENT: patient,
           ConstantMsg.BOOKED_BY: bookedBy,
           ConstantMsg.LAB: lab,
-          ConstantMsg.ADDRESS: address.text,
+          ConstantMsg.ADDRESS: searchAddress,
           ConstantMsg.DATE: widget.date,
           ConstantMsg.TIME_FROM: widget.slot,
           ConstantMsg.GENDER: gender,
@@ -539,10 +538,10 @@ class BookingScreenState extends State<BookingScreen> {
         print(placeDetails.zipCode);
 
         if(placeDetails.streetNumber==null){
-          address.text = "${placeDetails.street}, "+"${placeDetails.city}, "+"${placeDetails.state}, "
+          searchAddress = "${placeDetails.street}, "+"${placeDetails.city}, "+"${placeDetails.state}, "
               +"${placeDetails.country}";
         }else{
-          address.text = "${placeDetails.streetNumber}, "+"${placeDetails.street}, "+"${placeDetails.city}, "
+          searchAddress = "${placeDetails.streetNumber}, "+"${placeDetails.street}, "+"${placeDetails.city}, "
               +"${placeDetails.state}, "+"${placeDetails.country}";
         }
 
@@ -729,21 +728,32 @@ class BookingScreenState extends State<BookingScreen> {
                             color: Color(ColorValues.BLACK_COLOR), width: 1),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: TextFormField(
-                        controller: address,
-                        autofocus: false,
-                        // enabled: false,
-                        validator: (value) {
-                          return value.isEmpty ? "Please Enter Address" : null;
-                        },
-                        decoration: InputDecoration(
-                            border:
-                                OutlineInputBorder(borderSide: BorderSide.none),
-                            hintText: "Address",
-                            hintStyle: TextStyle(
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                                fontSize: 12.0,
-                                fontFamily: "Regular")),
+                      child: new Padding(
+                        padding: EdgeInsets.fromLTRB(12.0, 0.0, 0.0, 0.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: searchAddress == ""
+                              ? Text(
+                            "Select Address",
+                            style: TextStyle(
+                              fontFamily: 'customLight',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12.0,
+                              color: Color(ColorValues.HINT_COL),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )
+                              : Text(
+                            searchAddress,
+                            style: TextStyle(
+                                color: Color(ColorValues.BLACK_COL),
+                                fontSize: 13.0,
+                                fontFamily: "Regular"),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
                     ),
                   ),
