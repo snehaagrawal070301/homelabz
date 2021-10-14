@@ -13,7 +13,7 @@
         android:name="android.permisssion.ACCESS_COARSE_LOCATION" />
 
    <application
-        android:label="homelabz"
+        android:label="Patient"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity

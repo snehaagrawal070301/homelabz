@@ -274,17 +274,20 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                               //onConfirmed();
                                               showPopup(context);
                                             },
-                                            child: Text(
-                                              _list[pos].bookingStatus == null
-                                                  ? ""
-                                                  : _list[pos].bookingStatus,
-                                              // "Confirmed",
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Color(
-                                                      ColorValues.WHITE_COLOR),
-                                                  fontFamily: "Regular"),
-                                              textAlign: TextAlign.center,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(2),
+                                              child: Text(
+                                                _list[pos].bookingStatus == null
+                                                    ? ""
+                                                    : _list[pos].bookingStatus,
+                                                // "Confirmed",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: Color(
+                                                        ColorValues.WHITE_COLOR),
+                                                    fontFamily: "Regular"),
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ),
                                           )),
                                         ),
