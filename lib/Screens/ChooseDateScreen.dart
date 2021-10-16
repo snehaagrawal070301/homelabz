@@ -75,7 +75,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       body:SingleChildScrollView(
           child:
           Container(
-            height: MediaQuery.of(context).size.height * 0.85,
+            height: MediaQuery.of(context).size.height * 0.88,
             color: Color(ColorValues.WHITE_COLOR),
             child: Stack(
               children: [
@@ -383,7 +383,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                           // }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(top: 26, left: 25, right: 25),
+                          margin: EdgeInsets.only(top: 26, left: 25, right: 25,bottom:20),
                           height: 40,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
