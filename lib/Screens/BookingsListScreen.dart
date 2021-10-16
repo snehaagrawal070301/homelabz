@@ -595,8 +595,11 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                   return Center(
                     child: Column(
                       children: [
-                        Image(
-                          image: AssetImage("assets/images/NoAppointment.jpg"),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image(
+                            image: AssetImage("assets/images/NoAppointment.jpg",),
+                          ),
                         ),
                         Text("No Appointment available!"),
                       ],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/apiConstants.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -25,15 +28,39 @@ class _NotificationScreenState extends State<NotificationScreen> {
     getNotificationsList();
   }
 
-  void getNotificationsList(){
-//    dataList = [];
-//    dataList.add("1");
-//    dataList.add("2");
-//    dataList.add("3");
-//    dataList.add("4");
-//    print("++++++++++ ${dataList.length}");
+  Future<void> getNotificationsList() async {
+    // dataList = [];
+    // dataList.add("1");
+    // dataList.add("2");
+    // dataList.add("3");
+    // dataList.add("4");
+    // print("++++++++++ ${dataList.length}");
 
+    try {
+      var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
+          preferences.getString(ConstantMsg.ID).toString());
 
+      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
+
+      Map<String, String> headers = {
+        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+        ConstantMsg.HEADER_AUTH:
+        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+      };
+      // make GET request
+      Response response = await get(url, headers: headers,);
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+
+      if (response.statusCode == 200) {
+
+        setState(() {
+        });
+      }
+    } catch (ex) {
+
+    }
   }
 
   @override
