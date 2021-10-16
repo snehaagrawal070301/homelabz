@@ -57,5 +57,6 @@ class ConstantMsg{
   static final String OTP_VALIDATION = "Please enter Code";
   static final String NMAE_VALIDATION = "Please enter Name";
   static final String PRESCRIPTION_VALIDATION = "Please attach prescription";
+  static final String REMARKS_VALIDATION = "Please attach prescription or add remarks";
 
 }

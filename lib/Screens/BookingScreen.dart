@@ -144,6 +144,7 @@ class BookingScreenState extends State<BookingScreen> {
 
         for (int i = 0; i < list.length; i++) {
           DoctorResponse model = DoctorResponse.fromJson(data[i]);
+          if(model.name!=null && model.name.length>0)
           _doctor.add(model);
         }
         setState(() {});
@@ -194,7 +195,18 @@ class BookingScreenState extends State<BookingScreen> {
             if (imageList != null && imageList.length>0) {
               getPreSignedUrl();
             } else {
-              showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
+              // showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
+              String remarkVal = remarks.text;
+              if(remarkVal!=null && remarkVal.length>0){
+                if (widget.date == null) {
+                  // callBookAppointmentApi();
+                  callBookAppointmentApiByDate(true);
+                } else {
+                  callBookAppointmentApiByDate(false);
+                }
+              }else{
+                showToast(ConstantMsg.REMARKS_VALIDATION);
+              }
             }
           } else {
             showToast(ConstantMsg.GENDER_VALIDATION);
@@ -210,68 +222,71 @@ class BookingScreenState extends State<BookingScreen> {
     }
   }
 
-  void callBookAppointmentApi() async {
-    try {
-      var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
-      Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-            "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
-      };
-
-      Map patient = {
-        ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-      };
-      Map bookedBy = {
-        ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-      };
-      Map lab = {
-        ConstantMsg.ID: selectedLabId,
-      };
-
-      Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
-      List docList = [];
-      for (int i = 0; i < urlList.length; i++) {
-        Map list1 = {
-          "category": "BOOKING",
-          "name": urlList[i].keyName,
-          "path": urlList[i].keyPath,
-          "user": userMap
-        };
-        docList.add(list1);
-      }
-
-      Map mapBody = {
-        ConstantMsg.PATIENT: patient,
-        ConstantMsg.BOOKED_BY: bookedBy,
-        ConstantMsg.LAB: lab,
-        ConstantMsg.ADDRESS: searchAddress,
-        ConstantMsg.DATE: "",
-        ConstantMsg.GENDER: gender,
-        //ConstantMsg.ID: 0,
-        ConstantMsg.IS_ASAP: "true",
-        ConstantMsg.DOB: convertedDateTime,
-        ConstantMsg.DOC_LIST: docList,
-      };
-      print(mapBody);
-      // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
-
-      String body = response.body;
-      var data = json.decode(body);
-      print(body);
-
-      if (response.statusCode == 200) {
-        int id = data["id"];
-        print(id);
-
-        callPaymentScreen(id);
-      } else {}
-    } catch (e) {
-      print("Error+++++" + e.toString());
-    }
-  }
+  // void callBookAppointmentApi() async {
+  //   try {
+  //     var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
+  //     Map<String, String> headers = {
+  //       ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+  //       ConstantMsg.HEADER_AUTH:
+  //           "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+  //     };
+  //
+  //     Map patient = {
+  //       ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
+  //     };
+  //     Map bookedBy = {
+  //       ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
+  //     };
+  //     Map lab = {
+  //       ConstantMsg.ID: selectedLabId,
+  //     };
+  //
+  //     if(urlList!=null){
+  //     Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
+  //     List docList = [];
+  //     for (int i = 0; i < urlList.length; i++) {
+  //       Map list1 = {
+  //         "category": "BOOKING",
+  //         "name": urlList[i].keyName,
+  //         "path": urlList[i].keyPath,
+  //         "user": userMap
+  //       };
+  //       docList.add(list1);
+  //     }
+  //     }
+  //
+  //     Map mapBody = {
+  //       ConstantMsg.PATIENT: patient,
+  //       ConstantMsg.BOOKED_BY: bookedBy,
+  //       ConstantMsg.LAB: lab,
+  //       ConstantMsg.ADDRESS: searchAddress,
+  //       ConstantMsg.DATE: "",
+  //       ConstantMsg.GENDER: gender,
+  //       //ConstantMsg.ID: 0,
+  //       ConstantMsg.IS_ASAP: "true",
+  //       ConstantMsg.REMARKS: remarks.text,
+  //       ConstantMsg.DOB: convertedDateTime,
+  //       ConstantMsg.DOC_LIST: docList,
+  //     };
+  //     print(mapBody);
+  //     // make POST request
+  //     Response response =
+  //         await post(url, headers: headers, body: json.encode(mapBody));
+  //
+  //     String body = response.body;
+  //     var data = json.decode(body);
+  //     print(body);
+  //
+  //     if (response.statusCode == 200) {
+  //       int id = data["id"];
+  //       print(id);
+  //
+  //       callPaymentScreen(id);
+  //     } else {}
+  //   } catch (e) {
+  //     print("Error+++++" + e.toString());
+  //   }
+  // }
 
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -404,10 +419,11 @@ class BookingScreenState extends State<BookingScreen> {
         uploadCount++;
         if (uploadCount == urlList.length) {
           // call Save api here
+          uploadCount=0;
           if (widget.date == null) {
-            callBookAppointmentApi();
+            callBookAppointmentApiByDate(true);
           } else {
-            callBookAppointmentApiByDate();
+            callBookAppointmentApiByDate(false);
           }
         }
       } else {}
@@ -434,7 +450,7 @@ class BookingScreenState extends State<BookingScreen> {
   //   }
   // }
 
-  void callBookAppointmentApiByDate() async {
+  void callBookAppointmentApiByDate(bool isASAP) async {
     try {
       var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
       Map<String, String> headers = {
@@ -442,7 +458,7 @@ class BookingScreenState extends State<BookingScreen> {
         ConstantMsg.HEADER_AUTH:
             "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
-
+      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
       Map patient = {
         ConstantMsg.ID: preferences.get(ConstantMsg.ID),
       };
@@ -453,52 +469,48 @@ class BookingScreenState extends State<BookingScreen> {
         ConstantMsg.ID: selectedLabId,
       };
 
-      Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
-      List docList = [];
-      for (int i = 0; i < urlList.length; i++) {
-        Map list1 = {
-          "category": "BOOKING",
-          "name": urlList[i].keyName,
-          "path": urlList[i].keyPath,
-          "user": userMap
-        };
-        docList.add(list1);
+      List docList;
+      if(urlList!=null && urlList.length>0) {
+        Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
+        List docList = [];
+        for (int i = 0; i < urlList.length; i++) {
+          Map list1 = {
+            "category": "BOOKING",
+            "name": urlList[i].keyName,
+            "path": urlList[i].keyPath,
+            "user": userMap
+          };
+          docList.add(list1);
+        }
       }
 
-      Map mapBody;
+      Map doctor;
       if (selectedDoctorId != null) {
-        Map doctor = {
+        doctor = {
           ConstantMsg.ID: selectedDoctorId,
         };
-        mapBody = {
-          ConstantMsg.PATIENT: patient,
-          ConstantMsg.BOOKED_BY: bookedBy,
-          ConstantMsg.LAB: lab,
-          ConstantMsg.DOCTOR: doctor,
-          ConstantMsg.ADDRESS: searchAddress,
-          ConstantMsg.DATE: widget.date,
-          ConstantMsg.TIME_FROM: widget.slot,
-          ConstantMsg.GENDER: gender,
-          ConstantMsg.REMARKS: remarks.text,
-          ConstantMsg.IS_ASAP: "false",
-          ConstantMsg.DOB: convertedDateTime,
-          ConstantMsg.DOC_LIST: docList,
-        };
-      } else {
-        mapBody = {
-          ConstantMsg.PATIENT: patient,
-          ConstantMsg.BOOKED_BY: bookedBy,
-          ConstantMsg.LAB: lab,
-          ConstantMsg.ADDRESS: searchAddress,
-          ConstantMsg.DATE: widget.date,
-          ConstantMsg.TIME_FROM: widget.slot,
-          ConstantMsg.GENDER: gender,
-          ConstantMsg.REMARKS: remarks.text,
-          ConstantMsg.IS_ASAP: "false",
-          ConstantMsg.DOB: convertedDateTime,
-          ConstantMsg.DOC_LIST: docList,
-        };
       }
+
+      Map mapBody = {
+          ConstantMsg.PATIENT: patient,
+          ConstantMsg.BOOKED_BY: bookedBy,
+          ConstantMsg.LAB: lab,
+
+        if(selectedDoctorId!=null)
+          ConstantMsg.DOCTOR: doctor,
+
+          ConstantMsg.ADDRESS: searchAddress,
+          ConstantMsg.DATE: widget.date,
+          ConstantMsg.TIME_FROM: widget.slot,
+          ConstantMsg.GENDER: gender,
+          ConstantMsg.REMARKS: remarks.text,
+          ConstantMsg.IS_ASAP: isASAP,
+          ConstantMsg.DOB: convertedDateTime,
+
+        if(urlList!=null && urlList.length>0)
+          ConstantMsg.DOC_LIST: docList,
+
+        };
 
       print(mapBody);
       // make POST request
@@ -1133,7 +1145,7 @@ class BookingScreenState extends State<BookingScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavBar(""),
+      bottomNavigationBar: BottomNavBar("bookingScreen"),
     );
   }
 }

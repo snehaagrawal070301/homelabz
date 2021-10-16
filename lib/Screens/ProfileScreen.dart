@@ -496,6 +496,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Image.asset('assets/images/profile_pic.png'),
             ),
           ),
+
           Positioned(
               top: 60,
               left: 60,
@@ -512,6 +513,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Image.asset('assets/images/Camera.png'),
                   ))),
+
           Positioned(
             top: 70,
             width: MediaQuery.of(context).size.width,

@@ -478,7 +478,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   ? Container()
                   : _model.paymentStatus == null
                   ? Container()
-                  :_model.paymentStatus.compareTo("UnPaid")==0?
+                  :_model.paymentStatus.compareTo("Unpaid")==0?
               GestureDetector(
                 onTap: () {
                   callPaymentScreen();

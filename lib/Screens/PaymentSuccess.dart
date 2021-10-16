@@ -94,7 +94,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Center(
-                  child: Text("BACK TO HOME",style: TextStyle(fontFamily: "Regular",fontSize: 15,
+                  child: Text("VIEW BOOKING",style: TextStyle(fontFamily: "Regular",fontSize: 15,
                   color: Color(ColorValues.WHITE_COLOR)),textAlign: TextAlign.center,),),
               ),
            ),

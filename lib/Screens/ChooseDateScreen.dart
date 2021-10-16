@@ -5,7 +5,9 @@ import 'package:homelabz/Models/TimeSlot.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/AsapScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'BookingScreen.dart';
 
@@ -435,16 +437,24 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       showToast("Please choose slot!");
     } else {
       String slot = slots[index].startTime+":00";
-      validateSlot(slot);
+      validateSlot(convertedDateTime,slot);
     }
   }
 
-  void validateSlot(String slot) {
+  void validateSlot(String time, String slot) {
     // validate slot time with current time
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BookingScreen(convertedDateTime, slot)));
+    String input = time+" "+slot;
+    DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(input);
+    DateTime currentDateTime = DateTime.now();
+
+    if(tempDate.compareTo(currentDateTime)==1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BookingScreen(convertedDateTime, slot)));
+    }else{
+      showToast("You can not select past time!");
+    }
   }
 }

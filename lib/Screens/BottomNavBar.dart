@@ -27,12 +27,54 @@ class _BottomNavBarState extends State<BottomNavBar> {
 //            MaterialPageRoute(
 //                builder: (context) => HomeScreen()));
         // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-        if (widget.screenName != null &&
-            widget.screenName.compareTo("homeScreen") == 0) {
-          // do nothing
+        if (widget.screenName != "") {
+          if (widget.screenName.compareTo("homeScreen") == 0) {
+            // do nothing
+          }else if(widget.screenName.compareTo("bookingScreen") == 0) {
+            showAlertDialog(context);
+          }
         } else {
           makeRoutePage(context: context, pageRef: HomeScreen());
         }
+      },
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK", style: TextStyle(
+        color: Color(ColorValues.THEME_TEXT_COLOR),
+      ),),
+      onPressed: () {
+        makeRoutePage(context: context, pageRef: HomeScreen());
+      },
+    );
+
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel", style: TextStyle(
+        color: Color(ColorValues.THEME_TEXT_COLOR),
+      ),),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Discard"),
+      content: Text("Do you want to discard this Booking?"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
