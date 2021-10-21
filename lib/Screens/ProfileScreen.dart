@@ -21,7 +21,7 @@ import 'package:uuid/uuid.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key key}) : super(key: key);
-
+  static File imageFile;
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _flag = false;
   var isLoading = true;
   String convertedDateTime;
-  File imageFile;
+  //static File imageFile;
   PreSignedUrlResponse responseModel;
   List<DocumentPresignedURLModelList> urlList;
   String fileExt;
@@ -79,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // check the status code for the result
       String body = response.body;
       print(body);
+      print("_______________${ProfileScreen.imageFile}");
 
       if (response.statusCode == 200) {
         UserDetails model = UserDetails.fromJson(json.decode(body));
@@ -207,18 +208,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _imgFromCamera() async {
     PickedFile pickedFile =
     await ImagePicker.platform.pickImage(source: ImageSource.camera);
-    imageFile = File(pickedFile.path);
+    ProfileScreen.imageFile = File(pickedFile.path);
 
-    print(imageFile.path);
-    String fileName = (imageFile.path.split('/').last);
-    fileExt = "." + (imageFile.path.split('.').last);
-    String filePath = imageFile.path.replaceAll("/$fileName", '');
+    print(ProfileScreen.imageFile.path);
+    String fileName = (ProfileScreen.imageFile.path.split('/').last);
+    fileExt = "." + (ProfileScreen.imageFile.path.split('.').last);
+    String filePath = ProfileScreen.imageFile.path.replaceAll("/$fileName", '');
 
     print("fileName " + fileName);
     print("fileExt " + fileExt);
 
     setState(() {
-      imageFile = imageFile;
+      ProfileScreen.imageFile = ProfileScreen.imageFile;
       uploadFlag = true;
     });
   }
@@ -226,18 +227,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _imgFromGallery() async {
     PickedFile pickedFile =
     await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-    imageFile = File(pickedFile.path);
+    ProfileScreen.imageFile = File(pickedFile.path);
 
-    print(imageFile.path);
-    String fileName = (imageFile.path.split('/').last);
-    fileExt = "." + (imageFile.path.split('.').last);
-    String filePath = imageFile.path.replaceAll("/$fileName", '');
+    print(ProfileScreen.imageFile.path);
+    String fileName = (ProfileScreen.imageFile.path.split('/').last);
+    fileExt = "." + (ProfileScreen.imageFile.path.split('.').last);
+    String filePath = ProfileScreen.imageFile.path.replaceAll("/$fileName", '');
 
     print("fileName " + fileName);
     print("fileExt " + fileExt);
 
     setState(() {
-      imageFile = imageFile;
+      ProfileScreen.imageFile = ProfileScreen.imageFile;
       uploadFlag = true;
     });
   }
@@ -293,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       var url = Uri.parse(urlList[0].presignedURL);
       // make PUT request
-      Response response = await put(url, body: await imageFile.readAsBytes());
+      Response response = await put(url, body: await ProfileScreen.imageFile.readAsBytes());
       if (response.statusCode == 200) {
         print("=== Success ===");
         updateUserDetails();
@@ -442,14 +443,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.81,
             decoration: BoxDecoration(
                 color: const Color(ColorValues.WHITE),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50.0),
                     topRight: Radius.circular(50.0))),
           ),
-          imageFile != null
+          ProfileScreen.imageFile != null
               ? Positioned(
             left: 0,
             right: 0,
@@ -458,7 +459,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: Colors.white,
               child: ClipOval(
                 child: Image.file(
-                  imageFile,
+                  ProfileScreen.imageFile,
                   width: 85,
                   height: 85,
                   fit: BoxFit.fitHeight,
@@ -552,7 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           autofocus: false,
                           cursorColor: Colors.black,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontFamily: "Regular",
                             color: Color(ColorValues.BLACK_TEXT_COL),
                           ),
@@ -562,7 +563,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 14,
                               fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
-                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                              color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: 15, bottom: 11, top: 11, right: 15),
@@ -590,7 +591,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           readOnly: true,
                           cursorColor: Colors.black,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontFamily: "Regular",
                             color: Color(ColorValues.BLACK_TEXT_COL),
                           ),
@@ -600,7 +601,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 14,
                               fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
-                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                              color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: 15, bottom: 11, top: 11, right: 15),
@@ -631,7 +632,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                             cursorColor: Colors.black,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
                               fontFamily: "Regular",
                               color: Color(ColorValues.BLACK_TEXT_COL),
                             ),
@@ -641,7 +642,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fontSize: 14,
                                 fontFamily: "Regular",
                                 fontWeight: FontWeight.w700,
-                                color: Color(ColorValues.THEME_TEXT_COLOR),
+                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
                               ),
                               contentPadding: EdgeInsets.only(
                                   left: 15, bottom: 11, top: 11, right: 15),
@@ -677,7 +678,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           autofocus: false,
                           cursorColor: Colors.black,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontFamily: "Regular",
                             color: Color(ColorValues.BLACK_TEXT_COL),
                           ),
@@ -687,7 +688,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 14,
                               fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
-                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                              color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: 15, bottom: 11, top: 11, right: 15),
@@ -717,7 +718,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           autofocus: false,
                           cursorColor: Colors.black,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             fontFamily: "Regular",
                             color: Color(ColorValues.BLACK_TEXT_COL),
                           ),
@@ -727,7 +728,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 14,
                               fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
-                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                              color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: 15, bottom: 11, top: 11, right: 15),
@@ -745,8 +746,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 30, horizontal: 40),
+                        margin: EdgeInsets.only(left: 40,right: 40,top:30),
                         height: 40,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(

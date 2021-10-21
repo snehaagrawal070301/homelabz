@@ -300,6 +300,7 @@ class BookingScreenState extends State<BookingScreen> {
   void removeImage(int pos) async {
     setState(() {
       imageList.removeAt(pos);
+      showToast("Prescription Removed");
     });
   }
 

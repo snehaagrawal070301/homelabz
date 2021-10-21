@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
-
+  var imageName=ProfileScreen.imageFile;
   // String mobile;
   TextEditingController mobileController = TextEditingController();
   TextEditingController otp = TextEditingController();
@@ -87,10 +87,34 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              imageName!=null?
               Expanded(
                 flex: 2,
                 child: GestureDetector(
                   onTap: () {
+                    print(imageName);
+                    //call Profile Screen\
+                    callProfileScreen();
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: ClipOval(
+                      child: Image.file(
+                        imageName,
+                        width: 44,
+                        height: 44,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                ),
+              ):
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () {
+                    print(imageName);
                     //call Profile Screen\
                     callProfileScreen();
                   },
@@ -244,6 +268,8 @@ class HomeScreenState extends State<HomeScreen> {
                                       _bottomSheet(context);
                                     }
                                     else {
+                                      print(preferences.getString(ConstantMsg.ID));
+                                      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
                                       callUpcomingScreen();
                                     }
                                   },
@@ -1109,6 +1135,8 @@ class HomeScreenState extends State<HomeScreen> {
 
           preferences.setString(ConstantMsg.MOBILE_NUM,
               data['userModel']['mobileNumber'].toString());
+          print(preferences.getString(ConstantMsg.ID));
+          print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
         }
 
         callUpcomingScreen();
@@ -1130,10 +1158,10 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callUpcomingScreen() {
-    Navigator.pushReplacement(
+    Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (BuildContext context) => BookingsListScreen()));
+            builder: (BuildContext context) => BookingsListScreen()));;
   }
 
   void isnewUser(String mobileNumber) async {
