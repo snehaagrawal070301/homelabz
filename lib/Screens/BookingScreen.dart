@@ -287,6 +287,45 @@ class BookingScreenState extends State<BookingScreen> {
   //     print("Error+++++" + e.toString());
   //   }
   // }
+  showAlertDialog(BuildContext context, int pos) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK", style: TextStyle(
+        color: Color(ColorValues.THEME_TEXT_COLOR),
+      ),),
+      onPressed: () {
+        removeImage(pos);
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel", style: TextStyle(
+        color: Color(ColorValues.THEME_TEXT_COLOR),
+      ),),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Remove Prescription"),
+      content: Text("Do you really want to remove prescription"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -300,7 +339,7 @@ class BookingScreenState extends State<BookingScreen> {
   void removeImage(int pos) async {
     setState(() {
       imageList.removeAt(pos);
-      showToast("Prescription Removed");
+      //showToast("Prescription Removed");
     });
   }
 
@@ -992,8 +1031,7 @@ class BookingScreenState extends State<BookingScreen> {
                                                             child:
                                                                 GestureDetector(
                                                               onTap: () {
-                                                                removeImage(
-                                                                    pos);
+                                                                showAlertDialog(context,pos);
                                                               },
                                                               child: Image(
                                                                 image: AssetImage(

@@ -35,8 +35,6 @@ class AsapScreenState extends State<AsapScreen>{
         color: Color(ColorValues.THEME_COLOR)),),
       ),
       body:
-      SingleChildScrollView(
-        child:
         Container(
           height: MediaQuery.of(context).size.height,
           color: Color(ColorValues.WHITE_COLOR),
@@ -170,7 +168,6 @@ class AsapScreenState extends State<AsapScreen>{
                ),
           ]),
         ),
-      ),
       bottomNavigationBar: BottomNavBar("bookingScreen"),
     );
   }
