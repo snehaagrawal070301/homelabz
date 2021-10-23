@@ -280,8 +280,8 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                               child: Center(
                                                   child: GestureDetector(
                                                 onTap: () {
-                                                  //onConfirmed();
-                                                  showPopup(context);
+//                                                  onConfirmed();
+//                                                  showPopup(context);
                                                 },
                                                 child: Container(
                                                   margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -641,10 +641,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
     );
   }
 
-  Widget showPopup(BuildContext context) {
-    return RaisedButton(
-        child: Text("Custom"),
-        onPressed: () {
+  showPopup(BuildContext context) {
           showDialog(
               context: context,
               builder: (context) {
@@ -679,7 +676,6 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                   ),
                 );
               });
-        });
   }
 
 //  Future<bool> _onBackPressed() {

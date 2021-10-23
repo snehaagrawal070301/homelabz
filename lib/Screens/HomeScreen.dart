@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/ErrorModel.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
+import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/CallForBooking.dart';
@@ -456,17 +457,17 @@ class HomeScreenState extends State<HomeScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-//                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
-//                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-//                                showToast("no data available");
-//                              }
-//                              else {
-//                                Navigator.push(
-//                                    context,
-//                                    MaterialPageRoute(
-//                                        builder: (context) =>
-//                                            History()));
-//                              }
+                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
+                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
+                                showToast("no data available");
+                              }
+                              else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            History()));
+                              }
                                   },
                                   child: Container(
                                     height: MediaQuery

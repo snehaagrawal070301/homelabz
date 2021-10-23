@@ -52,7 +52,7 @@ class BookingScreenState extends State<BookingScreen> {
   List<UploadData> imageList = [];
   ProgressDialog dialog;
   int uploadCount = 0;
-
+  File imageToDisplay;
 //  DateTime selectedDate;
   String convertedDateTime;
   int selectedLabId;
@@ -335,6 +335,46 @@ class BookingScreenState extends State<BookingScreen> {
       timeInSecForIosWeb: 1,
     );
   }
+  void showImage(context) {
+    showDialog(context: context, builder: (context){
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Container(
+          height: 250,
+          width: 250,
+          child: Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                          Icons.cancel
+                      ),
+                    )
+                  ],
+                ),
+                Image.file(
+                imageToDisplay,
+                width: 200,
+                height: 200,
+                fit: BoxFit.fitHeight,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    );
+  }
 
   void removeImage(int pos) async {
     setState(() {
@@ -378,6 +418,7 @@ class BookingScreenState extends State<BookingScreen> {
     PickedFile pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.camera);
     File imageFile = File(pickedFile.path);
+    imageToDisplay=imageFile;
     setData(imageFile);
   }
 
@@ -385,6 +426,7 @@ class BookingScreenState extends State<BookingScreen> {
     PickedFile pickedFile =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     File imageFile = File(pickedFile.path);
+    imageToDisplay=imageFile;
     setData(imageFile);
   }
 
@@ -1007,6 +1049,7 @@ class BookingScreenState extends State<BookingScreen> {
                                               (BuildContext context, int pos) {
                                             return GestureDetector(
                                                 onTap: () {
+                                                  showImage(context);
                                                   // download and show
                                                 },
                                                 child: Container(
