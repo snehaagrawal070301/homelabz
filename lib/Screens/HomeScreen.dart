@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
-  var imageName=ProfileScreen.imageFile;
+  var imageName;
   // String mobile;
   TextEditingController mobileController = TextEditingController();
   TextEditingController otp = TextEditingController();
@@ -86,12 +87,11 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              imageName!=null?
+              getImagePath()==true?
               Expanded(
                 flex: 2,
                 child: GestureDetector(
                   onTap: () {
-                    print(imageName);
                     //call Profile Screen\
                     callProfileScreen();
                   },
@@ -99,7 +99,7 @@ class HomeScreenState extends State<HomeScreen> {
                     radius: 20,
                     backgroundColor: Colors.white,
                     child: ClipOval(
-                      child: Image.file(
+                      child: Image.memory(
                         imageName,
                         width: 44,
                         height: 44,
@@ -1293,6 +1293,18 @@ class HomeScreenState extends State<HomeScreen> {
       }
     } else {
       showToast("Please login first!");
+    }
+  }
+
+  bool getImagePath() {
+    if(preferences!=null) {
+      String img = preferences.getString("image");
+      if (img != null && img.length > 0) {
+        imageName = Uint8List.fromList(img.codeUnits);
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

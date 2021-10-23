@@ -287,6 +287,7 @@ class BookingScreenState extends State<BookingScreen> {
   //     print("Error+++++" + e.toString());
   //   }
   // }
+
   showAlertDialog(BuildContext context, int pos) {
     // set up the button
     Widget okButton = FlatButton(
@@ -311,7 +312,7 @@ class BookingScreenState extends State<BookingScreen> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Remove Prescription"),
-      content: Text("Do you really want to remove prescription"),
+      content: Text("Do you want to remove this prescription?"),
       actions: [
         cancelButton,
         okButton,
@@ -339,7 +340,6 @@ class BookingScreenState extends State<BookingScreen> {
   void removeImage(int pos) async {
     setState(() {
       imageList.removeAt(pos);
-      //showToast("Prescription Removed");
     });
   }
 

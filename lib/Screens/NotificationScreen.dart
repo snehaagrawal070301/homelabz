@@ -48,7 +48,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
       // make GET request
-      Response response = await get(url, headers: headers,);
+      Response response = await get(url, headers: headers);
       // check the status code for the result
       String body = response.body;
       print(body);

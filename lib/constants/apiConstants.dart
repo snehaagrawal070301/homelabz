@@ -24,5 +24,5 @@ class ApiConstants{
   static final String GET_DOWNLOAD_URL = BaseURL+"document/download";
   static final String LOGOUT = BaseURL+"user/logout";
   static final String GET_BOOKING_DETAILS = BaseURL+"booking/findById/";//{id}
-  static final String GET_NOTIFICATION_LIST = BaseURL+"notifiaction/findAll/";
+  static final String GET_NOTIFICATION_LIST = BaseURL+"notification/findAll/";
 }
