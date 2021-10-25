@@ -22,16 +22,30 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
   int index = -1;
   CalendarController _controller;
   List<TimeSlot> slots = [];
-  String convertedDateTime;
-
+  String convertedDateTime="${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+  int temp;
+  DateTime today = DateTime.now();
+  DateTime initialDay;
+  DateTime endingDay;
+  DateTime findFirstDateOfTheWeek(DateTime dateTime) {
+    initialDay=dateTime.subtract(Duration(days: dateTime.weekday - 1));
+    return dateTime.subtract(Duration(days: dateTime.weekday - 1));
+  }
+  DateTime findLastDateOfTheWeek(DateTime dateTime) {
+    endingDay=dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+    return dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  }
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     fillDataInList();
+    print(findFirstDateOfTheWeek(today));
+    print(findLastDateOfTheWeek(today));
   }
 
   void fillDataInList() {
+    DateTime today = DateTime.now();
     slots.add(TimeSlot("07:00", "08:00"));
     slots.add(TimeSlot("08:00", "09:00"));
     slots.add(TimeSlot("09:00", "10:00"));
@@ -164,9 +178,12 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               )
                             ]),
                         child: TableCalendar(
-                          startDay: DateTime.now(),
+                          availableGestures: AvailableGestures.none,
+                          startDay: initialDay,
+                         endDay: endingDay,
                           initialCalendarFormat: CalendarFormat.week,
                           calendarStyle: CalendarStyle(
+                            //renderDaysOfWeek: false,
                               highlightToday: false,
                               holidayStyle: TextStyle(
                                   color: Color(ColorValues.BLACK_COLOR)),
@@ -178,7 +195,10 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               selectedStyle: TextStyle(
                                   color: Color(ColorValues.WHITE_COLOR))),
                           headerStyle: HeaderStyle(
-                            headerPadding: EdgeInsets.symmetric(vertical: 1),
+                            //formatButtonShowsNext: false,
+                            leftChevronVisible: false,
+                            rightChevronVisible: false,
+                            headerPadding: EdgeInsets.symmetric(vertical: 5),
                             titleTextStyle: TextStyle(
                                 color: Color(ColorValues.THEME_COLOR),
                                 fontFamily: "Regular",
@@ -259,6 +279,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                              color: Color(0xffF6F6F6),
                              child: Center(child: Text("Available Time",style: TextStyle(color: Color(ColorValues.THEME_COLOR),fontFamily: "Regular",fontSize: 16),textAlign: TextAlign.center,)),
                            ),
+                        
                         Container(
                           margin: EdgeInsets.all(20.0),
                           height: MediaQuery.of(context).size.height * 0.33,
@@ -275,7 +296,9 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               ),
                               itemCount: slots.length,
                               itemBuilder: (BuildContext ctx, pos) {
-                                return GestureDetector(
+                                return
+                                  1==validateSlot(convertedDateTime, slots[pos].startTime+":00")?
+                                      GestureDetector(
                                   onTap: () async {
                                     setState(() {
                                       print(pos);
@@ -283,7 +306,8 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                                       // CELL_COLOR= const Color(0xff21C8BE);
                                     });
                                   },
-                                  child: index == pos
+                                  child:
+                                  index == pos
                                       ? Container(
                                           width: 30,
                                           height: 20,
@@ -356,6 +380,42 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                                             ],
                                           ),
                                         ),
+                                ):
+                                Container(
+                                  width: 30,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      color:
+                                      Color(ColorValues.CELL_COLOR).withOpacity(0.5),
+                                      borderRadius:
+                                      BorderRadius.circular(10)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        slots[pos].startTime,
+                                        style: TextStyle(
+                                            color: Color(
+                                                ColorValues.WHITE_COLOR),
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        " - ",
+                                        style: TextStyle(
+                                            color: Color(
+                                                ColorValues.WHITE_COLOR),
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        slots[pos].endTime,
+                                        style: TextStyle(
+                                            color: Color(
+                                                ColorValues.WHITE_COLOR),
+                                            fontSize: 12),
+                                      )
+                                    ],
+                                  ),
                                 );
                               }),
                         ),
@@ -437,11 +497,14 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       showToast("Please choose slot!");
     } else {
       String slot = slots[index].startTime+":00";
-      validateSlot(convertedDateTime,slot);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BookingScreen(convertedDateTime, slot)));
     }
   }
 
-  void validateSlot(String time, String slot) {
+  int validateSlot(String time, String slot) {
     // validate slot time with current time
 
     String input = time+" "+slot;
@@ -449,12 +512,14 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     DateTime currentDateTime = DateTime.now();
 
     if(tempDate.compareTo(currentDateTime)==1) {
+      return 1;
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BookingScreen(convertedDateTime, slot)));
     }else{
-      showToast("You can not select past time!");
+      return 0;
+//      showToast("You can not select past time!");
     }
   }
 }
