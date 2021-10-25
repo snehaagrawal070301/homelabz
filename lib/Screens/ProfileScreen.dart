@@ -30,8 +30,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _name;
   TextEditingController _phone = new TextEditingController();
   TextEditingController _dob = new TextEditingController();
-  TextEditingController _education = new TextEditingController();
+  //TextEditingController _education = new TextEditingController();
   TextEditingController _address = new TextEditingController();
+  TextEditingController _email = new TextEditingController();
+  String gender;
   bool _flag = false;
   var isLoading = true;
   String convertedDateTime;
@@ -86,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _name = new TextEditingController(text: model.name);
           _phone = new TextEditingController(text: model.mobileNumber);
           _dob = new TextEditingController(text: model.dob);
-          _education = new TextEditingController(text: model.education);
+          //_education = new TextEditingController(text: model.education);
           _address = new TextEditingController(text: model.address);
 
           // imageUrl = model.imagePresignedURL;
@@ -358,7 +360,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ConstantMsg.NAME: _name.text,
           ConstantMsg.MOBILE_NUM: _phone.text,
           ConstantMsg.DOB: _dob.text,
-          ConstantMsg.EDUCATION: _education.text,
+          ConstantMsg.EMAIL: _email.text,
+          ConstantMsg.GENDER:gender,
           ConstantMsg.ADDRESS: _address.text,
           ConstantMsg.IMAGE_PATH: urlList[0].keyPath,
           ConstantMsg.IMG_PRE_SIGNED_URL: urlList[0].presignedURL,
@@ -369,7 +372,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ConstantMsg.NAME: _name.text,
           ConstantMsg.MOBILE_NUM: _phone.text,
           ConstantMsg.DOB: _dob.text,
-          ConstantMsg.EDUCATION: _education.text,
+          ConstantMsg.EMAIL: _email.text,
+          ConstantMsg.GENDER:gender,
           ConstantMsg.ADDRESS: _address.text,
         };
       }
@@ -449,7 +453,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.81,
+              height: MediaQuery.of(context).size.height * 0.86,
               decoration: BoxDecoration(
                   color: const Color(ColorValues.WHITE),
                   borderRadius: BorderRadius.only(
@@ -677,7 +681,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Container(
                           padding: const EdgeInsets.all(10.0),
                           child: TextField(
-                            controller: _education,
+                            controller: _email,
                             onEditingComplete: () {
                               _flag = true;
                             },
@@ -689,7 +693,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Color(ColorValues.BLACK_TEXT_COL),
                             ),
                             decoration: new InputDecoration(
-                              labelText: 'Education',
+                              labelText: 'Email',
                               labelStyle: TextStyle(
                                 fontSize: 14,
                                 fontFamily: "Regular",
@@ -749,6 +753,126 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                             ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 14, left: 20, right: 20),
+                          child: Text(
+                            "Gender",
+                            style: TextStyle(
+                                fontFamily: "Black",
+                                fontSize: 12,
+                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5)),
+                          ),
+                        ),
+                        Container(
+                          height: 36,
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(top: 11, left: 20, right: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          gender = "MALE";
+                                        });
+                                      },
+                                      child: gender == "MALE"
+                                          ? Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(ColorValues.THEME_COLOR),
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10)),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                              "Male",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      ColorValues.WHITE_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                      )
+                                          : Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(ColorValues.LIGHT_GRAY),
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Color(
+                                                  ColorValues.BLACK_COLOR).withOpacity(0.5),
+                                              width: 1),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                              "Male",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      ColorValues.THEME_TEXT_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                      ))),
+                              Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          gender = "FEMALE";
+                                        });
+                                      },
+                                      child: gender == "FEMALE"
+                                          ? Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.THEME_COLOR),
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(10),
+                                                topRight: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Female",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(ColorValues.WHITE),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ))
+                                          : Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(ColorValues.LIGHT_GRAY),
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(10),
+                                              topRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Color(
+                                                  ColorValues.BLACK_COLOR).withOpacity(0.5),
+                                              width: 1),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                              "Female",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      ColorValues.THEME_COLOR),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                      ))),
+                            ],
                           ),
                         ),
                         Container(

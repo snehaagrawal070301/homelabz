@@ -46,6 +46,7 @@ class ConstantMsg{
   static final String DEVICE_ID = "deviceId";
   static final String DOC_LIST = "documentList";
   static final String TIME_FROM = "timeFrom";
+  static final String EMAIL = "email";
 
 
   //_________________VALIDATION MESSAGES___________________

@@ -1170,6 +1170,7 @@ class HomeScreenState extends State<HomeScreen> {
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         ConstantMsg.MOBILE_NUM: mobileNumber,
+        ConstantMsg.ROLE: "ROLE_PATIENT",
       };
       // make POST request
       Response response =
