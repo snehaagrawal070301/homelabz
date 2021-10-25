@@ -111,8 +111,6 @@ class BookingScreenState extends State<BookingScreen> {
     }
   }
 
-/*
-}*/
 
   void callPaymentScreen(int bookingId) {
     Navigator.pushReplacement(
