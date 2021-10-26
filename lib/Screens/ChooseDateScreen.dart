@@ -61,6 +61,10 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
 
     print(slots.length);
   }
+//  @override
+//  void OnVisibleDaysChanged(DateTime first,DateTime last,CalendarFormat format){
+//
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +163,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 72,
+                  top: 75,
                   left: 20,
                   right: 20,
                   child: Column(
@@ -179,11 +183,10 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                             ]),
                         child: TableCalendar(
                           availableGestures: AvailableGestures.none,
-                          startDay: initialDay,
+                          startDay: DateTime.now(),
                          endDay: endingDay,
                           initialCalendarFormat: CalendarFormat.week,
                           calendarStyle: CalendarStyle(
-                            //renderDaysOfWeek: false,
                               highlightToday: false,
                               holidayStyle: TextStyle(
                                   color: Color(ColorValues.BLACK_COLOR)),
@@ -212,6 +215,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                             formatButtonVisible: false,
                           ),
                           builders: CalendarBuilders(
+
                               dayBuilder: (context, date, events) => Container(
                                     margin: EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 8),
