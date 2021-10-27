@@ -79,7 +79,7 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(ColorValues.WHITE_COLOR),
+      backgroundColor: Color(ColorValues.THEME_TEXT_COLOR),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Color(ColorValues.WHITE_COLOR),
@@ -101,65 +101,46 @@ class _HistoryState extends State<History> {
         ),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(clipBehavior: Clip.none, children: [
-          Container(
-            color: Color(ColorValues.THEME_COLOR),
-            child: Container(
-                height: 120,
-                width: MediaQuery.of(context).size.width,
-                color: Color(ColorValues.THEME_COLOR),
-            ),
-          ),
-          Positioned(
-            top: 80,
-            left: 10,
-            right: 10,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              // alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 7.0,
-                      spreadRadius: 1.0,
-                    )
-                  ]),
-//              child: Container(
-//                  padding: EdgeInsets.all(10),
-//                  child: Text(
-//                    _list == null ? "" : "Upcoming Appointments",
-//                    style: TextStyle(
-//                        color: Color(ColorValues.BLACK_COLOR),
-//                        fontSize: 12,
-//                        fontFamily: "Regular"),
-//                  )),
-            ),
-          ),
-          Positioned(
-            top: 120,
-            left: 15,
-            right: 15,
-            bottom: 5,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: FutureBuilder<List<UpcomingBookingList>>(builder:
-                  (BuildContext context,
-                  AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
-                // print(snapshot.data);
-                // if(snapshot.hasData)
-                if (_list != null && _list.length > 0) {
-                  return isLoading
-                      ? new Center(child: CircularProgressIndicator())
-                      : RefreshIndicator(
-                    onRefresh: callBookingList,
-                    child: ListView.builder(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+
+        child: Stack(
+            children: <Widget>[
+        Container(
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        decoration: BoxDecoration(
+            color: const Color(ColorValues.WHITE),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(50.0),
+                topRight: Radius.circular(50.0))),
+      ),
+
+      _list != null && _list.length>0?
+      Positioned(
+          top: 60,
+          right: 0,
+          left: 0,
+          child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+      height: MediaQuery
+          .of(context)
+          .size
+          .height,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      child: ListView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         // physics: const ScrollPhysics(),
                         // shrinkWrap: true,
@@ -521,31 +502,29 @@ class _HistoryState extends State<History> {
                             ),
                           );
                         }),
-                  );
-                } else {
-                  return Center(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Image(
-                            image: AssetImage("assets/images/NoAppointment.jpg",),
-                          ),
-                        ),
-                        Text("No Appointment available!"),
-                      ],
-                    ),
-                    // child: new Container(
-                    //   padding: EdgeInsets.all(40.0),
-                    //   child: Text("No data available"),
-                    // ),
-                  );
-                }
-              }),
+    ),
+      ):
+      Positioned(
+          top: 70,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          child:Center(
+            child: Column(
+              children: [
+                Image(
+                  image: AssetImage("assets/images/Nodatafound.jpg"),
+                ),
+                Text("No data available!"),
+              ],
             ),
-          ),
-        ]),
+          )
       ),
+
+            ],
+        ),
+      ),
+    );
 //      body: Container(
 //        height: MediaQuery
 //            .of(context)
@@ -929,16 +908,6 @@ class _HistoryState extends State<History> {
 //          ),
 //        ]),
 //      ),
-      bottomNavigationBar: BottomNavBar(""),
-    );
-  }
 
-  void onConfirmed() {
-    Fluttertoast.showToast(
-      msg: "Confirmed",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-    );
   }
 }

@@ -22,11 +22,13 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
   int index = -1;
   CalendarController _controller;
   List<TimeSlot> slots = [];
-  String convertedDateTime="${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+  String todayDateTime="${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
   int temp;
+  String convertedDateTime;
   DateTime today = DateTime.now();
   DateTime initialDay;
   DateTime endingDay;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime findFirstDateOfTheWeek(DateTime dateTime) {
     initialDay=dateTime.subtract(Duration(days: dateTime.weekday - 1));
     return dateTime.subtract(Duration(days: dateTime.weekday - 1));
@@ -182,10 +184,16 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               )
                             ]),
                         child: TableCalendar(
+//                          calendarFormat: _calendarFormat,
+//                          onFormatChanged: (format) {
+//                            setState(() {
+//                              _calendarFormat = format;
+//                            });
+//                          },
                           availableGestures: AvailableGestures.none,
                           startDay: DateTime.now(),
                          endDay: endingDay,
-                          initialCalendarFormat: CalendarFormat.week,
+                          initialCalendarFormat: _calendarFormat,
                           calendarStyle: CalendarStyle(
                               highlightToday: false,
                               holidayStyle: TextStyle(
@@ -214,8 +222,16 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                             centerHeaderTitle: true,
                             formatButtonVisible: false,
                           ),
-                          builders: CalendarBuilders(
+                          onDaySelected: (date, events,e) {
+                            setState(() {
 
+                            });
+                            print(date.toUtc());
+                            convertedDateTime =
+                            "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                            print(convertedDateTime);
+                          },
+                          builders: CalendarBuilders(
                               dayBuilder: (context, date, events) => Container(
                                     margin: EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 8),
@@ -252,12 +268,13 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                                     ),
                                   )),
                           calendarController: _controller,
-                          onDaySelected: (date, events, context) {
-                            //print(date.toString());
-                            convertedDateTime =
-                                "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-                            print(convertedDateTime);
-                          },
+//                          onDaySelected: (date, events, context) {
+//                            print(date.toString());
+//                            convertedDateTime =
+//                                "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+//                            print(convertedDateTime);
+//
+//                          },
                         ),
                       ),
                       Container(
@@ -301,7 +318,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               itemCount: slots.length,
                               itemBuilder: (BuildContext ctx, pos) {
                                 return
-                                  1==validateSlot(convertedDateTime, slots[pos].startTime+":00")?
+                                  1==validateSlot(convertedDateTime, slots[pos].startTime+":00")&&convertedDateTime!=todayDateTime?
                                       GestureDetector(
                                   onTap: () async {
                                     setState(() {
@@ -491,7 +508,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
   void callBookingScreen() {
     if (convertedDateTime == null) {
       convertedDateTime =
-          "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+      "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
       print(convertedDateTime);
     }
 
@@ -510,7 +527,11 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
 
   int validateSlot(String time, String slot) {
     // validate slot time with current time
-
+    if (convertedDateTime == null) {
+      convertedDateTime =
+      "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
+      print(convertedDateTime);
+    }
     String input = time+" "+slot;
     DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(input);
     DateTime currentDateTime = DateTime.now();

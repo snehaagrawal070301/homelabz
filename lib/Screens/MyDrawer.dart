@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/ErrorModel.dart';
+import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/HomeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -79,7 +80,10 @@ class _MyDrawerState extends State<MyDrawer> {
                 color: Color(ColorValues.GREY_TEXT_COLOR),
               ),
               ListTile(
-                onTap: () => callSettingsScreen(),
+                onTap: () => Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => History())),
                 leading: ImageIcon(
                   AssetImage('assets/images/history.png'),
                   color: Color(ColorValues.THEME_TEXT_COLOR),
@@ -146,10 +150,10 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   callSettingsScreen() {
-    // Navigator.push(
-    //     context,
-    //     new MaterialPageRoute(
-    //         builder: (BuildContext context) => SettingsScreen()));
+//     Navigator.push(
+//         context,
+//         new MaterialPageRoute(
+//             builder: (BuildContext context) => SettingsScreen()));
   }
 
   callLogout() async {
