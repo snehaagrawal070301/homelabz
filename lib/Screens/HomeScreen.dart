@@ -1290,6 +1290,8 @@ class HomeScreenState extends State<HomeScreen> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => ProfileScreen()));
+        setState(() {
+        });
       } else {
         showToast("Please login first!");
       }

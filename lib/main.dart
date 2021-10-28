@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/DocumentUpload.dart';
 import 'package:homelabz/Screens/HomeScreen.dart';
 import 'package:homelabz/Screens/ProfileScreen.dart';
 
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: const Color(0xffFFFFFF),
           canvasColor: Colors.transparent),
-      home: HomeScreen(),
+      //home: HomeScreen(),
+      home:FilePickerDemo()
     );
   }
 }

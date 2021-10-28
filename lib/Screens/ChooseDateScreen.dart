@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +25,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
   List<TimeSlot> slots = [];
   String todayDateTime="${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
   int temp;
-  String convertedDateTime;
+  String convertedDateTime="${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
   DateTime today = DateTime.now();
   DateTime initialDay;
   DateTime endingDay;
