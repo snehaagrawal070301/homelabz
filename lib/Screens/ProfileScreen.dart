@@ -15,6 +15,7 @@ import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -28,6 +29,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _name;
+  DateTime selectedDate=DateTime.now();
   TextEditingController _phone = new TextEditingController();
   TextEditingController _dob = new TextEditingController();
   //TextEditingController _education = new TextEditingController();
@@ -36,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String gender;
   bool _flag = false;
   var isLoading = true;
+  DateTime tempDate = DateTime.now();
   String convertedDateTime;
   File imageFile;
   PreSignedUrlResponse responseModel;
@@ -50,6 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //print(_dob.text);
+    //print(convertedDateTime);
     getSharedPreferences();
   }
 
@@ -88,6 +93,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _name = new TextEditingController(text: model.name);
           _phone = new TextEditingController(text: model.mobileNumber);
           _dob = new TextEditingController(text: model.dob);
+          print(_dob.text);
+          print(selectedDate);
+         // tempDate = DateFormat().parse(_dob.text);
           //_education = new TextEditingController(text: model.education);
           _address = new TextEditingController(text: model.address);
 
@@ -311,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future selectDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-        initialDate: DateTime.now(),
+        initialDate: tempDate,
         firstDate: DateTime(1950),
         lastDate: DateTime.now(),
         fieldLabelText: 'Date of Birth',
@@ -337,6 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context: context);
     if (pickedDate != null) {
       setState(() {
+        selectedDate=pickedDate;
         convertedDateTime =
         "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
         _dob.text = convertedDateTime;
@@ -510,20 +519,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             Positioned(
                 top: 60,
-                left: 60,
-                right: 0,
+                right: 150,
                 child: InkWell(
-                    onTap: () {
-                      changeProfilePic();
-                    },
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                  child: Container(
+                        height: 40,
+                        //width: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                                changeProfilePic();
+                          },
+                          child: Image.asset('assets/images/Camera.png')),
                       ),
-                      child: Image.asset('assets/images/Camera.png'),
-                    ))),
+                )),
 
             Positioned(
               top: 70,

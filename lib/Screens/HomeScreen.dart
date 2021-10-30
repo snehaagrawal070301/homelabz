@@ -32,11 +32,15 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController otp = TextEditingController();
   SharedPreferences preferences;
   String mobile;
+  FToast fToast;
+
 
   @override
   void initState() {
     super.initState();
     getSharedPreferences();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   getSharedPreferences() async {
@@ -61,7 +65,7 @@ class HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
                         preferences.getString(ConstantMsg.LOGIN_STATUS).compareTo("false") == 0) {
-                      showToast("Please login first!");
+                      _showToast("Please login first!");
                     } else {
                       Scaffold.of(context).openDrawer();
                     }
@@ -459,7 +463,7 @@ class HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                               if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
                                 print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-                                showToast("no data available");
+                                _showToast("no data available");
                               }
                               else {
                                 Navigator.push(
@@ -767,7 +771,7 @@ class HomeScreenState extends State<HomeScreen> {
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
                       } else {
-                        showToast(ConstantMsg.MOB_VALIDATION);
+                        _showToast(ConstantMsg.MOB_VALIDATION);
                       }
                     },
                     child: Container(
@@ -879,7 +883,7 @@ class HomeScreenState extends State<HomeScreen> {
                           .length > 0) {
                         signIn(mobileNumber);
                       } else {
-                        showToast(ConstantMsg.NAME_VALIDATION);
+                        _showToast(ConstantMsg.NAME_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1065,7 +1069,7 @@ class HomeScreenState extends State<HomeScreen> {
                         callLoginApi(mobileNumber);
                       }
                       else {
-                        showToast(ConstantMsg.OTP_VALIDATION);
+                        _showToast(ConstantMsg.OTP_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1141,22 +1145,63 @@ class HomeScreenState extends State<HomeScreen> {
 
         callUpcomingScreen();
       }else{
-        showToast(data['mobileMessage']);
+       // _showToast(data['mobileMessage']);
+        _showToast("Invalid Code");
       }
     } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
 
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
+//  void showToast(String message) {
+//    Fluttertoast.showToast(
+//      msg: message,
+//      toastLength: Toast.LENGTH_SHORT,
+//      gravity: ToastGravity.BOTTOM,
+//      timeInSecForIosWeb: 1,
+//      backgroundColor:
+//    );
+//  }
+  _showToast(String message) {
+    Widget toast = Container(
+      width: 350,
+      height: 35,
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: Colors.green.withOpacity(0.8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check,color: Colors.white,),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text("${message}",style: TextStyle(color: Color(ColorValues.WHITE_COLOR)),),
+        ],
+      ),
     );
-  }
 
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds:2),
+    );
+
+    // Custom Toast Position
+//    fToast.showToast(
+//        child: toast,
+//        toastDuration: Duration(seconds: 2),
+//        positionedToastBuilder: (context, child) {
+//          return Positioned(
+//            child: child,
+//            top: 16.0,
+//            left: 16.0,
+//          );
+//        });
+  }
   void callUpcomingScreen() {
     Navigator.push(
         context,
@@ -1227,13 +1272,14 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        showToast("Code has been sent to your mobile number");
+        _showToast("Code has been sent to your mobile number");
         Navigator.pop(context);
         _bottomSheet3(context, mobileNumber);
       } else {
         var data = json.decode(body);
         ErrorModel model = ErrorModel.fromJson(data);
-        showToast(model.message);
+        //_showToast(model.message);
+        _showToast("Invalid Code");
       }
     }
     catch (e) {
@@ -1258,7 +1304,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        showToast(
+        _showToast(
             "The code has been sent to your mobile number. Please check!");
       }
     }
@@ -1293,10 +1339,10 @@ class HomeScreenState extends State<HomeScreen> {
         setState(() {
         });
       } else {
-        showToast("Please login first!");
+        _showToast("Please login first!");
       }
     } else {
-      showToast("Please login first!");
+      _showToast("Please login first!");
     }
   }
 

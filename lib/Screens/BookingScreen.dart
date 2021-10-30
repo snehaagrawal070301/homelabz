@@ -49,6 +49,7 @@ class BookingScreenState extends State<BookingScreen> {
   PreSignedUrlResponse responseModel;
   List<DocumentPresignedURLModelList> urlList;
   String fileExt;
+  DateTime selectedDate = DateTime.now();
   List<UploadData> imageList = [];
   ProgressDialog dialog;
   int uploadCount = 0;
@@ -77,9 +78,9 @@ class BookingScreenState extends State<BookingScreen> {
     callDoctorApi();
   }
 
-  Future selectDate(BuildContext context) async {
+  Future selectDate(BuildContext context,String selecteddate) async {
     final pickedDate = await showDatePicker(
-        initialDate: DateTime.now(),
+        initialDate: selectedDate,
         firstDate: DateTime(1950),
         lastDate: DateTime.now(),
         fieldLabelText: 'Date of Birth',
@@ -105,6 +106,7 @@ class BookingScreenState extends State<BookingScreen> {
         context: context);
     if (pickedDate != null) {
       setState(() {
+        selectedDate=pickedDate;
         convertedDateTime =
             "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
       });
@@ -851,7 +853,7 @@ class BookingScreenState extends State<BookingScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      selectDate(context);
+                      selectDate(context,convertedDateTime);
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(20, 24, 20, 10),
@@ -884,7 +886,10 @@ class BookingScreenState extends State<BookingScreen> {
                                       fontFamily: "Regular")),
                             GestureDetector(
                               onTap: () {
-                                selectDate(context);
+                                if(convertedDateTime!=null)
+                                  selectDate(context,convertedDateTime);
+                                else
+                                  selectDate(context,null);
                               },
                               child: ImageIcon(
                                 AssetImage('assets/images/calendarImage.png'),
