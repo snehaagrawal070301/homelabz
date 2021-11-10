@@ -3,7 +3,8 @@ class ApiConstants{
   //dev
   static final String BaseURL = "http://43.231.127.173:3000/homelabz/api/v1/";
   //prod
-  //static final String BaseURL = "http://3.142.38.4:3000/homelabz/api/v1/";
+  // static final String BaseURL = "http://3.142.38.4:3000/homelabz/api/v1/";
+  // static final String BaseURL = "https://homelabz.com/homelabz/api/v1/";
 
   static final String LOGIN_API = BaseURL+"user/login";
   static final String VERIFY_OTP_API = BaseURL+"user/verifyOTP";
@@ -24,5 +25,6 @@ class ApiConstants{
   static final String GET_DOWNLOAD_URL = BaseURL+"document/download";
   static final String LOGOUT = BaseURL+"user/logout";
   static final String GET_BOOKING_DETAILS = BaseURL+"booking/findById/";//{id}
-  static final String GET_NOTIFICATION_LIST = BaseURL+"notification/findAll/";
+  static final String GET_NOTIFICATION_LIST = BaseURL+"notification/findAll?userId=";
+  static final String DOWNLOAD_ALL_DOCS = BaseURL+"document/findAll?bookingId=";
 }

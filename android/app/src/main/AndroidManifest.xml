@@ -13,6 +13,7 @@
         android:name="android.permisssion.ACCESS_COARSE_LOCATION" />
 
    <application
+        android:allowBackup="false"
         android:label="Patient"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">

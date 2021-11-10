@@ -45,6 +45,10 @@ class HomeScreenState extends State<HomeScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
+    imageName = preferences.getString("image");
+    setState(() {
+
+    });
   }
 
   @override
@@ -65,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
                         preferences.getString(ConstantMsg.LOGIN_STATUS).compareTo("false") == 0) {
-                      _showToast("Please login first!");
+                      showToast("Please login first!");
                     } else {
                       Scaffold.of(context).openDrawer();
                     }
@@ -463,7 +467,7 @@ class HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                               if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
                                 print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-                                _showToast("no data available");
+                                showToast("no data available");
                               }
                               else {
                                 Navigator.push(
@@ -660,118 +664,250 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   _bottomSheet1(context) {
+//     showModalBottomSheet(
+//       isScrollControlled: true,
+//         context: context,
+//         builder: (context) {
+//           return FittedBox(
+//             child:
+//             Container(
+//               decoration: BoxDecoration(
+//                   color: Color(ColorValues.WHITE_COLOR),
+//                   borderRadius: BorderRadius.only(
+//                       topLeft: Radius.circular(10),
+//                       topRight: Radius.circular(10))),
+//               width: MediaQuery
+//                   .of(context)
+//                   .size
+//                   .width,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   Container(
+//                     padding: EdgeInsets.only(top: 38),
+//                     child: Text(
+//                       "Register",
+//                       style: TextStyle(
+//                         fontSize: 20,
+//                         color: Color(ColorValues.THEME_COLOR),
+//                         fontFamily: "Regular",
+//                       ),
+//                     ),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.only(top: 50),
+//                     child: Image(
+//                       image: AssetImage("assets/images/RegisterIcon.png"),
+//                       height: 65,
+//                       width: 65,
+//                     ),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.only(top: 15),
+//                     child: Text(
+//                       "Enter Your Mobile Number",
+//                       style: TextStyle(
+//                         fontSize: 14,
+//                         color: Color(ColorValues.BLACK_COLOR),
+//                         fontFamily: "Black",
+//                       ),
+//                     ),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.only(top: 10),
+//                     child: Center(
+//                         child: Text(
+//                           "We will send you one time\npassword(OTP)",
+//                           style: TextStyle(
+//                             fontSize: 14,
+//                             color: Color(ColorValues.BLACK_TEXT_COL),
+//                             fontFamily: "Regular",
+//                           ),
+//                           textAlign: TextAlign.center,
+//                         )),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.symmetric(horizontal: 50),
+//                     width: MediaQuery
+//                         .of(context)
+//                         .size
+//                         .width,
+//                     child: IntlPhoneField(
+//                       keyboardType: TextInputType.phone,
+//                       controller: mobileController,
+//                       decoration: InputDecoration(
+//                         hintText: "Enter Mobile Number",
+//                         hintStyle: TextStyle(
+//                           color: Color(0xffBDBDBD),
+//                           fontSize: 12.0,
+//                           fontFamily: "Regular",
+//                         ),
+//                       ),
+//                       onChanged: (phone) {
+//                         print(phone.completeNumber);
+//                         mobile = phone.completeNumber;
+//                       },
+//                     ),
+// //                      child: TextFormField(
+// //                        textAlign: TextAlign.center,
+// //                        keyboardType: TextInputType.phone,
+// //                        controller: mobile,
+// //                        validator: (mobile) {
+// //                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
+// //                          },
+// //                        decoration: InputDecoration(
+// //                          hintText: "Enter Mobile Number",
+// //                          hintStyle: TextStyle(
+// //                            color: Color(0xffBDBDBD),
+// //                            fontSize: 12.0,
+// //                            fontFamily: "Regular",
+// //                          ),
+// //                        ),
+// //                      )
+//                   ),
+//                   GestureDetector(
+//                     onTap: () {
+//                       if (mobileController.text.toString() != null &&
+//                           mobileController.text
+//                               .toString()
+//                               .length > 0) {
+//                         // String mobileNumber = mobileController.text.toString();
+//                         isnewUser(mobile);
+// //                        Navigator.pop(context);
+// //                        _bottomSheet2(context);
+//                       } else {
+//                         showToast(ConstantMsg.MOB_VALIDATION);
+//                       }
+//                     },
+//                     child: Container(
+//                       height: 35,
+//                       width: MediaQuery
+//                           .of(context)
+//                           .size
+//                           .width * 0.53,
+//                       margin: EdgeInsets.symmetric(vertical: 25),
+//                       decoration: BoxDecoration(
+//                         color: Color(ColorValues.THEME_COLOR),
+//                         borderRadius: BorderRadius.circular(10),
+//                       ),
+//                       child: Center(
+//                           child: Text(
+//                             "SEND",
+//                             style: TextStyle(
+//                               color: Color(0xffFFFFFF),
+//                               fontSize: 14,
+//                               fontFamily: "Bold",
+//                             ),
+//                           )),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         });
+
+
     showModalBottomSheet(
-        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5.0))),
+      //  backgroundColor: Colors.black,
         context: context,
-        builder: (context) {
-          return FittedBox(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10))),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 38),
-                    child: Text(
-                      "Register",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(ColorValues.THEME_COLOR),
-                        fontFamily: "Regular",
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Image(
-                      image: AssetImage("assets/images/RegisterIcon.png"),
-                      height: 65,
-                      width: 65,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 15),
-                    child: Text(
-                      "Enter Your Mobile Number",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(ColorValues.BLACK_COLOR),
-                        fontFamily: "Black",
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Center(
-                        child: Text(
-                          "We will send you one time\npassword(OTP)",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(ColorValues.BLACK_TEXT_COL),
-                            fontFamily: "Regular",
-                          ),
-                          textAlign: TextAlign.center,
-                        )),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: IntlPhoneField(
-                      keyboardType: TextInputType.phone,
-                      controller: mobileController,
-                      decoration: InputDecoration(
-                        hintText: "Enter Mobile Number",
-                        hintStyle: TextStyle(
-                          color: Color(0xffBDBDBD),
-                          fontSize: 12.0,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal:1 ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    color: Color(ColorValues.WHITE_COLOR),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10))),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 38),
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(ColorValues.THEME_COLOR),
                           fontFamily: "Regular",
                         ),
                       ),
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
-                        mobile = phone.completeNumber;
-                      },
                     ),
-//                      child: TextFormField(
-//                        textAlign: TextAlign.center,
-//                        keyboardType: TextInputType.phone,
-//                        controller: mobile,
-//                        validator: (mobile) {
-//                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-//                          },
-//                        decoration: InputDecoration(
-//                          hintText: "Enter Mobile Number",
-//                          hintStyle: TextStyle(
-//                            color: Color(0xffBDBDBD),
-//                            fontSize: 12.0,
-//                            fontFamily: "Regular",
-//                          ),
-//                        ),
-//                      )
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (mobileController.text.toString() != null &&
-                          mobileController.text
-                              .toString()
-                              .length > 0) {
-                        // String mobileNumber = mobileController.text.toString();
-                        isnewUser(mobile);
+                    Container(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Image(
+                        image: AssetImage("assets/images/RegisterIcon.png"),
+                        height: 65,
+                        width: 65,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Text(
+                        "Enter Your Mobile Number",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(ColorValues.BLACK_COLOR),
+                          fontFamily: "Black",
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Center(
+                          child: Text(
+                            "We will send you one time\npassword(OTP)",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(ColorValues.BLACK_TEXT_COL),
+                              fontFamily: "Regular",
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      child: IntlPhoneField(
+                        keyboardType: TextInputType.phone,
+                        controller: mobileController,
+                        decoration: InputDecoration(
+                          hintText: "Enter Mobile Number",
+                          hintStyle: TextStyle(
+                            color: Color(0xffBDBDBD),
+                            fontSize: 12.0,
+                            fontFamily: "Regular",
+                          ),
+                        ),
+                        onChanged: (phone) {
+                          print(phone.completeNumber);
+                          mobile = phone.completeNumber;
+                        },
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (mobileController.text.toString() != null &&
+                            mobileController.text
+                                .toString()
+                                .length > 0) {
+                          // String mobileNumber = mobileController.text.toString();
+                          isnewUser(mobile);
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
                       } else {
-                        _showToast(ConstantMsg.MOB_VALIDATION);
+                        showToast(ConstantMsg.MOB_VALIDATION);
                       }
                     },
                     child: Container(
@@ -796,11 +932,9 @@ class HomeScreenState extends State<HomeScreen> {
                           )),
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
-        });
+                ],),
+    ),]),));
+
   }
 
   _bottomSheet2(context, String mobileNumber) {
@@ -883,7 +1017,7 @@ class HomeScreenState extends State<HomeScreen> {
                           .length > 0) {
                         signIn(mobileNumber);
                       } else {
-                        _showToast(ConstantMsg.NAME_VALIDATION);
+                        showToast(ConstantMsg.NAME_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1069,7 +1203,7 @@ class HomeScreenState extends State<HomeScreen> {
                         callLoginApi(mobileNumber);
                       }
                       else {
-                        _showToast(ConstantMsg.OTP_VALIDATION);
+                        showToast(ConstantMsg.OTP_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1145,50 +1279,21 @@ class HomeScreenState extends State<HomeScreen> {
 
         callUpcomingScreen();
       }else{
-       // _showToast(data['mobileMessage']);
-        _showToast("Invalid Code");
+        showToast(data['mobileMessage']);
       }
     } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
 
-//  void showToast(String message) {
-//    Fluttertoast.showToast(
-//      msg: message,
-//      toastLength: Toast.LENGTH_SHORT,
-//      gravity: ToastGravity.BOTTOM,
-//      timeInSecForIosWeb: 1,
-//      backgroundColor:
-//    );
-//  }
-  _showToast(String message) {
-    Widget toast = Container(
-      width: 350,
-      height: 35,
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.green.withOpacity(0.8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.check,color: Colors.white,),
-          SizedBox(
-            width: 10.0,
-          ),
-          Text("${message}",style: TextStyle(color: Color(ColorValues.WHITE_COLOR)),),
-        ],
-      ),
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
     );
-
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds:2),
-    );
+  }
 
     // Custom Toast Position
 //    fToast.showToast(
@@ -1201,10 +1306,9 @@ class HomeScreenState extends State<HomeScreen> {
 //            left: 16.0,
 //          );
 //        });
-  }
+
   void callUpcomingScreen() {
-    Navigator.push(
-        context,
+    Navigator.push(context,
         new MaterialPageRoute(
             builder: (BuildContext context) => BookingsListScreen()));;
   }
@@ -1272,14 +1376,13 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        _showToast("Code has been sent to your mobile number");
+        showToast("Code has been sent to your mobile number");
         Navigator.pop(context);
         _bottomSheet3(context, mobileNumber);
       } else {
         var data = json.decode(body);
         ErrorModel model = ErrorModel.fromJson(data);
-        //_showToast(model.message);
-        _showToast("Invalid Code");
+        showToast(model.message);
       }
     }
     catch (e) {
@@ -1304,7 +1407,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        _showToast(
+        showToast(
             "The code has been sent to your mobile number. Please check!");
       }
     }
@@ -1339,10 +1442,10 @@ class HomeScreenState extends State<HomeScreen> {
         setState(() {
         });
       } else {
-        _showToast("Please login first!");
+        showToast("Please login first!");
       }
     } else {
-      _showToast("Please login first!");
+      showToast("Please login first!");
     }
   }
 

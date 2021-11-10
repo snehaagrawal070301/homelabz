@@ -32,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   DateTime selectedDate=DateTime.now();
   TextEditingController _phone = new TextEditingController();
   TextEditingController _dob = new TextEditingController();
+
   //TextEditingController _education = new TextEditingController();
   TextEditingController _address = new TextEditingController();
   TextEditingController _email = new TextEditingController();
@@ -48,6 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   SharedPreferences preferences;
   Uint8List bytes;
   ProgressDialog dialog;
+  String imageUrl;
+  String oldImagePath;
 
   @override
   void initState() {
@@ -98,10 +101,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
          // tempDate = DateFormat().parse(_dob.text);
           //_education = new TextEditingController(text: model.education);
           _address = new TextEditingController(text: model.address);
+          _email = new TextEditingController(text: model.email);
+          gender = model.gender.toUpperCase();
 
-          // imageUrl = model.imagePresignedURL;
-          if (model.imagePath != null && model.imagePath.length > 0) {
-            downloadImageUrl(model.imagePath);
+          preferences.setString("name", model.name);
+          preferences.setString("dob", model.dob);
+          preferences.setString("address", model.address);
+          preferences.setString("gender", gender);
+
+          if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
+            oldImagePath = model.imagePath;
+            // downloadImageUrl(model.imagePath);
+            imageUrl = model.imagePresignedURL;
+            preferences.setString("image", imageUrl);
           }
           isLoading = false;
         });
@@ -111,45 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         isLoading = true;
       });
     }
-  }
-
-  Future<void> downloadImageUrl(String imagePath) async {
-    try {
-      var url = Uri.parse(ApiConstants.GET_DOWNLOAD_URL);
-      Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
-      };
-
-      Map map = {
-        ConstantMsg.KEY_PATH: imagePath,
-      };
-
-      // make POST request
-      Response response =
-      await post(url, headers: headers, body: json.encode(map));
-      // check the status code for the result
-      String body = response.body;
-      print(body);
-
-      var data = json.decode(body);
-      if (response.statusCode == 200) {
-        String keyPath = data["keyPath"];
-        String url = data["presignedURL"];
-
-        ByteData imageData = await NetworkAssetBundle(Uri.parse(url)).load("");
-        bytes = imageData.buffer.asUint8List();
-
-        String s = String.fromCharCodes(bytes);
-        preferences.setString("image", s);
-        print(preferences.getString("image"));
-
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } catch (ex) {}
   }
 
   void changeProfilePic() {
@@ -169,11 +142,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final placeDetails = await PlaceApiProvider(sessionToken)
           .getPlaceDetailFromId(result.placeId);
       setState(() {
-        print(result.description);
-        print(placeDetails.streetNumber);
-        print(placeDetails.street);
-        print(placeDetails.city);
-        print(placeDetails.zipCode);
 
         if(placeDetails.streetNumber==null){
           _address.text = "${placeDetails.street}, "+"${placeDetails.city}, "+"${placeDetails.state}, "
@@ -319,7 +287,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future selectDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-        initialDate: tempDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(1950),
         lastDate: DateTime.now(),
         fieldLabelText: 'Date of Birth',
@@ -384,6 +352,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ConstantMsg.EMAIL: _email.text,
           ConstantMsg.GENDER:gender,
           ConstantMsg.ADDRESS: _address.text,
+          ConstantMsg.IMAGE_PATH:oldImagePath,
         };
       }
 
@@ -398,6 +367,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (response.statusCode == 200) {
         showToast(ValidationMsgs.PROFILE_UPDATE_SUCCESS);
         preferences.setString(ConstantMsg.NAME, data['name'].toString());
+
+        String dob = data['dob'].toString();
+        if (dob != null && dob.length > 0) preferences.setString("dob", dob);
+
+        String address = data['address'].toString();
+        if (address != null && address.length > 0)
+          preferences.setString("address", address);
       }
       await dialog.hide();
     } catch (ex) {
@@ -455,10 +431,509 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Color(ColorValues.WHITE)),),
       ),
       body: Container(
-          width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width,
+        // height: MediaQuery.of(context).size.height,
+        // child: Column(
+        //     children: [
+        //       Stack(clipBehavior: Clip.none, children: [
+        //         Container(
+        //           margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+        //           width: MediaQuery.of(context).size.width,
+        //           height: MediaQuery.of(context).size.height * 0.846,
+        //           decoration: BoxDecoration(
+        //               color: const Color(ColorValues.WHITE),
+        //               borderRadius: BorderRadius.only(
+        //                   topLeft: Radius.circular(50.0),
+        //                   topRight: Radius.circular(50.0))),
+        //         ),
+        //         imageFile != null
+        //             ? Positioned(
+        //                 left: 0,
+        //                 right: 0,
+        //                 child: CircleAvatar(
+        //                   radius: 45,
+        //                   backgroundColor: Colors.white,
+        //                   child: ClipOval(
+        //                     child: Image.file(
+        //                       imageFile,
+        //                       width: 85,
+        //                       height: 85,
+        //                       fit: BoxFit.fitHeight,
+        //                     ),
+        //                   ),
+        //                 ),
+        //               )
+        //             : imageUrl != null
+        //                 ? Positioned(
+        //                     left: 0,
+        //                     right: 0,
+        //                     child: CircleAvatar(
+        //                       radius: 45,
+        //                       backgroundColor: Colors.white,
+        //                       child: ClipOval(
+        //                         child: Image.network(
+        //                           imageUrl,
+        //                           height: 85,
+        //                           width: 85,
+        //                           fit: BoxFit.fill,
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   )
+        //                 : Positioned(
+        //                     left: 0,
+        //                     right: 0,
+        //                     child: Container(
+        //                       width: 100,
+        //                       height: 100,
+        //                       alignment: Alignment.center,
+        //                       decoration: BoxDecoration(
+        //                         shape: BoxShape.circle,
+        //                       ),
+        //                       child: Image.asset('assets/images/profile_pic.png'),
+        //                     ),
+        //                   ),
+        //         Positioned(
+        //             top: 60,
+        //             left: 60,
+        //             right: 0,
+        //             child: InkWell(
+        //                 onTap: () {
+        //                   changeProfilePic();
+        //                 },
+        //                 child: Container(
+        //                   height: 45,
+        //                   width: 45,
+        //                   decoration: BoxDecoration(
+        //                     shape: BoxShape.circle,
+        //                   ),
+        //                   child: Image.asset('assets/images/Camera.png'),
+        //                 ))),
+        //         Positioned(
+        //           top: 70,
+        //           width: MediaQuery.of(context).size.width,
+        //           // height: MediaQuery.of(context).size.height,
+        //           child: isLoading
+        //               ? new Center(
+        //                   child: CircularProgressIndicator(
+        //                       valueColor: AlwaysStoppedAnimation<Color>(
+        //                           ColorValues.TEXT_COLOR)))
+        //               : Container(
+        //                   margin: EdgeInsets.fromLTRB(40, 50, 40, 50),
+        //                   decoration: BoxDecoration(
+        //                     color: Color(ColorValues.WHITE),
+        //                     shape: BoxShape.rectangle,
+        //                     boxShadow: [
+        //                       BoxShadow(
+        //                         color: Colors.grey,
+        //                         blurRadius: 7.0, // soften the shadow
+        //                         spreadRadius: 0.0, //extend the shadow
+        //                       )
+        //                     ],
+        //                   ),
+        //                   child: Padding(
+        //                     padding: const EdgeInsets.all(8.0),
+        //                     child: Column(
+        //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                       crossAxisAlignment: CrossAxisAlignment.start,
+        //                       children: <Widget>[
+        //                         Container(
+        //                           padding: const EdgeInsets.all(10.0),
+        //                           child: TextField(
+        //                             controller: _name,
+        //                             onEditingComplete: () {
+        //                               _flag = true;
+        //                             },
+        //                             autofocus: false,
+        //                             cursorColor: Colors.black,
+        //                             style: TextStyle(
+        //                               fontSize: 12,
+        //                               fontFamily: "Regular",
+        //                               color: Color(ColorValues.BLACK_TEXT_COL),
+        //                             ),
+        //                             decoration: new InputDecoration(
+        //                               labelText: 'Name',
+        //                               labelStyle: TextStyle(
+        //                                 fontSize: 14,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w700,
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                     .withOpacity(0.5),
+        //                               ),
+        //                               contentPadding: EdgeInsets.only(
+        //                                   left: 15, bottom: 11, top: 11, right: 15),
+        //                               icon: ImageIcon(
+        //                                 AssetImage("assets/images/user_name.png"),
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
+        //                               ),
+        //                               hintStyle: TextStyle(
+        //                                 fontSize: 12,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w400,
+        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
+        //                               ),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                           padding: const EdgeInsets.all(10.0),
+        //                           child: TextField(
+        //                             controller: _phone,
+        //                             onEditingComplete: () {
+        //                               _flag = true;
+        //                             },
+        //                             autofocus: false,
+        //                             readOnly: true,
+        //                             cursorColor: Colors.black,
+        //                             style: TextStyle(
+        //                               fontSize: 12,
+        //                               fontFamily: "Regular",
+        //                               color: Color(ColorValues.BLACK_TEXT_COL),
+        //                             ),
+        //                             decoration: new InputDecoration(
+        //                               labelText: 'Phone',
+        //                               labelStyle: TextStyle(
+        //                                 fontSize: 14,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w700,
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                     .withOpacity(0.5),
+        //                               ),
+        //                               contentPadding: EdgeInsets.only(
+        //                                   left: 15, bottom: 11, top: 11, right: 15),
+        //                               icon: ImageIcon(
+        //                                 AssetImage("assets/images/contact.png"),
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
+        //                               ),
+        //                               hintStyle: TextStyle(
+        //                                 fontSize: 10,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w400,
+        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
+        //                               ),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                             padding: const EdgeInsets.all(10.0),
+        //                             child: TextField(
+        //                               autofocus: false,
+        //                               readOnly: true,
+        //                               onTap: () {
+        //                                 selectDate(context);
+        //                               },
+        //                               controller: _dob,
+        //                               onEditingComplete: () {
+        //                                 _flag = true;
+        //                               },
+        //                               cursorColor: Colors.black,
+        //                               style: TextStyle(
+        //                                 fontSize: 12,
+        //                                 fontFamily: "Regular",
+        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
+        //                               ),
+        //                               decoration: new InputDecoration(
+        //                                 labelText: 'Date of Birth',
+        //                                 labelStyle: TextStyle(
+        //                                   fontSize: 14,
+        //                                   fontFamily: "Regular",
+        //                                   fontWeight: FontWeight.w700,
+        //                                   color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                       .withOpacity(0.5),
+        //                                 ),
+        //                                 contentPadding: EdgeInsets.only(
+        //                                     left: 15,
+        //                                     bottom: 11,
+        //                                     top: 11,
+        //                                     right: 15),
+        //                                 icon: ImageIcon(
+        //                                   AssetImage("assets/images/calendar.png"),
+        //                                   color:
+        //                                       Color(ColorValues.THEME_TEXT_COLOR),
+        //                                 ),
+        //                                 suffixIconConstraints: BoxConstraints(
+        //                                     minHeight: 22, minWidth: 22),
+        //                                 suffixIcon: IconButton(
+        //                                   icon: ImageIcon(
+        //                                     AssetImage(
+        //                                         "assets/images/cal_sign_up.png"),
+        //                                     color:
+        //                                         Color(ColorValues.THEME_TEXT_COLOR),
+        //                                   ),
+        //                                 ),
+        //                                 hintStyle: TextStyle(
+        //                                   fontSize: 10,
+        //                                   fontFamily: "Regular",
+        //                                   fontWeight: FontWeight.w400,
+        //                                   color: Color(ColorValues.BLACK_TEXT_COL),
+        //                                 ),
+        //                               ),
+        //                             )),
+        //                         Container(
+        //                           padding: const EdgeInsets.all(10.0),
+        //                           child: TextField(
+        //                             controller: _email,
+        //                             onEditingComplete: () {
+        //                               _flag = true;
+        //                             },
+        //                             autofocus: false,
+        //                             cursorColor: Colors.black,
+        //                             style: TextStyle(
+        //                               fontSize: 12,
+        //                               fontFamily: "Regular",
+        //                               color: Color(ColorValues.BLACK_TEXT_COL),
+        //                             ),
+        //                             decoration: new InputDecoration(
+        //                               labelText: 'Email',
+        //                               labelStyle: TextStyle(
+        //                                 fontSize: 14,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w700,
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                     .withOpacity(0.5),
+        //                               ),
+        //                               contentPadding: EdgeInsets.only(
+        //                                   left: 15, bottom: 11, top: 11, right: 15),
+        //                               icon: ImageIcon(
+        //                                 AssetImage("assets/images/eduction.png"),
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
+        //                               ),
+        //                               hintStyle: TextStyle(
+        //                                 fontSize: 10,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w400,
+        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
+        //                               ),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                           padding: const EdgeInsets.all(10.0),
+        //                           child: TextField(
+        //                             controller: _address,
+        //                             onTap: () {
+        //                               callPlacesApi();
+        //                             },
+        //                             onEditingComplete: () {
+        //                               _flag = true;
+        //                             },
+        //                             autofocus: false,
+        //                             cursorColor: Colors.black,
+        //                             style: TextStyle(
+        //                               fontSize: 12,
+        //                               fontFamily: "Regular",
+        //                               color: Color(ColorValues.BLACK_TEXT_COL),
+        //                             ),
+        //                             decoration: new InputDecoration(
+        //                               labelText: 'Address',
+        //                               labelStyle: TextStyle(
+        //                                 fontSize: 14,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w700,
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                     .withOpacity(0.5),
+        //                               ),
+        //                               contentPadding: EdgeInsets.only(
+        //                                   left: 15, bottom: 11, top: 11, right: 15),
+        //                               icon: ImageIcon(
+        //                                 AssetImage("assets/images/location.png"),
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
+        //                               ),
+        //                               hintStyle: TextStyle(
+        //                                 fontSize: 10,
+        //                                 fontFamily: "Regular",
+        //                                 fontWeight: FontWeight.w400,
+        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
+        //                               ),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                           margin:
+        //                               EdgeInsets.only(top: 14, left: 20, right: 20),
+        //                           child: Text(
+        //                             "Gender",
+        //                             style: TextStyle(
+        //                                 fontFamily: "Black",
+        //                                 fontSize: 12,
+        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
+        //                                     .withOpacity(0.5)),
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                           height: 36,
+        //                           width: MediaQuery.of(context).size.width,
+        //                           margin:
+        //                               EdgeInsets.only(top: 11, left: 20, right: 20),
+        //                           child: Row(
+        //                             children: [
+        //                               Expanded(
+        //                                   flex: 1,
+        //                                   child: GestureDetector(
+        //                                       onTap: () {
+        //                                         setState(() {
+        //                                           gender = "MALE";
+        //                                         });
+        //                                       },
+        //                                       child: gender == "MALE"
+        //                                           ? Container(
+        //                                               decoration: BoxDecoration(
+        //                                                 color: Color(ColorValues
+        //                                                     .THEME_COLOR),
+        //                                                 borderRadius:
+        //                                                     BorderRadius.only(
+        //                                                         bottomLeft: Radius
+        //                                                             .circular(10),
+        //                                                         topLeft:
+        //                                                             Radius.circular(
+        //                                                                 10)),
+        //                                               ),
+        //                                               child: Center(
+        //                                                   child: Text(
+        //                                                 "Male",
+        //                                                 style: TextStyle(
+        //                                                     fontFamily: "Regular",
+        //                                                     fontSize: 12,
+        //                                                     color: Color(ColorValues
+        //                                                         .WHITE_COLOR),
+        //                                                     fontWeight:
+        //                                                         FontWeight.bold),
+        //                                                 textAlign: TextAlign.center,
+        //                                               )),
+        //                                             )
+        //                                           : Container(
+        //                                               decoration: BoxDecoration(
+        //                                                 color: Color(
+        //                                                     ColorValues.LIGHT_GRAY),
+        //                                                 borderRadius:
+        //                                                     BorderRadius.only(
+        //                                                         bottomLeft: Radius
+        //                                                             .circular(10),
+        //                                                         topLeft:
+        //                                                             Radius.circular(
+        //                                                                 10)),
+        //                                                 border: Border.all(
+        //                                                     color: Color(ColorValues
+        //                                                             .BLACK_COLOR)
+        //                                                         .withOpacity(0.5),
+        //                                                     width: 1),
+        //                                               ),
+        //                                               child: Center(
+        //                                                   child: Text(
+        //                                                 "Male",
+        //                                                 style: TextStyle(
+        //                                                     fontFamily: "Regular",
+        //                                                     fontSize: 12,
+        //                                                     color: Color(ColorValues
+        //                                                         .THEME_TEXT_COLOR),
+        //                                                     fontWeight:
+        //                                                         FontWeight.bold),
+        //                                                 textAlign: TextAlign.center,
+        //                                               )),
+        //                                             ))),
+        //                               Expanded(
+        //                                   flex: 1,
+        //                                   child: GestureDetector(
+        //                                       onTap: () {
+        //                                         setState(() {
+        //                                           gender = "FEMALE";
+        //                                         });
+        //                                       },
+        //                                       child: gender == "FEMALE"
+        //                                           ? Container(
+        //                                               decoration: BoxDecoration(
+        //                                                 color: Color(ColorValues
+        //                                                     .THEME_COLOR),
+        //                                                 borderRadius:
+        //                                                     BorderRadius.only(
+        //                                                         bottomRight: Radius
+        //                                                             .circular(10),
+        //                                                         topRight:
+        //                                                             Radius.circular(
+        //                                                                 10)),
+        //                                               ),
+        //                                               child: Center(
+        //                                                 child: Text(
+        //                                                   "Female",
+        //                                                   style: TextStyle(
+        //                                                       fontFamily: "Regular",
+        //                                                       fontSize: 12,
+        //                                                       color: Color(
+        //                                                           ColorValues
+        //                                                               .WHITE),
+        //                                                       fontWeight:
+        //                                                           FontWeight.bold),
+        //                                                   textAlign:
+        //                                                       TextAlign.center,
+        //                                                 ),
+        //                                               ))
+        //                                           : Container(
+        //                                               decoration: BoxDecoration(
+        //                                                 color: Color(
+        //                                                     ColorValues.LIGHT_GRAY),
+        //                                                 borderRadius:
+        //                                                     BorderRadius.only(
+        //                                                         bottomRight: Radius
+        //                                                             .circular(10),
+        //                                                         topRight:
+        //                                                             Radius.circular(
+        //                                                                 10)),
+        //                                                 border: Border.all(
+        //                                                     color: Color(ColorValues
+        //                                                             .BLACK_COLOR)
+        //                                                         .withOpacity(0.5),
+        //                                                     width: 1),
+        //                                               ),
+        //                                               child: Center(
+        //                                                   child: Text(
+        //                                                 "Female",
+        //                                                 style: TextStyle(
+        //                                                     fontFamily: "Regular",
+        //                                                     fontSize: 12,
+        //                                                     color: Color(ColorValues
+        //                                                         .THEME_COLOR),
+        //                                                     fontWeight:
+        //                                                         FontWeight.bold),
+        //                                                 textAlign: TextAlign.center,
+        //                                               )),
+        //                                             ))),
+        //                             ],
+        //                           ),
+        //                         ),
+        //                         Container(
+        //                           margin:
+        //                               EdgeInsets.only(left: 40, right: 40, top: 30, bottom: 20),
+        //                           height: 40,
+        //                           width: MediaQuery.of(context).size.width,
+        //                           decoration: BoxDecoration(
+        //                             color:
+        //                                 const Color(ColorValues.THEME_TEXT_COLOR),
+        //                           ),
+        //                           child: TextButton(
+        //                             onPressed: () {
+        //                               validateData();
+        //                             },
+        //                             child: Text(
+        //                               'Save',
+        //                               style: TextStyle(
+        //                                   color: Color(ColorValues.WHITE),
+        //                                   fontSize: 14),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                       ],
+        //                     ),
+        //                   )),
+        //         ),
+        //       ]),
+        //     ],
+        //   ),
+
+////////
+
+          // width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Stack(clipBehavior: Clip.none, children: [
+        child: Stack(clipBehavior: Clip.none, children: [
             Container(
               margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
               width: MediaQuery.of(context).size.width,
@@ -486,7 +961,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             )
-                : bytes != null
+                : imageUrl != null
                 ? Positioned(
               left: 0,
               right: 0,
@@ -494,8 +969,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 radius: 45,
                 backgroundColor: Colors.white,
                 child: ClipOval(
-                  child: Image.memory(
-                    bytes,
+                  child: Image.network(
+                    imageUrl,
                     height: 85,
                     width: 85,
                     fit: BoxFit.fill,
@@ -533,7 +1008,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: Image.asset('assets/images/Camera.png')),
                       ),
-                )),
+                )
+            ),
 
             Positioned(
               top: 70,
@@ -559,97 +1035,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: TextField(
-                            controller: _name,
-                            onEditingComplete: () {
-                              _flag = true;
-                            },
-                            autofocus: false,
-                            cursorColor: Colors.black,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Regular",
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                            ),
-                            decoration: new InputDecoration(
-                              labelText: 'Name',
-                              labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w700,
-                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 11, top: 11, right: 15),
-                              icon: ImageIcon(
-                                AssetImage("assets/images/user_name.png"),
-                                color: Color(ColorValues.THEME_TEXT_COLOR),
-                              ),
-                              hintStyle: TextStyle(
-                                fontSize: 12,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w400,
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: TextField(
-                            controller: _phone,
-                            onEditingComplete: () {
-                              _flag = true;
-                            },
-                            autofocus: false,
-                            readOnly: true,
-                            cursorColor: Colors.black,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Regular",
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                            ),
-                            decoration: new InputDecoration(
-                              labelText: 'Phone',
-                              labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w700,
-                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 11, top: 11, right: 15),
-                              icon: ImageIcon(
-                                AssetImage("assets/images/contact.png"),
-                                color: Color(ColorValues.THEME_TEXT_COLOR),
-                              ),
-                              hintStyle: TextStyle(
-                                fontSize: 10,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w400,
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
                             padding: const EdgeInsets.all(10.0),
                             child: TextField(
-                              autofocus: false,
-                              readOnly: true,
-                              onTap: () {
-                                selectDate(context);
-                              },
-                              controller: _dob,
+                              controller: _name,
                               onEditingComplete: () {
                                 _flag = true;
                               },
+                              autofocus: false,
                               cursorColor: Colors.black,
                               style: TextStyle(
                                 fontSize: 12,
@@ -657,7 +1055,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                               decoration: new InputDecoration(
-                                labelText: 'Date of Birth',
+                                labelText: 'Name',
                                 labelStyle: TextStyle(
                                   fontSize: 14,
                                   fontFamily: "Regular",
@@ -667,18 +1065,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 contentPadding: EdgeInsets.only(
                                     left: 15, bottom: 11, top: 11, right: 15),
                                 icon: ImageIcon(
-                                  AssetImage("assets/images/calendar.png"),
+                                  AssetImage("assets/images/user_name.png"),
                                   color: Color(ColorValues.THEME_TEXT_COLOR),
                                 ),
-                                suffixIconConstraints: BoxConstraints(
-                                    minHeight: 22, minWidth: 22),
-                                suffixIcon: IconButton(
-                                  icon: ImageIcon(
-                                    AssetImage(
-                                        "assets/images/cal_sign_up.png"),
-                                    color:
-                                    Color(ColorValues.THEME_TEXT_COLOR),
-                                  ),
+                                hintStyle: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(ColorValues.BLACK_TEXT_COL),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: TextField(
+                              controller: _phone,
+                              onEditingComplete: () {
+                                _flag = true;
+                              },
+                              enabled: false,
+                              autofocus: false,
+                              readOnly: true,
+                              cursorColor: Colors.black,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: "Regular",
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                              ),
+                              decoration: new InputDecoration(
+                                labelText: 'Phone',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                    left: 15, bottom: 11, top: 11, right: 15),
+                                icon: ImageIcon(
+                                  AssetImage("assets/images/contact.png"),
+                                  color: Color(ColorValues.THEME_TEXT_COLOR),
                                 ),
                                 hintStyle: TextStyle(
                                   fontSize: 10,
@@ -687,229 +1114,281 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Color(ColorValues.BLACK_TEXT_COL),
                                 ),
                               ),
-                            )),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: TextField(
-                            controller: _email,
-                            onEditingComplete: () {
-                              _flag = true;
-                            },
-                            autofocus: false,
-                            cursorColor: Colors.black,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Regular",
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                            ),
-                            decoration: new InputDecoration(
-                              labelText: 'Email',
-                              labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w700,
-                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 11, top: 11, right: 15),
-                              icon: ImageIcon(
-                                AssetImage("assets/images/eduction.png"),
-                                color: Color(ColorValues.THEME_TEXT_COLOR),
-                              ),
-                              hintStyle: TextStyle(
-                                fontSize: 10,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w400,
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: TextField(
-                            controller: _address,
-                            onTap: () {
-                              callPlacesApi();
-                            },
-                            onEditingComplete: () {
-                              _flag = true;
-                            },
-                            autofocus: false,
-                            cursorColor: Colors.black,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Regular",
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                            ),
-                            decoration: new InputDecoration(
-                              labelText: 'Address',
-                              labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w700,
-                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 11, top: 11, right: 15),
-                              icon: ImageIcon(
-                                AssetImage("assets/images/location.png"),
-                                color: Color(ColorValues.THEME_TEXT_COLOR),
-                              ),
-                              hintStyle: TextStyle(
-                                fontSize: 10,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w400,
-                                color: Color(ColorValues.BLACK_TEXT_COL),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 14, left: 20, right: 20),
-                          child: Text(
-                            "Gender",
-                            style: TextStyle(
-                                fontFamily: "Black",
+                          Container(
+                              padding: const EdgeInsets.all(10.0),
+                              child: TextField(
+                                autofocus: false,
+                                readOnly: true,
+                                onTap: () {
+                                  selectDate(context);
+                                },
+                                controller: _dob,
+                                onEditingComplete: () {
+                                  _flag = true;
+                                },
+                                cursorColor: Colors.black,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: "Regular",
+                                  color: Color(ColorValues.BLACK_TEXT_COL),
+                                ),
+                                decoration: new InputDecoration(
+                                  labelText: 'Date of Birth',
+                                  labelStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: "Regular",
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
+                                  ),
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, bottom: 11, top: 11, right: 15),
+                                  icon: ImageIcon(
+                                    AssetImage("assets/images/calendar.png"),
+                                    color: Color(ColorValues.THEME_TEXT_COLOR),
+                                  ),
+                                  suffixIconConstraints: BoxConstraints(
+                                      minHeight: 22, minWidth: 22),
+                                  suffixIcon: IconButton(
+                                    icon: ImageIcon(
+                                      AssetImage(
+                                          "assets/images/cal_sign_up.png"),
+                                      color:
+                                      Color(ColorValues.THEME_TEXT_COLOR),
+                                    ),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: "Regular",
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(ColorValues.BLACK_TEXT_COL),
+                                  ),
+                                ),
+                              )),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: TextField(
+                              controller: _email,
+                              onEditingComplete: () {
+                                _flag = true;
+                              },
+                              autofocus: false,
+                              cursorColor: Colors.black,
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5)),
+                                fontFamily: "Regular",
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                              ),
+                              decoration: new InputDecoration(
+                                labelText: 'Email',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                    left: 15, bottom: 11, top: 11, right: 15),
+                                icon: ImageIcon(
+                                  AssetImage("assets/images/eduction.png"),
+                                  color: Color(ColorValues.THEME_TEXT_COLOR),
+                                ),
+                                hintStyle: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(ColorValues.BLACK_TEXT_COL),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 36,
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(top: 11, left: 20, right: 20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          gender = "MALE";
-                                        });
-                                      },
-                                      child: gender == "MALE"
-                                          ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                              "Male",
-                                              style: TextStyle(
-                                                  fontFamily: "Regular",
-                                                  fontSize: 12,
-                                                  color: Color(
-                                                      ColorValues.WHITE_COLOR),
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
-                                            )),
-                                      )
-                                          : Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR).withOpacity(0.5),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                              "Male",
-                                              style: TextStyle(
-                                                  fontFamily: "Regular",
-                                                  fontSize: 12,
-                                                  color: Color(
-                                                      ColorValues.THEME_TEXT_COLOR),
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
-                                            )),
-                                      ))),
-                              Expanded(
-                                  flex: 1,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          gender = "FEMALE";
-                                        });
-                                      },
-                                      child: gender == "FEMALE"
-                                          ? Container(
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: TextField(
+                              controller: _address,
+                              onTap: () {
+                                callPlacesApi();
+                              },
+                              onEditingComplete: () {
+                                _flag = true;
+                              },
+                              autofocus: false,
+                              cursorColor: Colors.black,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: "Regular",
+                                color: Color(ColorValues.BLACK_TEXT_COL),
+                              ),
+                              decoration: new InputDecoration(
+                                labelText: 'Address',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5),
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                    left: 15, bottom: 11, top: 11, right: 15),
+                                icon: ImageIcon(
+                                  AssetImage("assets/images/location.png"),
+                                  color: Color(ColorValues.THEME_TEXT_COLOR),
+                                ),
+                                hintStyle: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: "Regular",
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(ColorValues.BLACK_TEXT_COL),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 14, left: 20, right: 20),
+                            child: Text(
+                              "Gender",
+                              style: TextStyle(
+                                  fontFamily: "Black",
+                                  fontSize: 12,
+                                  color: Color(ColorValues.THEME_TEXT_COLOR).withOpacity(0.5)),
+                            ),
+                          ),
+                          Container(
+                            height: 36,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 11, left: 20, right: 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            gender = "MALE";
+                                          });
+                                        },
+                                        child: gender == "MALE"
+                                            ? Container(
                                           decoration: BoxDecoration(
                                             color: Color(ColorValues.THEME_COLOR),
                                             borderRadius: BorderRadius.only(
-                                                bottomRight: Radius.circular(10),
-                                                topRight: Radius.circular(10)),
+                                                bottomLeft: Radius.circular(10),
+                                                topLeft: Radius.circular(10)),
                                           ),
                                           child: Center(
-                                            child: Text(
-                                              "Female",
-                                              style: TextStyle(
-                                                  fontFamily: "Regular",
-                                                  fontSize: 12,
-                                                  color: Color(ColorValues.WHITE),
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
+                                              child: Text(
+                                                "Male",
+                                                style: TextStyle(
+                                                    fontFamily: "Regular",
+                                                    fontSize: 12,
+                                                    color: Color(
+                                                        ColorValues.WHITE_COLOR),
+                                                    fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              )),
+                                        )
+                                            : Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.LIGHT_GRAY),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                                topLeft: Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Color(
+                                                    ColorValues.BLACK_COLOR).withOpacity(0.5),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                                "Male",
+                                                style: TextStyle(
+                                                    fontFamily: "Regular",
+                                                    fontSize: 12,
+                                                    color: Color(
+                                                        ColorValues.THEME_TEXT_COLOR),
+                                                    fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              )),
+                                        ))),
+                                Expanded(
+                                    flex: 1,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            gender = "FEMALE";
+                                          });
+                                        },
+                                        child: gender == "FEMALE"
+                                            ? Container(
+                                            decoration: BoxDecoration(
+                                              color: Color(ColorValues.THEME_COLOR),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(10),
+                                                  topRight: Radius.circular(10)),
                                             ),
-                                          ))
-                                          : Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR).withOpacity(0.5),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                              "Female",
-                                              style: TextStyle(
-                                                  fontFamily: "Regular",
-                                                  fontSize: 12,
-                                                  color: Color(
-                                                      ColorValues.THEME_COLOR),
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
-                                            )),
-                                      ))),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 40,right: 40,top:30),
-                          height: 40,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: const Color(ColorValues.THEME_TEXT_COLOR),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              validateData();
-                            },
-                            child: Text(
-                              'Save',
-                              style: TextStyle(
-                                  color: Color(ColorValues.WHITE),
-                                  fontSize: 14),
+                                            child: Center(
+                                              child: Text(
+                                                "Female",
+                                                style: TextStyle(
+                                                    fontFamily: "Regular",
+                                                    fontSize: 12,
+                                                    color: Color(ColorValues.WHITE),
+                                                    fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ))
+                                            : Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.LIGHT_GRAY),
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(10),
+                                                topRight: Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Color(
+                                                    ColorValues.BLACK_COLOR).withOpacity(0.5),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                                "Female",
+                                                style: TextStyle(
+                                                    fontFamily: "Regular",
+                                                    fontSize: 12,
+                                                    color: Color(
+                                                        ColorValues.THEME_COLOR),
+                                                    fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              )),
+                                        ))),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            margin: EdgeInsets.only(left: 40,right: 40,top:30, bottom: 20),
+                            height: 40,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: const Color(ColorValues.THEME_TEXT_COLOR),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                validateData();
+                              },
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                    color: Color(ColorValues.WHITE),
+                                    fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )),
             ),
           ]),
-        ),
+
       ),
     );
   }

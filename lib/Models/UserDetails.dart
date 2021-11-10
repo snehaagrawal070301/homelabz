@@ -9,6 +9,8 @@ class UserDetails {
   String education;
   String imagePath;
   String imagePresignedURL;
+  String email;
+  String gender;
 
   UserDetails(
       {this.id,
@@ -20,7 +22,9 @@ class UserDetails {
         this.dob,
         this.education,
         this.imagePath,
-        this.imagePresignedURL});
+        this.imagePresignedURL,
+        this.email,
+        this.gender});
 
   UserDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -33,6 +37,8 @@ class UserDetails {
     education = json['education'];
     imagePath = json['imagePath'];
     imagePresignedURL = json['imagePresignedURL'];
+    email = json['email'];
+    gender = json['gender'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +53,8 @@ class UserDetails {
     data['education'] = this.education;
     data['imagePath'] = this.imagePath;
     data['imagePresignedURL'] = this.imagePresignedURL;
+    data['email'] = this.email;
+    data['gender'] = this.gender;
     return data;
   }
 }

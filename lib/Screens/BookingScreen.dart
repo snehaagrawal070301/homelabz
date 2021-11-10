@@ -67,6 +67,21 @@ class BookingScreenState extends State<BookingScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
+    callAllLabsApi();
+    callDoctorApi();
+    if(preferences.getString("address")!=null){
+    searchAddress = preferences.getString("address");
+    }
+
+    if(preferences.getString("dob")!=null){
+      convertedDateTime = preferences.getString("dob");
+    }
+
+    if(preferences.getString("gender")!=null){
+      gender = preferences.getString("gender");
+    }
+
+    setState(() {});
   }
 
   @override
@@ -74,8 +89,6 @@ class BookingScreenState extends State<BookingScreen> {
     super.initState();
     print("Date ======== ${widget.date} ======== ${widget.slot}");
     getSharedPreferences();
-    callAllLabsApi();
-    callDoctorApi();
   }
 
   Future selectDate(BuildContext context,String selecteddate) async {
@@ -126,6 +139,7 @@ class BookingScreenState extends State<BookingScreen> {
       var url = Uri.parse(ApiConstants.GET_ALL_DOCTOR);
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
       // make POST request
       Response response = await get(
@@ -142,11 +156,17 @@ class BookingScreenState extends State<BookingScreen> {
         var data = json.decode(body);
         List list = data;
 
-        for (int i = 0; i < list.length; i++) {
-          DoctorResponse model = DoctorResponse.fromJson(data[i]);
+        for (var obj in list) {
+          DoctorResponse model = DoctorResponse.fromJson(obj);
           if(model.name!=null && model.name.length>0)
-          _doctor.add(model);
+            _doctor.add(model);
         }
+
+        // for (int i = 0; i < list.length; i++) {
+        //   DoctorResponse model = DoctorResponse.fromJson(data[i]);
+        //   if(model.name!=null && model.name.length>0)
+        //   _doctor.add(model);
+        // }
         setState(() {});
       }
     } catch (ex) {
@@ -160,6 +180,7 @@ class BookingScreenState extends State<BookingScreen> {
       var url = Uri.parse(ApiConstants.GET_ALL_LABS);
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
       // make POST request
       Response response = await get(
@@ -175,9 +196,8 @@ class BookingScreenState extends State<BookingScreen> {
 
         var data = json.decode(body);
         List list = data;
-
-        for (int i = 0; i < list.length; i++) {
-          LabResponse model = LabResponse.fromJson(data[i]);
+        for (var obj in list) {
+          LabResponse model = LabResponse.fromJson(obj);
           _labs.add(model);
         }
       }
@@ -222,71 +242,6 @@ class BookingScreenState extends State<BookingScreen> {
     }
   }
 
-  // void callBookAppointmentApi() async {
-  //   try {
-  //     var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
-  //     Map<String, String> headers = {
-  //       ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-  //       ConstantMsg.HEADER_AUTH:
-  //           "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
-  //     };
-  //
-  //     Map patient = {
-  //       ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-  //     };
-  //     Map bookedBy = {
-  //       ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-  //     };
-  //     Map lab = {
-  //       ConstantMsg.ID: selectedLabId,
-  //     };
-  //
-  //     if(urlList!=null){
-  //     Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
-  //     List docList = [];
-  //     for (int i = 0; i < urlList.length; i++) {
-  //       Map list1 = {
-  //         "category": "BOOKING",
-  //         "name": urlList[i].keyName,
-  //         "path": urlList[i].keyPath,
-  //         "user": userMap
-  //       };
-  //       docList.add(list1);
-  //     }
-  //     }
-  //
-  //     Map mapBody = {
-  //       ConstantMsg.PATIENT: patient,
-  //       ConstantMsg.BOOKED_BY: bookedBy,
-  //       ConstantMsg.LAB: lab,
-  //       ConstantMsg.ADDRESS: searchAddress,
-  //       ConstantMsg.DATE: "",
-  //       ConstantMsg.GENDER: gender,
-  //       //ConstantMsg.ID: 0,
-  //       ConstantMsg.IS_ASAP: "true",
-  //       ConstantMsg.REMARKS: remarks.text,
-  //       ConstantMsg.DOB: convertedDateTime,
-  //       ConstantMsg.DOC_LIST: docList,
-  //     };
-  //     print(mapBody);
-  //     // make POST request
-  //     Response response =
-  //         await post(url, headers: headers, body: json.encode(mapBody));
-  //
-  //     String body = response.body;
-  //     var data = json.decode(body);
-  //     print(body);
-  //
-  //     if (response.statusCode == 200) {
-  //       int id = data["id"];
-  //       print(id);
-  //
-  //       callPaymentScreen(id);
-  //     } else {}
-  //   } catch (e) {
-  //     print("Error+++++" + e.toString());
-  //   }
-  // }
 
   showAlertDialog(BuildContext context, int pos) {
     // set up the button
@@ -336,10 +291,11 @@ class BookingScreenState extends State<BookingScreen> {
       timeInSecForIosWeb: 1,
     );
   }
+
   void showImage(context) {
     showDialog(context: context, builder: (context){
       return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
         child: Container(
           height: 250,
           width: 250,
@@ -364,9 +320,9 @@ class BookingScreenState extends State<BookingScreen> {
                 ),
                 Image.file(
                 imageToDisplay,
-                width: 200,
+                width: 250,
                 height: 200,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fill,
                 ),
               ],
             ),
@@ -514,24 +470,6 @@ class BookingScreenState extends State<BookingScreen> {
     }
   }
 
-  // Future<void> uploadImage() async {
-  //   try {
-  //     var url = Uri.parse(urlList[0].presignedURL);
-  //     // make PUT request
-  //     Response response = await put(url, body: await imageFile.readAsBytes());
-  //     if (response.statusCode == 200) {
-  //       print("=== Success ===");
-  //       if (widget.date == null) {
-  //         callBookAppointmentApi();
-  //       } else {
-  //         callBookAppointmentApiByDate();
-  //       }
-  //     } else {}
-  //   } catch (e) {
-  //     print("Error+++++" + e.toString());
-  //   }
-  // }
-
   void callBookAppointmentApiByDate(bool isASAP) async {
     try {
       var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
@@ -554,7 +492,7 @@ class BookingScreenState extends State<BookingScreen> {
       List docList;
       if(urlList!=null && urlList.length>0) {
         Map userMap = {ConstantMsg.ID: preferences.getString(ConstantMsg.ID)};
-        List docList = [];
+        docList = [];
         for (int i = 0; i < urlList.length; i++) {
           Map list1 = {
             "category": "BOOKING",
@@ -914,7 +852,7 @@ class BookingScreenState extends State<BookingScreen> {
                   Container(
                     height: 36,
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(top: 11, left: 20, right: 20),
+                    margin: EdgeInsets.only(top: 11, left: 20, right: 20, bottom: 10),
                     child: Row(
                       children: [
                         Expanded(
@@ -1022,7 +960,7 @@ class BookingScreenState extends State<BookingScreen> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 20, right: 20, left: 20),
+                    margin: EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 10),
                     padding: EdgeInsets.only(left: 20),
                     height: 75,
                     width: MediaQuery.of(context).size.width,

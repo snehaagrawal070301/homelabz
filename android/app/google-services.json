@@ -1,62 +1,44 @@
 {
   "project_info": {
-    "project_number": "20018616061",
-    "project_id": "phlebotomist-2c7fd",
-    "storage_bucket": "phlebotomist-2c7fd.appspot.com"
+    "project_number": "634797801673",
+    "project_id": "homelabz",
+    "storage_bucket": "homelabz.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:20018616061:android:c8bcab96598044dd461094",
-        "android_client_info": {
-          "package_name": "com.example.homelabz"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBkWWEXPD2fKiCQL5aaT-zqG4bX95acync"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:20018616061:android:454b72c42e771f14461094",
+        "mobilesdk_app_id": "1:634797801673:android:4f42325343096f7f5dcd18",
         "android_client_info": {
           "package_name": "com.patient.homelabz"
         }
       },
       "oauth_client": [
         {
-          "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+          "client_id": "634797801673-eeok9sm544qs7up1gs7qtaiqm3lg2ren.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.patient.homelabz",
+            "certificate_hash": "fefcc921e64b2852d0ed241c8a3776bfc385a7af"
+          }
+        },
+        {
+          "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBkWWEXPD2fKiCQL5aaT-zqG4bX95acync"
+          "current_key": "AIzaSyDZ4ND20oEOBckGrZhKfYOqrxr2UPJ69pw"
+        },
+        {
+          "current_key": "AIzaSyClAmK-Quf6B6Un2SdrBxE62wn4HpiZeH4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+              "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -65,27 +47,38 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:20018616061:android:66941c269812923b461094",
+        "mobilesdk_app_id": "1:634797801673:android:47b1a73d854a8ce15dcd18",
         "android_client_info": {
           "package_name": "com.phlebotomist.homelabz"
         }
       },
       "oauth_client": [
         {
-          "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+          "client_id": "634797801673-i50lf8dil64hqqaanvu4uuc9ptujfvr3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phlebotomist.homelabz",
+            "certificate_hash": "fefcc921e64b2852d0ed241c8a3776bfc385a7af"
+          }
+        },
+        {
+          "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBkWWEXPD2fKiCQL5aaT-zqG4bX95acync"
+          "current_key": "AIzaSyDZ4ND20oEOBckGrZhKfYOqrxr2UPJ69pw"
+        },
+        {
+          "current_key": "AIzaSyClAmK-Quf6B6Un2SdrBxE62wn4HpiZeH4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "20018616061-u492i3t9otchcm7qnq481aqfoicbqjer.apps.googleusercontent.com",
+              "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

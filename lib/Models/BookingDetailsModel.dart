@@ -3,6 +3,7 @@ class BookingDetailsModel {
   Patient patient;
   BookedBy bookedBy;
   Phlebotomist phlebotomist;
+  Doctor doctor;
   String date;
   Lab lab;
   String dob;
@@ -19,6 +20,7 @@ class BookingDetailsModel {
         this.patient,
         this.bookedBy,
         this.phlebotomist,
+        this.doctor,
         this.date,
         this.lab,
         this.dob,
@@ -40,6 +42,8 @@ class BookingDetailsModel {
     phlebotomist = json['phlebotomist'] != null
         ? new Phlebotomist.fromJson(json['phlebotomist'])
         : null;
+    doctor =
+    json['doctor'] != null ? new Doctor.fromJson(json['doctor']) : null;
     date = json['date'];
     lab = json['lab'] != null ? new Lab.fromJson(json['lab']) : null;
     dob = json['dob'];
@@ -64,6 +68,9 @@ class BookingDetailsModel {
     if (this.phlebotomist != null) {
       data['phlebotomist'] = this.phlebotomist.toJson();
     }
+    if (this.doctor != null) {
+      data['doctor'] = this.doctor.toJson();
+    }
     data['date'] = this.date;
     if (this.lab != null) {
       data['lab'] = this.lab.toJson();
@@ -84,13 +91,25 @@ class Patient {
   int id;
   String name;
   String mobileNumber;
+  String address;
+  String imagePath;
+  String imagePresignedURL;
 
-  Patient({this.id, this.name, this.mobileNumber});
+  Patient(
+      {this.id,
+        this.name,
+        this.mobileNumber,
+        this.address,
+        this.imagePath,
+        this.imagePresignedURL});
 
   Patient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     mobileNumber = json['mobileNumber'];
+    address = json['address'];
+    imagePath = json['imagePath'];
+    imagePresignedURL = json['imagePresignedURL'];
   }
 
   Map<String, dynamic> toJson() {
@@ -98,6 +117,9 @@ class Patient {
     data['id'] = this.id;
     data['name'] = this.name;
     data['mobileNumber'] = this.mobileNumber;
+    data['address'] = this.address;
+    data['imagePath'] = this.imagePath;
+    data['imagePresignedURL'] = this.imagePresignedURL;
     return data;
   }
 }
@@ -142,6 +164,28 @@ class Phlebotomist {
     data['name'] = this.name;
     data['mobileNumber'] = this.mobileNumber;
     data['imagePath'] = this.imagePath;
+    return data;
+  }
+}
+
+class Doctor {
+  int id;
+  String name;
+  String mobileNumber;
+
+  Doctor({this.id, this.name, this.mobileNumber});
+
+  Doctor.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    mobileNumber = json['mobileNumber'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['mobileNumber'] = this.mobileNumber;
     return data;
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
@@ -7,7 +6,6 @@ import 'package:homelabz/Screens/BookingDetails.dart';
 import 'package:homelabz/Screens/ChooseDateScreen.dart';
 import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
-import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
@@ -27,7 +25,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
   SharedPreferences preferences;
   List<UpcomingBookingList> _list;
   BookingListResponse _model;
-  var isLoading = false;
+  var isData = true;
 
 
   @override
@@ -48,7 +46,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
     try {
       setState(() {
-        isLoading = true;
+        isData = true;
       });
       var url = Uri.parse(ApiConstants.BOOKING_LIST_BY_CRITERIA);
       Map<String, String> headers = {
@@ -70,16 +68,23 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
       if (response.statusCode == 200) {
         _list = [];
         _model = BookingListResponse.fromJson(json.decode(body));
-
         _list.addAll(_model.upcomingBookingList);
 
         setState(() {
-          isLoading = false;
+          isData = true;
+        });
+      }else{
+        setState(() {
+          isData = false;
         });
       }
       await dialog.hide();
 
     } catch (ex) {
+      setState(() {
+        isData = true;
+      });
+      await dialog.hide();
     }
   }
 
@@ -111,14 +116,6 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
-          // leading: Container(
-          //   margin: EdgeInsets.only(left: 17, top: 20, bottom: 20),
-          //   child: Image(
-          //     image: AssetImage("assets/images/MakeAnAppointmentMenu.png"),
-          //     height: 19.52,
-          //     width: 26,
-          //   ),
-          // ),
           title: Text(
             "Make an Appointment",
             style: TextStyle(
@@ -229,9 +226,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                   // print(snapshot.data);
                   // if(snapshot.hasData)
                   if (_list != null && _list.length > 0) {
-                    return isLoading
-                        ? new Center(child: CircularProgressIndicator())
-                        : RefreshIndicator(
+                    return RefreshIndicator(
                       onRefresh: callBookingList,
                           child: ListView.builder(
                               physics: const AlwaysScrollableScrollPhysics(),
@@ -597,7 +592,9 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                               }),
                         );
                   } else {
-                    return Center(
+                    return isData
+                        ? new Container()
+                        : new Center(
                       child: Column(
                         children: [
                           Padding(

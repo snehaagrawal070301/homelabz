@@ -47,6 +47,8 @@ class ConstantMsg{
   static final String DOC_LIST = "documentList";
   static final String TIME_FROM = "timeFrom";
   static final String EMAIL = "email";
+  static final String CAT_PRESCRIPTION = "BOOKING";
+  static final String CAT_SAMPLE = "TEST_SAMPLE";
 
 
   //_________________VALIDATION MESSAGES___________________

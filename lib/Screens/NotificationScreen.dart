@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:homelabz/Models/NotificationModel.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/ConstantMsg.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -13,8 +17,9 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  List dataList;
+  List<NotificationModel> dataList;
   SharedPreferences preferences;
+  var isData = true;
 
   @override
   void initState() {
@@ -29,18 +34,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Future<void> getNotificationsList() async {
-    // dataList = [];
-    // dataList.add("1");
-    // dataList.add("2");
-    // dataList.add("3");
-    // dataList.add("4");
-    // print("++++++++++ ${dataList.length}");
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
 
     try {
+      setState(() {
+        isData = true;
+      });
+
       var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
           preferences.getString(ConstantMsg.ID).toString());
 
       print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
+      print(preferences.getString(ConstantMsg.ID));
 
       Map<String, String> headers = {
         ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
@@ -48,18 +55,38 @@ class _NotificationScreenState extends State<NotificationScreen> {
         "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
       };
       // make GET request
-      Response response = await get(url, headers: headers);
+      Response response = await get(
+        url,
+        headers: headers,
+      );
       // check the status code for the result
       String body = response.body;
       print(body);
 
       if (response.statusCode == 200) {
+        dataList = [];
+        var data = json.decode(body);
+        List list = data;
+
+        for (var obj in list) {
+          NotificationModel model = NotificationModel.fromJson(obj);
+          dataList.add(model);
+        }
 
         setState(() {
+          isData = true;
+        });
+      } else {
+        setState(() {
+          isData = false;
         });
       }
+      await dialog.hide();
     } catch (ex) {
-
+      setState(() {
+        isData = true;
+      });
+      await dialog.hide();
     }
   }
 
@@ -92,71 +119,60 @@ class _NotificationScreenState extends State<NotificationScreen> {
             .of(context)
             .size
             .height,
-
         child: Stack(
           children: <Widget>[
             Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   color: const Color(ColorValues.WHITE),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50.0),
                       topRight: Radius.circular(50.0))),
             ),
-
-            dataList != null && dataList.length>0?
             Positioned(
               top: 60,
               right: 0,
               left: 0,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                child:
-                ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    // physics: const ScrollPhysics(),
-                    // shrinkWrap: true,
-                    itemCount: dataList.length,
-                    itemBuilder: (BuildContext context, int pos) {
-                      return
-                        Card(
+                padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: RefreshIndicator(
+                  onRefresh: getNotificationsList,
+                  child: dataList != null && dataList.length > 0
+                      ? ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      // physics: const ScrollPhysics(),
+                      // shrinkWrap: true,
+                      itemCount: dataList.length,
+                      itemBuilder: (BuildContext context, int pos) {
+                        return Card(
                             elevation: 8,
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
+                              margin:
+                              EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
                               child: new Column(
                                 children: [
                                   new Row(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       new Expanded(
                                         child: new Container(
-                                            margin: const EdgeInsets.fromLTRB(
+                                            margin:
+                                            const EdgeInsets.fromLTRB(
                                                 5.0, 5.0, 5.0, 0.0),
                                             // color: Colors.transparent,
                                             child: ClipRRect(
                                               borderRadius:
-                                              BorderRadius.circular(0.0),
+                                              BorderRadius.circular(
+                                                  0.0),
                                               child: Image.asset(
-                                                'assets/images/profile_pic.png',
+                                                'assets/images/ic_launcher.png',
                                                 height: 40.0,
                                                 width: 40.0,
                                               ),
@@ -165,27 +181,31 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       ),
                                       new Expanded(
                                         child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
+                                          padding:
+                                          const EdgeInsets.fromLTRB(
                                               10.0, 0, 0, 0),
                                           child: new Container(
-                                            margin: const EdgeInsets.fromLTRB(
+                                            margin:
+                                            const EdgeInsets.fromLTRB(
                                                 0.0, 0, 0, 5.0),
                                             child: new Column(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               children: [
                                                 new Container(
-                                                  margin:
-                                                  const EdgeInsets.fromLTRB(
+                                                  margin: const EdgeInsets
+                                                      .fromLTRB(
                                                       0.0, 10, 0, 5.0),
                                                   child: new Text(
-                                                    // lis[index].title,
-
-                                                    'Lorem ipsum dolor sit amet, consectetur adip isc ing elit. Arcu nibh venenatis.',
-
+                                                    dataList != null &&
+                                                        dataList[pos]
+                                                            .description !=
+                                                            null
+                                                        ? dataList[pos]
+                                                        .description
+                                                        : "",
+                                                    // 'Lorem ipsum dolor sit amet, consectetur '
+                                                    //     'adip isc ing elit. Arcu nibh venenatis.',
                                                     style: new TextStyle(
                                                         fontSize: 12.0,
                                                         color: Color(ColorValues
@@ -195,16 +215,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   ),
                                                 ),
                                                 new Container(
-                                                  margin:
-                                                  const EdgeInsets.fromLTRB(
+                                                  margin: const EdgeInsets
+                                                      .fromLTRB(
                                                       0.0, 5, 0, 5.0),
                                                   child: new Text(
-                                                    //lis[index].created,
-                                                    "2 Hours Ago",
-                                                    /*item.weight
-                                                                     .replaceAll(".00", "") +
-                                                                     " " +
-                                                                     item.unit*/
+                                                    dataList[pos]
+                                                        .createdDate,
+                                                    // MyUtils.getTimeDifferance(dataList[pos].createdDate),
+                                                    // "2 Hours Ago",
                                                     style: new TextStyle(
                                                         fontSize: 9.0,
                                                         color: ColorValues
@@ -221,37 +239,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       ),
                                     ],
                                   ),
-                                  // new Container(
-                                  //   height: 0.5,
-                                  //   color: ColorValues.TIME_NOTITFICAITON,
-                                  //
-                                  // ),
                                 ],
                               ),
-                            )
-                        );
-                    }
+                            ));
+                      })
+                      : isData
+                      ? new Container()
+                      : new Container(
+                    child: Center(
+                      child: Column(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Image(
+                            height: 250,
+                            width: 200,
+                            image: AssetImage(
+                                "assets/images/Nodatafound.jpg"),
+                          ),
+                        ),
+                        Text("No data available!"),
+                      ]),
+                    ),
+                  ),
                 ),
 //                           }),
               ),
-            ):
-            Positioned(
-                top: 70,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child:Center(
-                  child: Column(
-                    children: [
-                      Image(
-                        image: AssetImage("assets/images/Nodatafound.jpg"),
-                      ),
-                      Text("No data available!"),
-                    ],
-                  ),
-                )
-            ),
-
+            )
           ],
         ),
       ),

@@ -64,10 +64,6 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
 
     print(slots.length);
   }
-//  @override
-//  void OnVisibleDaysChanged(DateTime first,DateTime last,CalendarFormat format){
-//
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +94,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       body:SingleChildScrollView(
           child:
           Container(
-            height: MediaQuery.of(context).size.height * 0.88,
+            height: MediaQuery.of(context).size.height * 0.8,
             color: Color(ColorValues.WHITE_COLOR),
             child: Stack(
               children: [
@@ -444,7 +440,6 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                         ])
                       ),
 
-
                       GestureDetector(
                         onTap: () {
                           //call booking Screen here
@@ -467,7 +462,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                           // }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(top: 26, left: 25, right: 25,bottom:20),
+                          margin: EdgeInsets.only(top: 30, left: 25, right: 25,bottom:20),
                           height: 40,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -533,7 +528,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       "${DateTime.now().year.toString()}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
       print(convertedDateTime);
     }
-    String input = time+" "+slot;
+    String input = convertedDateTime +" "+slot;
     DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(input);
     DateTime currentDateTime = DateTime.now();
 
