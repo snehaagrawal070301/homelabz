@@ -664,246 +664,115 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   _bottomSheet1(context) {
-//     showModalBottomSheet(
-//       isScrollControlled: true,
-//         context: context,
-//         builder: (context) {
-//           return FittedBox(
-//             child:
-//             Container(
-//               decoration: BoxDecoration(
-//                   color: Color(ColorValues.WHITE_COLOR),
-//                   borderRadius: BorderRadius.only(
-//                       topLeft: Radius.circular(10),
-//                       topRight: Radius.circular(10))),
-//               width: MediaQuery
-//                   .of(context)
-//                   .size
-//                   .width,
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 children: [
-//                   Container(
-//                     padding: EdgeInsets.only(top: 38),
-//                     child: Text(
-//                       "Register",
-//                       style: TextStyle(
-//                         fontSize: 20,
-//                         color: Color(ColorValues.THEME_COLOR),
-//                         fontFamily: "Regular",
-//                       ),
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.only(top: 50),
-//                     child: Image(
-//                       image: AssetImage("assets/images/RegisterIcon.png"),
-//                       height: 65,
-//                       width: 65,
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.only(top: 15),
-//                     child: Text(
-//                       "Enter Your Mobile Number",
-//                       style: TextStyle(
-//                         fontSize: 14,
-//                         color: Color(ColorValues.BLACK_COLOR),
-//                         fontFamily: "Black",
-//                       ),
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.only(top: 10),
-//                     child: Center(
-//                         child: Text(
-//                           "We will send you one time\npassword(OTP)",
-//                           style: TextStyle(
-//                             fontSize: 14,
-//                             color: Color(ColorValues.BLACK_TEXT_COL),
-//                             fontFamily: "Regular",
-//                           ),
-//                           textAlign: TextAlign.center,
-//                         )),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.symmetric(horizontal: 50),
-//                     width: MediaQuery
-//                         .of(context)
-//                         .size
-//                         .width,
-//                     child: IntlPhoneField(
-//                       keyboardType: TextInputType.phone,
-//                       controller: mobileController,
-//                       decoration: InputDecoration(
-//                         hintText: "Enter Mobile Number",
-//                         hintStyle: TextStyle(
-//                           color: Color(0xffBDBDBD),
-//                           fontSize: 12.0,
-//                           fontFamily: "Regular",
-//                         ),
-//                       ),
-//                       onChanged: (phone) {
-//                         print(phone.completeNumber);
-//                         mobile = phone.completeNumber;
-//                       },
-//                     ),
-// //                      child: TextFormField(
-// //                        textAlign: TextAlign.center,
-// //                        keyboardType: TextInputType.phone,
-// //                        controller: mobile,
-// //                        validator: (mobile) {
-// //                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-// //                          },
-// //                        decoration: InputDecoration(
-// //                          hintText: "Enter Mobile Number",
-// //                          hintStyle: TextStyle(
-// //                            color: Color(0xffBDBDBD),
-// //                            fontSize: 12.0,
-// //                            fontFamily: "Regular",
-// //                          ),
-// //                        ),
-// //                      )
-//                   ),
-//                   GestureDetector(
-//                     onTap: () {
-//                       if (mobileController.text.toString() != null &&
-//                           mobileController.text
-//                               .toString()
-//                               .length > 0) {
-//                         // String mobileNumber = mobileController.text.toString();
-//                         isnewUser(mobile);
-// //                        Navigator.pop(context);
-// //                        _bottomSheet2(context);
-//                       } else {
-//                         showToast(ConstantMsg.MOB_VALIDATION);
-//                       }
-//                     },
-//                     child: Container(
-//                       height: 35,
-//                       width: MediaQuery
-//                           .of(context)
-//                           .size
-//                           .width * 0.53,
-//                       margin: EdgeInsets.symmetric(vertical: 25),
-//                       decoration: BoxDecoration(
-//                         color: Color(ColorValues.THEME_COLOR),
-//                         borderRadius: BorderRadius.circular(10),
-//                       ),
-//                       child: Center(
-//                           child: Text(
-//                             "SEND",
-//                             style: TextStyle(
-//                               color: Color(0xffFFFFFF),
-//                               fontSize: 14,
-//                               fontFamily: "Bold",
-//                             ),
-//                           )),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           );
-//         });
-
-
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(5.0))),
-      //  backgroundColor: Colors.black,
+      isScrollControlled: true,
         context: context,
-        isScrollControlled: true,
-        builder: (context) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal:1 ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Color(ColorValues.WHITE_COLOR),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10))),
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 38),
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Color(ColorValues.THEME_COLOR),
+        builder: (context) {
+          return FittedBox(
+            child:
+            Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              decoration: BoxDecoration(
+                  color: Color(ColorValues.WHITE_COLOR),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 38),
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color(ColorValues.THEME_COLOR),
+                        fontFamily: "Regular",
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Image(
+                      image: AssetImage("assets/images/RegisterIcon.png"),
+                      height: 65,
+                      width: 65,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text(
+                      "Enter Your Mobile Number",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(ColorValues.BLACK_COLOR),
+                        fontFamily: "Black",
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Center(
+                        child: Text(
+                          "We will send you one time\npassword(OTP)",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(ColorValues.BLACK_TEXT_COL),
+                            fontFamily: "Regular",
+                          ),
+                          textAlign: TextAlign.center,
+                        )),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: IntlPhoneField(
+                      keyboardType: TextInputType.phone,
+                      controller: mobileController,
+                      decoration: InputDecoration(
+                        hintText: "Enter Mobile Number",
+                        hintStyle: TextStyle(
+                          color: Color(0xffBDBDBD),
+                          fontSize: 12.0,
                           fontFamily: "Regular",
                         ),
                       ),
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                        mobile = phone.completeNumber;
+                      },
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Image(
-                        image: AssetImage("assets/images/RegisterIcon.png"),
-                        height: 65,
-                        width: 65,
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Text(
-                        "Enter Your Mobile Number",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(ColorValues.BLACK_COLOR),
-                          fontFamily: "Black",
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Center(
-                          child: Text(
-                            "We will send you one time\npassword(OTP)",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(ColorValues.BLACK_TEXT_COL),
-                              fontFamily: "Regular",
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      child: IntlPhoneField(
-                        keyboardType: TextInputType.phone,
-                        controller: mobileController,
-                        decoration: InputDecoration(
-                          hintText: "Enter Mobile Number",
-                          hintStyle: TextStyle(
-                            color: Color(0xffBDBDBD),
-                            fontSize: 12.0,
-                            fontFamily: "Regular",
-                          ),
-                        ),
-                        onChanged: (phone) {
-                          print(phone.completeNumber);
-                          mobile = phone.completeNumber;
-                        },
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (mobileController.text.toString() != null &&
-                            mobileController.text
-                                .toString()
-                                .length > 0) {
-                          // String mobileNumber = mobileController.text.toString();
-                          isnewUser(mobile);
+//                      child: TextFormField(
+//                        textAlign: TextAlign.center,
+//                        keyboardType: TextInputType.phone,
+//                        controller: mobile,
+//                        validator: (mobile) {
+//                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
+//                          },
+//                        decoration: InputDecoration(
+//                          hintText: "Enter Mobile Number",
+//                          hintStyle: TextStyle(
+//                            color: Color(0xffBDBDBD),
+//                            fontSize: 12.0,
+//                            fontFamily: "Regular",
+//                          ),
+//                        ),
+//                      )
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (mobileController.text.toString() != null &&
+                          mobileController.text
+                              .toString()
+                              .length > 0) {
+                        // String mobileNumber = mobileController.text.toString();
+                        isnewUser(mobile);
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
                       } else {
@@ -932,8 +801,139 @@ class HomeScreenState extends State<HomeScreen> {
                           )),
                     ),
                   ),
-                ],),
-    ),]),));
+                ],
+              ),
+            ),
+          );
+        });
+
+
+//     showModalBottomSheet(
+//         shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.vertical(top: Radius.circular(5.0))),
+//       //  backgroundColor: Colors.black,
+//         context: context,
+//         isScrollControlled: true,
+//         builder: (context) => Padding(
+//           padding: const EdgeInsets.symmetric(horizontal:1 ),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               Container(
+//                 decoration: BoxDecoration(
+//                     color: Color(ColorValues.WHITE_COLOR),
+//                     borderRadius: BorderRadius.only(
+//                         topLeft: Radius.circular(10),
+//                         topRight: Radius.circular(10))),
+//                 width: MediaQuery.of(context).size.width,
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Container(
+//                       padding: EdgeInsets.only(top: 38),
+//                       child: Text(
+//                         "Register",
+//                         style: TextStyle(
+//                           fontSize: 20,
+//                           color: Color(ColorValues.THEME_COLOR),
+//                           fontFamily: "Regular",
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       padding: EdgeInsets.only(top: 50),
+//                       child: Image(
+//                         image: AssetImage("assets/images/RegisterIcon.png"),
+//                         height: 65,
+//                         width: 65,
+//                       ),
+//                     ),
+//                     Container(
+//                       padding: EdgeInsets.only(top: 15),
+//                       child: Text(
+//                         "Enter Your Mobile Number",
+//                         style: TextStyle(
+//                           fontSize: 14,
+//                           color: Color(ColorValues.BLACK_COLOR),
+//                           fontFamily: "Black",
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       padding: EdgeInsets.only(top: 10),
+//                       child: Center(
+//                           child: Text(
+//                             "We will send you one time\npassword(OTP)",
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Color(ColorValues.BLACK_TEXT_COL),
+//                               fontFamily: "Regular",
+//                             ),
+//                             textAlign: TextAlign.center,
+//                           )),
+//                     ),
+//                     Container(
+//                       padding: EdgeInsets.symmetric(horizontal: 50),
+//                       width: MediaQuery
+//                           .of(context)
+//                           .size
+//                           .width,
+//                       child: IntlPhoneField(
+//                         keyboardType: TextInputType.phone,
+//                         controller: mobileController,
+//                         decoration: InputDecoration(
+//                           hintText: "Enter Mobile Number",
+//                           hintStyle: TextStyle(
+//                             color: Color(0xffBDBDBD),
+//                             fontSize: 12.0,
+//                             fontFamily: "Regular",
+//                           ),
+//                         ),
+//                         onChanged: (phone) {
+//                           print(phone.completeNumber);
+//                           mobile = phone.completeNumber;
+//                         },
+//                       ),
+//                     ),
+//                     GestureDetector(
+//                       onTap: () {
+//                         if (mobileController.text.toString() != null &&
+//                             mobileController.text
+//                                 .toString()
+//                                 .length > 0) {
+//                           // String mobileNumber = mobileController.text.toString();
+//                           isnewUser(mobile);
+// //                        Navigator.pop(context);
+// //                        _bottomSheet2(context);
+//                       } else {
+//                         showToast(ConstantMsg.MOB_VALIDATION);
+//                       }
+//                     },
+//                     child: Container(
+//                       height: 35,
+//                       width: MediaQuery
+//                           .of(context)
+//                           .size
+//                           .width * 0.53,
+//                       margin: EdgeInsets.symmetric(vertical: 25),
+//                       decoration: BoxDecoration(
+//                         color: Color(ColorValues.THEME_COLOR),
+//                         borderRadius: BorderRadius.circular(10),
+//                       ),
+//                       child: Center(
+//                           child: Text(
+//                             "SEND",
+//                             style: TextStyle(
+//                               color: Color(0xffFFFFFF),
+//                               fontSize: 14,
+//                               fontFamily: "Bold",
+//                             ),
+//                           )),
+//                     ),
+//                   ),
+//                 ],),
+//     ),]),));
 
   }
 
@@ -989,16 +989,6 @@ class HomeScreenState extends State<HomeScreen> {
                     child: TextFormField(
                       controller: name,
                       keyboardType: TextInputType.text,
-//                      validator: (value) {
-//                        value.isEmpty
-//                            ? 'Enter Your Name'
-//                            : RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
-//                            .hasMatch(value)
-//                            ? 'Enter a Valid Name'
-//                            : value.length < 3
-//                            ? 'Name must contain more than 3 characters'
-//                            : null;
-//                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Full Name",
@@ -1072,6 +1062,8 @@ class HomeScreenState extends State<HomeScreen> {
         builder: (context) {
           return FittedBox(
             child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               decoration: BoxDecoration(
                   color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.only(
@@ -1082,6 +1074,7 @@ class HomeScreenState extends State<HomeScreen> {
                   .size
                   .width,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
@@ -1126,14 +1119,6 @@ class HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         )
-                      //     Text(
-                      //   "To complete your registration, we have sent\nan OTP to ${this.mobileController.text.toString()} to verify",
-                      //   style: TextStyle(
-                      //       fontSize: 12,
-                      //       fontFamily: "Regular",
-                      //       color: Color(ColorValues.BLACK_TEXT_COL)),
-                      //   textAlign: TextAlign.center,
-                      // )
                     ),
                   ),
                   Container(
@@ -1235,7 +1220,6 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callLoginApi(String mobileNumber) async {
-    // String mobile = mobileController.text.toString();
     try {
       var url = Uri.parse(ApiConstants.VERIFY_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
