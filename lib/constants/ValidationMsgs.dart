@@ -23,11 +23,17 @@ class ValidationMsgs{
   ///////////////// SUCCESS messages////////////////////////////
 
   static final String PROFILE_UPDATE_SUCCESS = "Profile Updated Successfully";
-  static final String SAVE_SAMPLE_SUCCESS = "Test Sample saved Successfully";
-  static final String SUBMITTED_TO_LAB_SUCCESS = "Sample submitted to lab Successfully";
   static final String OTP_SUCCESS = "Code has been sent on mobile number. Please check";
 
 
+  ///////////////// Toast messages////////////////////////////
+
+  // static final String PROFILE_UPDATE_SUCCESS = "Profile Updated Successfully";
+  // static final String OTP_SUCCESS = "Code has been sent on mobile number. Please check";
+
+
 /////////////////////////////////////////////////////////////////////////////////////
+
+
 
 }

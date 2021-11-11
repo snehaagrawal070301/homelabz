@@ -1152,7 +1152,7 @@ class BookingScreenState extends State<BookingScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "CONTINUE",
+                          "Continue",
                           style: TextStyle(
                               fontFamily: "Regular",
                               fontSize: 15,

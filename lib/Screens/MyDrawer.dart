@@ -159,11 +159,12 @@ class _MyDrawerState extends State<MyDrawer> {
   callLogout() async {
     try {
       var url = Uri.parse(ApiConstants.LOGOUT);
-      Map<String, String> headers = {"Content-type": "application/json"};
+      Map<String, String> headers = {"Content-type": "application/json",
+        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN)
+      };
 
       // make POST request
-      Response response =
-          await post(url, headers: headers);
+      Response response = await post(url, headers: headers);
 
       print(response.statusCode);
       String body = response.body;
@@ -192,12 +193,12 @@ class _MyDrawerState extends State<MyDrawer> {
         );
 
       } else {
-        var data = json.decode(body);
-        ErrorModel model = ErrorModel.fromJson(data);
-        if (model.message != null && model.message.length > 0) {
-          String msg = model.message;
-          print(model.message);
-        }
+        // var data = json.decode(body);
+        // ErrorModel model = ErrorModel.fromJson(data);
+        // if (model.message != null && model.message.length > 0) {
+        //   String msg = model.message;
+        //   print(model.message);
+        // }
       }
     } catch (e) {}
 

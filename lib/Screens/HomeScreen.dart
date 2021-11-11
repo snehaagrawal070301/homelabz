@@ -69,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
                         preferences.getString(ConstantMsg.LOGIN_STATUS).compareTo("false") == 0) {
-                      showToast("Please login first!");
+                      showCustomToast("Please login first!");
                     } else {
                       Scaffold.of(context).openDrawer();
                     }
@@ -1279,17 +1279,36 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-    // Custom Toast Position
-//    fToast.showToast(
-//        child: toast,
-//        toastDuration: Duration(seconds: 2),
-//        positionedToastBuilder: (context, child) {
-//          return Positioned(
-//            child: child,
-//            top: 16.0,
-//            left: 16.0,
-//          );
-//        });
+  // Custom Toast Position
+  void showCustomToast(String message) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15.0),
+        color: Color(ColorValues.THEME_COLOR),
+      ),
+      child: Row(
+       mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(Icons.check,color: Color(ColorValues.WHITE_COLOR),),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Text(message,style: TextStyle(fontFamily: "Regular",fontSize: 14,
+                color: Color(ColorValues.WHITE_COLOR)),),
+          ),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds: 2),
+    );
+
+  }
 
   void callUpcomingScreen() {
     Navigator.push(context,
@@ -1398,21 +1417,6 @@ class HomeScreenState extends State<HomeScreen> {
     catch (e) {
       print("Error+++++" + e.toString());
     }
-
-    // var text = new RichText(
-    //   text: new TextSpan(
-    //     style: new TextStyle(
-    //       fontSize: 14.0,
-    //       color: Colors.black,
-    //     ),
-    //     children: <TextSpan>[
-    //       new TextSpan(text: 'To complete your registration, we have sent\nan OTP to'),
-    //       new TextSpan(text: '${this.mobileController.text.toString()}', style: new TextStyle(fontWeight: FontWeight.bold)),
-    //       new TextSpan(text: 'to verify'),
-    //     ],
-    //   ),
-    // );
-
   }
 
   void callProfileScreen() {
