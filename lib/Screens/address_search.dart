@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/Services/place_service.dart';
+import 'package:homelabz/components/colorValues.dart';
 
 class AddressSearch extends SearchDelegate<Suggestion> {
   AddressSearch(this.sessionToken) {
@@ -26,7 +27,11 @@ class AddressSearch extends SearchDelegate<Suggestion> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       tooltip: 'Back',
-      icon: Icon(Icons.arrow_back),
+      icon: ImageIcon(
+        AssetImage('assets/images/back_arrow.png'),
+        color: Color(ColorValues.THEME_COLOR),
+        size: 20,
+      ),
       onPressed: () {
         close(context, null);
       },

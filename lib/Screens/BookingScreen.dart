@@ -588,9 +588,10 @@ class BookingScreenState extends State<BookingScreen> {
       appBar: AppBar(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
+          icon: ImageIcon(
+            AssetImage('assets/images/back_arrow.png'),
             color: Color(ColorValues.THEME_COLOR),
+            size: 20,
           ),
           onPressed: () {
             Navigator.pop(context);

@@ -27,13 +27,13 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
   var imageName;
+
   // String mobile;
   TextEditingController mobileController = TextEditingController();
   TextEditingController otp = TextEditingController();
   SharedPreferences preferences;
   String mobile;
   FToast fToast;
-
 
   @override
   void initState() {
@@ -46,9 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
     imageName = preferences.getString("image");
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -59,22 +57,24 @@ class HomeScreenState extends State<HomeScreen> {
           backgroundColor: Color(ColorValues.THEME_COLOR),
           elevation: 0,
           leading: Builder(
-            builder: (context) =>
-                IconButton(
-                  icon: ImageIcon(
-                    AssetImage('assets/images/drawer.png'),
-                    color: Color(ColorValues.WHITE),
-                    size: 50,
-                  ),
-                  onPressed: () {
-                    if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
-                        preferences.getString(ConstantMsg.LOGIN_STATUS).compareTo("false") == 0) {
-                      showCustomToast("Please login first!");
-                    } else {
-                      Scaffold.of(context).openDrawer();
-                    }
-                  },
-                ),
+            builder: (context) => IconButton(
+              icon: ImageIcon(
+                AssetImage('assets/images/drawer.png'),
+                color: Color(ColorValues.WHITE),
+                size: 50,
+              ),
+              onPressed: () {
+                if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
+                    preferences
+                            .getString(ConstantMsg.LOGIN_STATUS)
+                            .compareTo("false") ==
+                        0) {
+                  showCustomToast("Please login first!", false);
+                } else {
+                  Scaffold.of(context).openDrawer();
+                }
+              },
+            ),
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -96,63 +96,54 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              getImagePath()==true?
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    //call Profile Screen\
-                    callProfileScreen();
-                  },
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: ClipOval(
-                      child: Image.memory(
-                        imageName,
-                        width: 44,
-                        height: 44,
-                        fit: BoxFit.fitHeight,
+              getImagePath() == true
+                  ? Expanded(
+                      flex: 2,
+                      child: GestureDetector(
+                        onTap: () {
+                          //call Profile Screen\
+                          callProfileScreen();
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            child: Image.memory(
+                              imageName,
+                              width: 44,
+                              height: 44,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      flex: 2,
+                      child: GestureDetector(
+                        onTap: () {
+                          print(imageName);
+                          //call Profile Screen\
+                          callProfileScreen();
+                        },
+                        child: Image(
+                          image: AssetImage('assets/images/profile.png'),
+                          height: 44,
+                          width: 44,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ):
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    print(imageName);
-                    //call Profile Screen\
-                    callProfileScreen();
-                  },
-                  child: Image(
-                    image: AssetImage('assets/images/profile.png'),
-                    height: 44,
-                    width: 44,
-                  ),
-                ),
-              ),
-            ],)
-      ),
+            ],
+          )),
       body:
-      // SingleChildScrollView(
-      //   child:
-      Stack(children: [
+          // SingleChildScrollView(
+          //   child:
+          Stack(children: [
         Positioned(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.125,
+          top: MediaQuery.of(context).size.height * 0.125,
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 color: Color(ColorValues.WHITE_COLOR),
                 borderRadius: BorderRadius.only(
@@ -209,16 +200,10 @@ class HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.only(
-                    top: 9, bottom: 25, left: 50, right: 50),
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.25,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.9,
+                padding:
+                    EdgeInsets.only(top: 9, bottom: 25, left: 50, right: 50),
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                     color: Color(ColorValues.WHITE_COLOR),
                     borderRadius: BorderRadius.circular(10),
@@ -240,298 +225,265 @@ class HomeScreenState extends State<HomeScreen> {
           right: 0,
           child: Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.44,
+                  top: MediaQuery.of(context).size.height * 0.44,
                   left: 25,
                   right: 25),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child: Column(
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    // showToast("clicked");
-                                    if (preferences.getString(
-                                        ConstantMsg.LOGIN_STATUS) == null ||
-                                        preferences.getString(
-                                            ConstantMsg.LOGIN_STATUS).compareTo(
-                                            "false") == 0) {
-                                      print(preferences.getString(
-                                          ConstantMsg.LOGIN_STATUS));
-                                      _bottomSheet(context);
-                                    }
-                                    else {
-                                      print(preferences.getString(ConstantMsg.ID));
-                                      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
-                                      callUpcomingScreen();
-                                    }
-                                  },
-                                  child: Container(
-                                    height: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.17,
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.4,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      color: Color(ColorValues.THEME_COLOR),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
+              child: Column(children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // showToast("clicked");
+                                if (preferences.getString(
+                                            ConstantMsg.LOGIN_STATUS) ==
+                                        null ||
+                                    preferences
+                                            .getString(ConstantMsg.LOGIN_STATUS)
+                                            .compareTo("false") ==
+                                        0) {
+                                  print(preferences
+                                      .getString(ConstantMsg.LOGIN_STATUS));
+                                  _bottomSheet(context);
+                                } else {
+                                  print(preferences.getString(ConstantMsg.ID));
+                                  print(preferences
+                                      .getString(ConstantMsg.ACCESS_TOKEN));
+                                  callUpcomingScreen();
+                                }
+                              },
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Image(
-                                              image: AssetImage(
-                                                  'assets/images/Appointment.png'),
-                                              height: 40,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Text(
-                                              "Make an\nAppointment ",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Regular",
-                                                color: Color(
-                                                    ColorValues.WHITE_COLOR),
-                                                fontSize: 14.0,
-                                              ),
-                                            ),
-                                          ],
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/Appointment.png'),
+                                          height: 40,
                                         )
                                       ],
                                     ),
-                                  ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Make an\nAppointment ",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color:
+                                                Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
+                        ),
+                      ),
 //                    SizedBox(width: 20.0),
-                          Expanded(
-                            flex: 1,
-                            child: Column(children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CallForBooking()));
-                                },
-                                child: Container(
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.17,
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.4,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    color: Color(ColorValues.THEME_COLOR),
-                                  ),
-                                  child: Column(
+                      Expanded(
+                        flex: 1,
+                        child: Column(children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CallForBooking()));
+                            },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.17,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: Color(ColorValues.THEME_COLOR),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        children: [
-                                          Image(
-                                            image:
-                                            AssetImage(
-                                                'assets/images/call.png'),
-                                            height: 40,
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        children: [
-                                          Text(
-                                            "Call for\nAppointment",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily: "Regular",
-                                              color: Color(
-                                                  ColorValues.WHITE_COLOR),
-                                              fontSize: 14.0,
-                                            ),
-                                          ),
-                                        ],
+                                      Image(
+                                        image: AssetImage(
+                                            'assets/images/call.png'),
+                                        height: 40,
                                       )
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Call for\nAppointment",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: "Regular",
+                                          color: Color(ColorValues.WHITE_COLOR),
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                      )
+                    ],
+                  ),
+                ),
+//                SizedBox(height: 25.0),
+                Container(
+                  margin: EdgeInsets.only(top: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/vault.png'),
+                                          height: 50,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Vault",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color:
+                                                Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                               ),
-                            ]),
-                          )
-                        ],
-                      ),
-                    ),
-//                SizedBox(height: 25.0),
-                    Container(
-                      margin: EdgeInsets.only(top: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.17,
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.4,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      color: Color(ColorValues.THEME_COLOR),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Image(
-                                              image: AssetImage(
-                                                  'assets/images/vault.png'),
-                                              height: 50,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Text(
-                                              "Vault",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Regular",
-                                                color: Color(
-                                                    ColorValues.WHITE_COLOR),
-                                                fontSize: 14.0,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
+                          ],
+                        ),
+                      ),
 //                    SizedBox(width: 20.0),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                              if(preferences.getString(ConstantMsg.LOGIN_STATUS)==null) {
-                                print(preferences.getString(ConstantMsg.LOGIN_STATUS));
-                                showToast("no data available");
-                              }
-                              else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            History()));
-                              }
-                                  },
-                                  child: Container(
-                                    height: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.17,
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.4,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      color: Color(ColorValues.THEME_COLOR),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
+                      Expanded(
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (preferences
+                                        .getString(ConstantMsg.LOGIN_STATUS) ==
+                                    null) {
+                                  print(preferences
+                                      .getString(ConstantMsg.LOGIN_STATUS));
+                                  showToast("no data available");
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => History()));
+                                }
+                              },
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.17,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: Color(ColorValues.THEME_COLOR),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Image(
-                                              image: AssetImage(
-                                                  'assets/images/history.png'),
-                                              height: 40,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Text(
-                                              "History",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: "Regular",
-                                                color: Color(
-                                                    ColorValues.WHITE_COLOR),
-                                                fontSize: 14.0,
-                                              ),
-                                            ),
-                                          ],
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/images/history.png'),
+                                          height: 40,
                                         )
                                       ],
                                     ),
-                                  ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "History",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "Regular",
+                                            color:
+                                                Color(ColorValues.WHITE_COLOR),
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ])),
+                    ],
+                  ),
+                ),
+              ])),
         ),
       ]),
       // ),
@@ -551,16 +503,13 @@ class HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10))),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
                     padding:
-                    const EdgeInsets.only(top: 20, left: 17, bottom: 15),
+                        const EdgeInsets.only(top: 20, left: 17, bottom: 15),
                     child: Text(
                       "Login or Register",
                       style: TextStyle(
@@ -584,37 +533,31 @@ class HomeScreenState extends State<HomeScreen> {
                           top: 30, bottom: 10, left: 25, right: 25),
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       height: 35,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           color: Color(ColorValues.THEME_COLOR),
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Center(
                           child: Text(
-                            "Continue with Phone",
-                            style: TextStyle(
-                              color: Color(ColorValues.WHITE_COLOR),
-                              fontFamily: "Regular",
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
+                        "Continue with Phone",
+                        style: TextStyle(
+                          color: Color(ColorValues.WHITE_COLOR),
+                          fontFamily: "Regular",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                     padding: EdgeInsets.symmetric(horizontal: 25),
                     height: 35,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         border:
-                        Border.all(color: Color(ColorValues.BLACK_COLOR)),
+                            Border.all(color: Color(ColorValues.BLACK_COLOR)),
                         borderRadius: BorderRadius.circular(10.0)),
                     child: Row(
                       children: [
@@ -665,12 +608,11 @@ class HomeScreenState extends State<HomeScreen> {
 
   _bottomSheet1(context) {
     showModalBottomSheet(
-      isScrollControlled: true,
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return FittedBox(
-            child:
-            Container(
+            child: Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               decoration: BoxDecoration(
@@ -717,21 +659,18 @@ class HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(top: 10),
                     child: Center(
                         child: Text(
-                          "We will send you one time\npassword(OTP)",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(ColorValues.BLACK_TEXT_COL),
-                            fontFamily: "Regular",
-                          ),
-                          textAlign: TextAlign.center,
-                        )),
+                      "We will send you one time\npassword(OTP)",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(ColorValues.BLACK_TEXT_COL),
+                        fontFamily: "Regular",
+                      ),
+                      textAlign: TextAlign.center,
+                    )),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 50),
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     child: IntlPhoneField(
                       keyboardType: TextInputType.phone,
                       controller: mobileController,
@@ -768,9 +707,7 @@ class HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () {
                       if (mobileController.text.toString() != null &&
-                          mobileController.text
-                              .toString()
-                              .length > 0) {
+                          mobileController.text.toString().length > 0) {
                         // String mobileNumber = mobileController.text.toString();
                         isnewUser(mobile);
 //                        Navigator.pop(context);
@@ -781,10 +718,7 @@ class HomeScreenState extends State<HomeScreen> {
                     },
                     child: Container(
                       height: 35,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.53,
+                      width: MediaQuery.of(context).size.width * 0.53,
                       margin: EdgeInsets.symmetric(vertical: 25),
                       decoration: BoxDecoration(
                         color: Color(ColorValues.THEME_COLOR),
@@ -792,13 +726,13 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Center(
                           child: Text(
-                            "SEND",
-                            style: TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 14,
-                              fontFamily: "Bold",
-                            ),
-                          )),
+                        "SEND",
+                        style: TextStyle(
+                          color: Color(0xffFFFFFF),
+                          fontSize: 14,
+                          fontFamily: "Bold",
+                        ),
+                      )),
                     ),
                   ),
                 ],
@@ -806,7 +740,6 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           );
         });
-
 
 //     showModalBottomSheet(
 //         shape: RoundedRectangleBorder(
@@ -934,7 +867,6 @@ class HomeScreenState extends State<HomeScreen> {
 //                   ),
 //                 ],),
 //     ),]),));
-
   }
 
   _bottomSheet2(context, String mobileNumber) {
@@ -949,17 +881,14 @@ class HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10))),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
                     padding:
-                    const EdgeInsets.only(top: 20, left: 17, bottom: 15),
+                        const EdgeInsets.only(top: 20, left: 17, bottom: 15),
                     child: Text(
                       "Login or Register",
                       style: TextStyle(
@@ -977,13 +906,10 @@ class HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.only(top: 30),
                     padding: EdgeInsets.only(left: 27, bottom: 5),
                     height: 38,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.85,
+                    width: MediaQuery.of(context).size.width * 0.85,
                     decoration: BoxDecoration(
                         border:
-                        Border.all(color: Color(ColorValues.BLACK_COLOR)),
+                            Border.all(color: Color(ColorValues.BLACK_COLOR)),
                         color: Color(ColorValues.LIGHT_GRAY),
                         borderRadius: BorderRadius.circular(10.0)),
                     child: TextFormField(
@@ -1002,9 +928,8 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (name.text != null && name.text
-                          .toString()
-                          .length > 0) {
+                      if (name.text != null &&
+                          name.text.toString().length > 0) {
                         signIn(mobileNumber);
                       } else {
                         showToast(ConstantMsg.NAME_VALIDATION);
@@ -1014,24 +939,21 @@ class HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.only(top: 22),
                         padding: EdgeInsets.symmetric(horizontal: 27),
                         height: 33,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.85,
+                        width: MediaQuery.of(context).size.width * 0.85,
                         decoration: BoxDecoration(
                             color: Color(ColorValues.THEME_COLOR),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Center(
                             child: Text(
-                              "Continue",
-                              style: TextStyle(
-                                color: Color(ColorValues.WHITE_COLOR),
-                                fontSize: 14,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ))),
+                          "Continue",
+                          style: TextStyle(
+                            color: Color(ColorValues.WHITE_COLOR),
+                            fontSize: 14,
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ))),
                   ),
                   GestureDetector(
                       onTap: () {
@@ -1049,7 +971,6 @@ class HomeScreenState extends State<HomeScreen> {
                           )))
                 ],
               ),
-
             ),
           );
         });
@@ -1069,10 +990,7 @@ class HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10))),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -1102,30 +1020,27 @@ class HomeScreenState extends State<HomeScreen> {
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     child: Center(
-                        child:
-                        RichText(
-                          text: new TextSpan(
-                            style: new TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              new TextSpan(
-                                  text: 'To complete your registration, we have sent\nan OTP to '),
-                              new TextSpan(text: '${this.mobile}',
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              new TextSpan(text: ' to verify'),
-                            ],
-                          ),
-                        )
-                    ),
+                        child: RichText(
+                      text: new TextSpan(
+                        style: new TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          new TextSpan(
+                              text:
+                                  'To complete your registration, we have sent\nan OTP to '),
+                          new TextSpan(
+                              text: '${this.mobile}',
+                              style:
+                                  new TextStyle(fontWeight: FontWeight.bold)),
+                          new TextSpan(text: ' to verify'),
+                        ],
+                      ),
+                    )),
                   ),
                   Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     margin: EdgeInsets.only(
                       top: 30,
                     ),
@@ -1186,17 +1101,13 @@ class HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       if (otp.text != null && otp.text.length > 0) {
                         callLoginApi(mobileNumber);
-                      }
-                      else {
+                      } else {
                         showToast(ConstantMsg.OTP_VALIDATION);
                       }
                     },
                     child: Container(
                       height: 33,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.53,
+                      width: MediaQuery.of(context).size.width * 0.53,
                       margin: EdgeInsets.only(top: 26, bottom: 15),
                       decoration: BoxDecoration(
                         color: Color(ColorValues.THEME_COLOR),
@@ -1204,12 +1115,12 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Center(
                           child: Text(
-                            "VERIFY",
-                            style: TextStyle(
-                                color: Color(ColorValues.WHITE_COLOR),
-                                fontFamily: "Regular",
-                                fontSize: 14),
-                          )),
+                        "VERIFY",
+                        style: TextStyle(
+                            color: Color(ColorValues.WHITE_COLOR),
+                            fontFamily: "Regular",
+                            fontSize: 14),
+                      )),
                     ),
                   )
                 ],
@@ -1233,7 +1144,7 @@ class HomeScreenState extends State<HomeScreen> {
       };
       // make POST request
       Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+          await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       var data = json.decode(body);
@@ -1249,11 +1160,11 @@ class HomeScreenState extends State<HomeScreen> {
           preferences.setString(ConstantMsg.TOKEN_TYPE,
               data['oAuthResponse']['token_type'].toString());
 
-          preferences.setString(ConstantMsg.ID,
-              data['userModel']['id'].toString());
+          preferences.setString(
+              ConstantMsg.ID, data['userModel']['id'].toString());
 
-          preferences.setString(ConstantMsg.NAME,
-              data['userModel']['name'].toString());
+          preferences.setString(
+              ConstantMsg.NAME, data['userModel']['name'].toString());
 
           preferences.setString(ConstantMsg.MOBILE_NUM,
               data['userModel']['mobileNumber'].toString());
@@ -1262,7 +1173,7 @@ class HomeScreenState extends State<HomeScreen> {
         }
 
         callUpcomingScreen();
-      }else{
+      } else {
         showToast(data['mobileMessage']);
       }
     } catch (e) {
@@ -1280,40 +1191,54 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   // Custom Toast Position
-  void showCustomToast(String message) {
+  void showCustomToast(String message, bool isError) {
+
     Widget toast = Container(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7.0),
-      decoration: BoxDecoration(
+      decoration: isError == false
+          ? BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Color(ColorValues.THEME_COLOR),
+        color: Colors.green,
+      )
+          : BoxDecoration(
+        borderRadius: BorderRadius.circular(15.0),
+        color: Colors.red,
       ),
       child: Row(
-       mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.check,color: Color(ColorValues.WHITE_COLOR),),
+          Icon(
+            Icons.check,
+            color: Color(ColorValues.WHITE),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 15.0),
-            child: Text(message,style: TextStyle(fontFamily: "Regular",fontSize: 14,
-                color: Color(ColorValues.WHITE_COLOR)),),
+            child: Text(
+              message,
+              style: TextStyle(
+                  fontFamily: "Regular",
+                  fontSize: 14,
+                  color: Color(ColorValues.WHITE)),
+            ),
           ),
         ],
       ),
     );
-
 
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
       toastDuration: Duration(seconds: 2),
     );
-
   }
 
   void callUpcomingScreen() {
-    Navigator.push(context,
+    Navigator.push(
+        context,
         new MaterialPageRoute(
-            builder: (BuildContext context) => BookingsListScreen()));;
+            builder: (BuildContext context) => BookingsListScreen()));
+    ;
   }
 
   void isnewUser(String mobileNumber) async {
@@ -1326,7 +1251,7 @@ class HomeScreenState extends State<HomeScreen> {
       };
       // make POST request
       Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+          await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1337,14 +1262,12 @@ class HomeScreenState extends State<HomeScreen> {
           // Navigator.pop(context);
           // _bottomSheet3(context);
           signIn(mobileNumber);
-        }
-        else {
+        } else {
           Navigator.pop(context);
           _bottomSheet2(context, mobileNumber);
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
@@ -1372,7 +1295,7 @@ class HomeScreenState extends State<HomeScreen> {
 
       // make POST request
       Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+          await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1387,8 +1310,7 @@ class HomeScreenState extends State<HomeScreen> {
         ErrorModel model = ErrorModel.fromJson(data);
         showToast(model.message);
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
@@ -1403,7 +1325,7 @@ class HomeScreenState extends State<HomeScreen> {
       };
       // make POST request
       Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+          await post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1413,8 +1335,7 @@ class HomeScreenState extends State<HomeScreen> {
         showToast(
             "The code has been sent to your mobile number. Please check!");
       }
-    }
-    catch (e) {
+    } catch (e) {
       print("Error+++++" + e.toString());
     }
   }
@@ -1427,8 +1348,7 @@ class HomeScreenState extends State<HomeScreen> {
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => ProfileScreen()));
-        setState(() {
-        });
+        setState(() {});
       } else {
         showToast("Please login first!");
       }
@@ -1438,7 +1358,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   bool getImagePath() {
-    if(preferences!=null) {
+    if (preferences != null) {
       String img = preferences.getString("image");
       if (img != null && img.length > 0) {
         imageName = Uint8List.fromList(img.codeUnits);

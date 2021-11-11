@@ -138,9 +138,10 @@ class PaymentScreenState extends State<PaymentScreen>{
       appBar: AppBar(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
         leading: IconButton(
-            icon: Icon(
-            Icons.arrow_back,
-            color: Color(ColorValues.THEME_COLOR),
+            icon: ImageIcon(
+              AssetImage('assets/images/back_arrow.png'),
+              color: Color(ColorValues.THEME_COLOR),
+              size: 20,
             ),
           onPressed: () {
               if(widget.screenName!=null &&(widget.screenName.compareTo("BookingDetails")==0)) {

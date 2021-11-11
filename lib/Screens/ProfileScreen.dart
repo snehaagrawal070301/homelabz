@@ -419,9 +419,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Color(ColorValues.THEME_TEXT_COLOR),
         leading: IconButton(
           // iconSize: 20,
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color(ColorValues.WHITE),
+          icon: ImageIcon(
+            AssetImage('assets/images/back_arrow.png'),
+            color: Color(ColorValues.THEME_COLOR),
+            size: 20,
           ),
           onPressed: () {
             Navigator.pop(context);
