@@ -8,7 +8,7 @@ import 'package:homelabz/Screens/PaymentSuccess.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Services/payment-service.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -49,12 +49,12 @@ class PaymentScreenState extends State<PaymentScreen>{
     try {
       var url = Uri.parse(ApiConstants.GET_PAYMENT_INFO);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       Map mapBody = {
-        ConstantMsg.BOOKING_ID: widget.bookingId,
+        Constants.BOOKING_ID: widget.bookingId,
       };
       print(mapBody);
       // make POST request
@@ -97,14 +97,14 @@ class PaymentScreenState extends State<PaymentScreen>{
     try {
       var url = Uri.parse(ApiConstants.SUBMIT_PAYMENT_INFO);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       Map mapBody = {
-        ConstantMsg.BALANCE_TRANSACTION: model.amount,
-        ConstantMsg.BOOKING_ID: widget.bookingId,
-        ConstantMsg.STATUS: status,
+        Constants.BALANCE_TRANSACTION: model.amount,
+        Constants.BOOKING_ID: widget.bookingId,
+        Constants.STATUS: status,
       };
       print(mapBody);
       // make POST request

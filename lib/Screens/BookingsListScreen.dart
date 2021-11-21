@@ -8,7 +8,7 @@ import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -50,13 +50,13 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
       });
       var url = Uri.parse(ApiConstants.BOOKING_LIST_BY_CRITERIA);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-            "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       Map map = {
-        ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
-        ConstantMsg.LIST_TYPE: ["UPCOMING"],
+        Constants.PATIENT_ID: preferences.getString(Constants.ID),
+        Constants.LIST_TYPE: ["UPCOMING"],
       };
       // make POST request
       Response response =

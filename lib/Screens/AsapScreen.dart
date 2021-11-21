@@ -134,7 +134,7 @@ class AsapScreenState extends State<AsapScreen>{
                       ),
                       Container(
                         padding: EdgeInsets.fromLTRB(21, 19, 21, 20),
-                        child: Text("Get your labs done within 24hours by paying extra \n10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
+                        child: Text("Get your labs done within 24hours by paying extra \n\$10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
                         ),
                     ],
                   ),
@@ -150,7 +150,7 @@ class AsapScreenState extends State<AsapScreen>{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        BookingScreen(null,null)));
+                                        BookingScreen(null,null,null)));
                     },
                       child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),

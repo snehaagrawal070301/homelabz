@@ -10,7 +10,7 @@ import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/CallForBooking.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
-  var imageName;
+  String imageName="";
 
   // String mobile;
   TextEditingController mobileController = TextEditingController();
@@ -39,6 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getSharedPreferences();
+    getImagePath();
     fToast = FToast();
     fToast.init(context);
   }
@@ -64,12 +65,13 @@ class HomeScreenState extends State<HomeScreen> {
                 size: 50,
               ),
               onPressed: () {
-                if (preferences.getString(ConstantMsg.LOGIN_STATUS) == null ||
+                if (preferences.getString(Constants.LOGIN_STATUS) == null ||
                     preferences
-                            .getString(ConstantMsg.LOGIN_STATUS)
+                            .getString(Constants.LOGIN_STATUS)
                             .compareTo("false") ==
                         0) {
-                  showCustomToast("Please login first!", false);
+                  // showCustomToast("Please login first!", false);
+                  showToast("Please login first!");
                 } else {
                   Scaffold.of(context).openDrawer();
                 }
@@ -96,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              getImagePath() == true
+              imageName!=""
                   ? Expanded(
                       flex: 2,
                       child: GestureDetector(
@@ -108,11 +110,11 @@ class HomeScreenState extends State<HomeScreen> {
                           radius: 20,
                           backgroundColor: Colors.white,
                           child: ClipOval(
-                            child: Image.memory(
+                            child: Image.network(
                               imageName,
-                              width: 44,
-                              height: 44,
-                              fit: BoxFit.fitHeight,
+                              width: 42,
+                              height: 42,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -245,19 +247,19 @@ class HomeScreenState extends State<HomeScreen> {
                               onTap: () {
                                 // showToast("clicked");
                                 if (preferences.getString(
-                                            ConstantMsg.LOGIN_STATUS) ==
+                                            Constants.LOGIN_STATUS) ==
                                         null ||
                                     preferences
-                                            .getString(ConstantMsg.LOGIN_STATUS)
+                                            .getString(Constants.LOGIN_STATUS)
                                             .compareTo("false") ==
                                         0) {
                                   print(preferences
-                                      .getString(ConstantMsg.LOGIN_STATUS));
+                                      .getString(Constants.LOGIN_STATUS));
                                   _bottomSheet(context);
                                 } else {
-                                  print(preferences.getString(ConstantMsg.ID));
+                                  print(preferences.getString(Constants.ID));
                                   print(preferences
-                                      .getString(ConstantMsg.ACCESS_TOKEN));
+                                      .getString(Constants.ACCESS_TOKEN));
                                   callUpcomingScreen();
                                 }
                               },
@@ -423,10 +425,10 @@ class HomeScreenState extends State<HomeScreen> {
                             GestureDetector(
                               onTap: () {
                                 if (preferences
-                                        .getString(ConstantMsg.LOGIN_STATUS) ==
+                                        .getString(Constants.LOGIN_STATUS) ==
                                     null) {
                                   print(preferences
-                                      .getString(ConstantMsg.LOGIN_STATUS));
+                                      .getString(Constants.LOGIN_STATUS));
                                   showToast("no data available");
                                 } else {
                                   Navigator.push(
@@ -713,7 +715,7 @@ class HomeScreenState extends State<HomeScreen> {
 //                        Navigator.pop(context);
 //                        _bottomSheet2(context);
                       } else {
-                        showToast(ConstantMsg.MOB_VALIDATION);
+                        showToast(Constants.MOB_VALIDATION);
                       }
                     },
                     child: Container(
@@ -932,7 +934,7 @@ class HomeScreenState extends State<HomeScreen> {
                           name.text.toString().length > 0) {
                         signIn(mobileNumber);
                       } else {
-                        showToast(ConstantMsg.NAME_VALIDATION);
+                        showToast(Constants.NAME_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1102,7 +1104,7 @@ class HomeScreenState extends State<HomeScreen> {
                       if (otp.text != null && otp.text.length > 0) {
                         callLoginApi(mobileNumber);
                       } else {
-                        showToast(ConstantMsg.OTP_VALIDATION);
+                        showToast(Constants.OTP_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1135,9 +1137,9 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.VERIFY_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobileNumber,
-        ConstantMsg.OTP: otp.text,
-        ConstantMsg.ROLE: "ROLE_PATIENT"
+        Constants.MOBILE_NUM: mobileNumber,
+        Constants.OTP: otp.text,
+        Constants.ROLE: "ROLE_PATIENT"
 
 //        ConstantMsg.MOBILE_NUM: "1111111110",
 //        ConstantMsg.OTP: 123456
@@ -1152,24 +1154,24 @@ class HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         print(body);
         if (data["oAuthResponse"].toString() != null) {
-          preferences.setString(ConstantMsg.LOGIN_STATUS, "true");
+          preferences.setString(Constants.LOGIN_STATUS, "true");
 
-          preferences.setString(ConstantMsg.ACCESS_TOKEN,
+          preferences.setString(Constants.ACCESS_TOKEN,
               data['oAuthResponse']['access_token'].toString());
 
-          preferences.setString(ConstantMsg.TOKEN_TYPE,
+          preferences.setString(Constants.TOKEN_TYPE,
               data['oAuthResponse']['token_type'].toString());
 
           preferences.setString(
-              ConstantMsg.ID, data['userModel']['id'].toString());
+              Constants.ID, data['userModel']['id'].toString());
 
           preferences.setString(
-              ConstantMsg.NAME, data['userModel']['name'].toString());
+              Constants.NAME, data['userModel']['name'].toString());
 
-          preferences.setString(ConstantMsg.MOBILE_NUM,
+          preferences.setString(Constants.MOBILE_NUM,
               data['userModel']['mobileNumber'].toString());
-          print(preferences.getString(ConstantMsg.ID));
-          print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
+          print(preferences.getString(Constants.ID));
+          print(preferences.getString(Constants.ACCESS_TOKEN));
         }
 
         callUpcomingScreen();
@@ -1185,53 +1187,53 @@ class HomeScreenState extends State<HomeScreen> {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 1,
     );
   }
 
   // Custom Toast Position
-  void showCustomToast(String message, bool isError) {
-
-    Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7.0),
-      decoration: isError == false
-          ? BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.green,
-      )
-          : BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.red,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Icon(
-            Icons.check,
-            color: Color(ColorValues.WHITE),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Text(
-              message,
-              style: TextStyle(
-                  fontFamily: "Regular",
-                  fontSize: 14,
-                  color: Color(ColorValues.WHITE)),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    fToast.showToast(
-      child: toast,
-      gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 2),
-    );
-  }
+  // void showCustomToast(String message, bool isError) {
+  //
+  //   Widget toast = Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7.0),
+  //     decoration: isError == false
+  //         ? BoxDecoration(
+  //       borderRadius: BorderRadius.circular(15.0),
+  //       color: Colors.green,
+  //     )
+  //         : BoxDecoration(
+  //       borderRadius: BorderRadius.circular(15.0),
+  //       color: Colors.red,
+  //     ),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: [
+  //         Icon(
+  //           Icons.check,
+  //           color: Color(ColorValues.WHITE),
+  //         ),
+  //         Padding(
+  //           padding: const EdgeInsets.only(left: 15.0),
+  //           child: Text(
+  //             message,
+  //             style: TextStyle(
+  //                 fontFamily: "Regular",
+  //                 fontSize: 14,
+  //                 color: Color(ColorValues.WHITE)),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  //
+  //   fToast.showToast(
+  //     child: toast,
+  //     gravity: ToastGravity.TOP,
+  //     toastDuration: Duration(seconds: 2),
+  //   );
+  // }
 
   void callUpcomingScreen() {
     Navigator.push(
@@ -1246,8 +1248,8 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.NEW_USER);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobileNumber,
-        ConstantMsg.ROLE: "ROLE_PATIENT",
+        Constants.MOBILE_NUM: mobileNumber,
+        Constants.ROLE: "ROLE_PATIENT",
       };
       // make POST request
       Response response =
@@ -1282,14 +1284,14 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (userName != null && userName.length > 0) {
         mapBody = {
-          ConstantMsg.MOBILE_NUM: mobileNumber,
-          ConstantMsg.NAME: userName,
-          ConstantMsg.ROLE: "ROLE_PATIENT",
+          Constants.MOBILE_NUM: mobileNumber,
+          Constants.NAME: userName,
+          Constants.ROLE: "ROLE_PATIENT",
         };
       } else {
         mapBody = {
-          ConstantMsg.MOBILE_NUM: mobileNumber,
-          ConstantMsg.ROLE: "ROLE_PATIENT",
+          Constants.MOBILE_NUM: mobileNumber,
+          Constants.ROLE: "ROLE_PATIENT",
         };
       }
 
@@ -1320,8 +1322,8 @@ class HomeScreenState extends State<HomeScreen> {
       var url = Uri.parse(ApiConstants.GENERATE_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
-        ConstantMsg.MOBILE_NUM: mobileNumber,
-        ConstantMsg.ROLE: "ROLE_PATIENT",
+        Constants.MOBILE_NUM: mobileNumber,
+        Constants.ROLE: "ROLE_PATIENT",
       };
       // make POST request
       Response response =
@@ -1341,7 +1343,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callProfileScreen() {
-    String val = preferences.getString(ConstantMsg.LOGIN_STATUS);
+    String val = preferences.getString(Constants.LOGIN_STATUS);
     if (val != null) {
       if (val.compareTo("true") == 0) {
         Navigator.push(
@@ -1361,7 +1363,7 @@ class HomeScreenState extends State<HomeScreen> {
     if (preferences != null) {
       String img = preferences.getString("image");
       if (img != null && img.length > 0) {
-        imageName = Uint8List.fromList(img.codeUnits);
+        imageName = img;
         return true;
       } else {
         return false;

@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/BookingListResponse.dart';
-import 'package:homelabz/Screens/AsapScreen.dart';
+import 'package:homelabz/Models/CompletedBookingResponse.dart';
 import 'package:homelabz/Screens/BookingDetails.dart';
-import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class History extends StatefulWidget {
@@ -20,9 +19,9 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
 
   SharedPreferences preferences;
-  List<UpcomingBookingList> _list;
-  BookingListResponse _model;
-  var isLoading = false;
+  List<CompletedBookingList> _list;
+  CompletedBookingResponse _model;
+  var isData = true;
 
   @override
   void initState() {
@@ -36,19 +35,23 @@ class _HistoryState extends State<History> {
   }
 
   callBookingList() async {
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+
     try {
       setState(() {
-        isLoading = true;
+        isData = true;
       });
       var url = Uri.parse(ApiConstants.BOOKING_LIST_BY_CRITERIA);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH: "bearer " +
-            preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH: "bearer " +
+            preferences.getString(Constants.ACCESS_TOKEN),
       };
       Map map = {
-        ConstantMsg.PATIENT_ID: preferences.getString(ConstantMsg.ID),
-        ConstantMsg.LIST_TYPE: ["COMPLETED"],
+        Constants.PATIENT_ID: preferences.getString(Constants.ID),
+        Constants.LIST_TYPE: ["COMPLETED"],
       };
       // make POST request
       Response response =
@@ -59,19 +62,25 @@ class _HistoryState extends State<History> {
 
       if (response.statusCode == 200) {
         _list = [];
-        _model = BookingListResponse.fromJson(json.decode(body));
+        _model = CompletedBookingResponse.fromJson(json.decode(body));
 
-        _list.addAll(_model.upcomingBookingList);
+        _list.addAll(_model.completedBookingList);
 
         setState(() {
-          isLoading = false;
+          isData = true;
+        });
+      }else{
+        setState(() {
+          isData = false;
         });
       }
+      await dialog.hide();
+
     } catch (ex) {
-      print("ERROR+++++++++++++  ${ex}");
       setState(() {
-        isLoading = true;
+        isData = true;
       });
+      await dialog.hide();
     }
   }
 
@@ -125,7 +134,7 @@ class _HistoryState extends State<History> {
                 topRight: Radius.circular(50.0))),
       ),
 
-      _list != null && _list.length>0?
+      // _list != null && _list.length>0?
       Positioned(
           top: 60,
           right: 0,
@@ -140,7 +149,8 @@ class _HistoryState extends State<History> {
           .of(context)
           .size
           .width,
-      child: ListView.builder(
+      child: _list!=null&&_list.length>0?
+      ListView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         // physics: const ScrollPhysics(),
                         // shrinkWrap: true,
@@ -501,25 +511,45 @@ class _HistoryState extends State<History> {
                               ),
                             ),
                           );
-                        }),
-    ),
-      ):
-      Positioned(
-          top: 70,
-          bottom: 0,
-          right: 0,
-          left: 0,
-          child:Center(
-            child: Column(
-              children: [
-                Image(
-                  image: AssetImage("assets/images/Nodatafound.jpg"),
-                ),
-                Text("No data available!"),
-              ],
+                        })
+            :isData
+          ? new Container()
+          : new Center(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Image(
+                image: AssetImage("assets/images/NoAppointment.jpg",),
+              ),
             ),
-          )
+            Text("No Appointment available!"),
+          ],
+        ),
+        // child: new Container(
+        //   padding: EdgeInsets.all(40.0),
+        //   child: Text("No data available"),
+        // ),
       ),
+    ),
+      )
+          // :
+      // Positioned(
+      //     top: 70,
+      //     bottom: 0,
+      //     right: 0,
+      //     left: 0,
+      //     child:Center(
+      //       child: Column(
+      //         children: [
+      //           Image(
+      //             image: AssetImage("assets/images/Nodatafound.jpg"),
+      //           ),
+      //           Text("No data available!"),
+      //         ],
+      //       ),
+      //     )
+      // ),
 
             ],
         ),

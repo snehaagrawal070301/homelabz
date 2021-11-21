@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:homelabz/Models/BookingDetailsModel.dart';
 import 'package:homelabz/Models/PrescriptionModel.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
+import 'package:homelabz/constants/Values.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -45,11 +46,11 @@ class _BookingDetailsState extends State<BookingDetails> {
     try {
       var url = Uri.parse(ApiConstants.GET_BOOKING_DETAILS + widget.bookingId.toString());
       print(url);
-      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
+      print(preferences.getString(Constants.ACCESS_TOKEN));
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
       Response response = await get(
@@ -78,9 +79,9 @@ class _BookingDetailsState extends State<BookingDetails> {
     try {
       String booking = widget.bookingId.toString();
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       var uri = Uri.parse(ApiConstants.DOWNLOAD_ALL_DOCS+booking);
@@ -99,7 +100,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 
         for (int i = 0; i < list.length; i++) {
           PrescriptionModel model = PrescriptionModel.fromJson(data[i]);
-          if(model.category.compareTo(ConstantMsg.CAT_PRESCRIPTION)==0) {
+          if(model.category.compareTo(Constants.CAT_PRESCRIPTION)==0) {
             prescriptionList.add(model);
           }
           // else if(model.category.compareTo(ConstantMsg.CAT_SAMPLE)==0) {
@@ -128,13 +129,13 @@ class _BookingDetailsState extends State<BookingDetails> {
       try {
         var url = Uri.parse(ApiConstants.GET_DOWNLOAD_URL);
         Map<String, String> headers = {
-          ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-          ConstantMsg.HEADER_AUTH:
-          "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+          Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+          Constants.HEADER_AUTH:
+          "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
         };
 
         Map map = {
-          ConstantMsg.KEY_PATH: imagePath,
+          Constants.KEY_PATH: imagePath,
         };
 
         // make POST request
@@ -154,44 +155,28 @@ class _BookingDetailsState extends State<BookingDetails> {
     }
 
   void showImage(context, imageUrl) {
-    showDialog(context: context, builder: (context){
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
-        child: Container(
-          height: 250,
-          width: 250,
-          child: Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.transparent.withOpacity(0.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(2.0)),
+            child: Wrap(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                          Icons.cancel
-                      ),
+                    Image.network(
+                      imageUrl,
                     )
                   ],
                 ),
-                Image.network(
-                  imageUrl,
-                  width: 250,
-                  height: 200,
-                  fit: BoxFit.fill,
-                ),
               ],
             ),
-          ),
-        ),
-      );
-    }
-    );
+          );
+        });
   }
 
   @override
@@ -203,7 +188,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         leading: IconButton(
           icon: ImageIcon(
             AssetImage('assets/images/back_arrow.png'),
-            color: Color(ColorValues.THEME_COLOR),
+            color: Color(ColorValues.WHITE),
             size: 20,
           ),
           onPressed: () {
@@ -214,7 +199,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           "Booking Details",
           style: TextStyle(
               fontFamily: "Regular",
-              fontSize: 18,
+              fontSize: Values.PAGE_HEADING_SIZE,
               color: Color(ColorValues.WHITE)),
         ),
       ),
@@ -236,9 +221,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Text(
                       'Patient: ',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Color(
-                            ColorValues.THEME_TEXT_COLOR),
+                        fontSize: Values.HEADING_SIZE,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Regular",
+                        color: Color(ColorValues.THEME_TEXT_COLOR),
                       ),
                     ),
                   ),
@@ -246,10 +232,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Text(
                       'Booking ID:',
                       style: TextStyle(
-                        fontSize: 14,
-                        // fontWeight: FontWeight.bold,
-                        color: Color(
-                            ColorValues.THEME_TEXT_COLOR),
+                        fontSize: Values.HEADING_SIZE,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Regular",
+                        color: Color(ColorValues.THEME_TEXT_COLOR),
                       ),
                     ),
                   ),
@@ -269,7 +255,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                           : _model.patient.name,
                       // 'Patient name here ',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: Values.VALUE_SIZE,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.bold,
                         color: Color(
                             ColorValues.BLACK_TEXT_COL),
@@ -281,7 +268,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Text(
                       '${widget.bookingId}',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: Values.VALUE_SIZE,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.bold,
                         color: Color(
                             ColorValues.BLACK_TEXT_COL),
@@ -310,7 +298,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                       child: Text(
                         'Status: ',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: Values.HEADING_SIZE,
+                          fontFamily: "Regular",
+                          fontWeight: FontWeight.bold,
                           color: Color(
                               ColorValues.THEME_TEXT_COLOR),
                         ),
@@ -325,7 +315,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                             : _model.bookingStatus,
                         // 'New',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.bold,
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
@@ -353,7 +344,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                 child: Text(
                   'Address Details:',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.bold,
                     color: Color(
                         ColorValues.THEME_TEXT_COLOR),
@@ -372,25 +364,13 @@ class _BookingDetailsState extends State<BookingDetails> {
 
                   // 'house no. 345A, Vijay Nagar, Indore',
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
                 ),
               ),
-              // Container(
-              //   margin: EdgeInsets.only(top: 5),
-              //   child: Text(
-              //     'Indore',
-              //     style: TextStyle(
-              //       fontSize: 14,
-              //       // fontWeight: FontWeight.bold,
-              //       color: Color(
-              //           ColorValues.BLACK_TEXT_COL),
-              //     ),
-              //   ),
-              // ),
               Container(
                 margin: EdgeInsets.only(top: 5),
                 child: Text(
@@ -402,8 +382,8 @@ class _BookingDetailsState extends State<BookingDetails> {
 
                   // '+918937846355',
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
@@ -415,7 +395,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                 child: Text(
                   'Doctor Details:',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.bold,
                     color: Color(
                         ColorValues.THEME_TEXT_COLOR),
@@ -427,10 +408,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                 margin: EdgeInsets.only(top: 5),
                 child: Text(
                   _model != null && _model.doctor != null ?
-                      _model.doctor.name :" ",
+                      _model.doctor.name :"NA",
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
@@ -456,7 +437,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                 child: Text(
                   'Lab Details:',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.bold,
                     color: Color(
                         ColorValues.THEME_TEXT_COLOR),
@@ -472,10 +454,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                       : _model.lab.user.name == null
                       ? ""
                       : _model.lab.user.name,
-                  // 'Lab name here',
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
@@ -488,12 +469,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                   _model == null
                       ? ""
                       : _model.lab.user.mobileNumber == null
-                      ? ""
+                      ? "NA"
                       : _model.lab.user.mobileNumber,
                   // 'rating etc',
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
@@ -510,8 +491,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       : _model.lab.user.address,
 
                   style: TextStyle(
-                    fontSize: 14,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: Values.VALUE_SIZE,
+                    fontFamily: "Regular",
                     color: Color(
                         ColorValues.BLACK_TEXT_COL),
                   ),
@@ -523,7 +504,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                 child: Text(
                   'Billing Details:',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.bold,
                     color: Color(
                         ColorValues.THEME_TEXT_COLOR),
@@ -540,7 +522,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       child: Text(
                         'Payment Method: ',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
                         ),
@@ -550,7 +533,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       child: Text(
                         'Online',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.bold,
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
@@ -571,7 +555,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       child: Text(
                         'Amount: ',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
                         ),
@@ -586,7 +571,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                             : "\$"+_model.amount.toString(),
                         // '\$100',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.bold,
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
@@ -607,7 +593,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       child: Text(
                         'Payment Status: ',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
                         ),
@@ -622,7 +609,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                             :_model.paymentStatus,
                         // 'Paid',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: Values.VALUE_SIZE,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.bold,
                           color: Color(
                               ColorValues.BLACK_TEXT_COL),
@@ -658,8 +646,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                         "Pay Now",
                         style: TextStyle(
                           color: Color(ColorValues.WHITE_COLOR),
+                          fontSize: Values.HEADING_SIZE,
                           fontFamily: "Regular",
-                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -667,66 +655,140 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ),
               )
                   :Container(),
-
+///////////////////////////////////////////////////////////////////
+              //OLD UI
+              // Container(
+              //   margin: EdgeInsets.only(top: 20, right: 20, left: 20),
+              //   padding: EdgeInsets.only(left: 20),
+              //   height: 70,
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //     color: Color(ColorValues.LIGHT_GRAY),
+              //     border: Border.all(
+              //         color: Color(ColorValues.BLACK_COLOR), width: 1),
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //           children: [
+              //             prescriptionList.length > 0
+              //                 ? Container(
+              //               alignment: Alignment.centerRight,
+              //               height: 35,
+              //               width:
+              //               MediaQuery.of(context).size.width / 3,
+              //               child: ListView.builder(
+              //                   scrollDirection: Axis.horizontal,
+              //                   itemCount: prescriptionList.length,
+              //                   itemBuilder:
+              //                       (BuildContext context, int pos) {
+              //                     return GestureDetector(
+              //                         onTap: () {
+              //                           downloadPrescription(prescriptionList[pos].path);
+              //                         },
+              //                         child: Container(
+              //                             height: 50,
+              //                             child: Stack(
+              //                               children: [
+              //                                 Container(
+              //                                   margin: EdgeInsets
+              //                                       .fromLTRB(5, 5, 5, 5),
+              //                                   child: Image(
+              //                                     image: AssetImage(
+              //                                         "assets/images/prescription_logo.jpg"),
+              //                                     height: 30,
+              //                                     width: 30,
+              //                                     alignment: Alignment
+              //                                         .centerLeft,
+              //                                   ),
+              //                                 ),
+              //                               ],
+              //                             ))
+              //                     );
+              //                   }),
+              //             )
+              //                 : new Container(
+              //               height: 35,
+              //               width: MediaQuery.of(context).size.width / 3,
+              //             ),
+              //           ],
+              //         ),
+              // ),
+              ///////////////
               Container(
-                margin: EdgeInsets.only(top: 20, right: 20, left: 20),
-                padding: EdgeInsets.only(left: 20),
-                height: 70,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Color(ColorValues.LIGHT_GRAY),
-                  border: Border.all(
-                      color: Color(ColorValues.BLACK_COLOR), width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          prescriptionList.length > 0
-                              ? Container(
-                            alignment: Alignment.centerRight,
-                            height: 35,
-                            width:
-                            MediaQuery.of(context).size.width / 3,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: prescriptionList.length,
-                                itemBuilder:
-                                    (BuildContext context, int pos) {
-                                  return GestureDetector(
-                                      onTap: () {
-                                        downloadPrescription(prescriptionList[pos].path);
-                                      },
-                                      child: Container(
-                                          height: 50,
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                margin: EdgeInsets
-                                                    .fromLTRB(5, 5, 5, 5),
-                                                child: Image(
-                                                  image: AssetImage(
-                                                      "assets/images/prescription_logo.jpg"),
-                                                  height: 30,
-                                                  width: 30,
-                                                  alignment: Alignment
-                                                      .centerLeft,
-                                                ),
-                                              ),
-                                            ],
-                                          ))
-                                  );
-                                }),
-                          )
-                              : new Container(
-                            height: 35,
-                            width: MediaQuery.of(context).size.width / 3,
+                  margin: EdgeInsets.only(
+                      top: 30, right: 20, left: 20, bottom: 20),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Color(ColorValues.WHITE),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 5.0,
+                          spreadRadius: 0.5,
+                        )
+                      ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: prescriptionList.length > 0
+                              ? GridView.builder(
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio:
+                                (MediaQuery.of(context)
+                                    .size
+                                    .width) /
+                                    (MediaQuery.of(context)
+                                        .size
+                                        .height /
+                                        3),
+                              ),
+                              shrinkWrap: true,
+                              primary: false,
+                              scrollDirection: Axis.vertical,
+                              itemCount: prescriptionList.length,
+                              itemBuilder: (BuildContext ctx, pos) {
+                                return Container(
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 8,left: 15),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              downloadPrescription(prescriptionList[pos].path);
+                                            },
+                                            child: Container(
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                      child: Image(
+                                                        image: AssetImage("assets/images/prescription_logo.jpg"),
+                                                        height: 50,
+                                                        width: 50,
+                                                        alignment: Alignment.centerLeft,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))
+                                          ),
+                                        ),
+                                    ]
+                                    ));
+                              })
+                              : Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(child: Text("No Prescription Available")),
                           ),
-
-                        ],
-                      ),
-              ),
-
+                        ),
+                      ])),
+///////////////////////////////////////////////////////////////////
               Container(
                 margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
                 child: Divider(
@@ -741,7 +803,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                 child: Text(
                   'View Invoice',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.bold,
                     color: Color(
                         ColorValues.THEME_TEXT_COLOR),
@@ -771,7 +834,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: Text(
                       'Reach out to us ',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: Values.HEADING_SIZE,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.bold,
                         color: Color(
                             ColorValues.BLACK_TEXT_COL),
@@ -787,7 +851,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 },
                 child: Container(
                   margin: EdgeInsets.only(
-                      top: 20, bottom: 10, left: 25, right: 25),
+                      top: 20, bottom: 20, left: 25, right: 25),
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   height: 35,
 
@@ -799,8 +863,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                         "Need Help?",
                         style: TextStyle(
                           color: Color(ColorValues.WHITE_COLOR),
+                          fontSize: Values.HEADING_SIZE,
                           fontFamily: "Regular",
-                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,

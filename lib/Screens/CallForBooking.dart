@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -288,7 +288,7 @@ class _CallForBookingState extends State<CallForBooking> {
     try {
       var url = Uri.parse(ApiConstants.CALL_API);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
       };
       // make POST request
       Response response = await get(

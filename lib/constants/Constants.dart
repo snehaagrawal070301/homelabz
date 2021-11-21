@@ -1,4 +1,4 @@
-class ConstantMsg{
+class Constants{
 
   static final String NAME_VALIDATION = "Please Enter Your Name";
   static final String CODE_VALIDATION = "Please Enter Code";
@@ -46,6 +46,7 @@ class ConstantMsg{
   static final String DEVICE_ID = "deviceId";
   static final String DOC_LIST = "documentList";
   static final String TIME_FROM = "timeFrom";
+  static final String TIME_TO = "timeTo";
   static final String EMAIL = "email";
   static final String CAT_PRESCRIPTION = "BOOKING";
   static final String CAT_SAMPLE = "TEST_SAMPLE";

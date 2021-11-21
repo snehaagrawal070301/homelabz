@@ -6,7 +6,7 @@ import 'package:homelabz/Models/ErrorModel.dart';
 import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/HomeScreen.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -160,7 +160,7 @@ class _MyDrawerState extends State<MyDrawer> {
     try {
       var url = Uri.parse(ApiConstants.LOGOUT);
       Map<String, String> headers = {"Content-type": "application/json",
-        ConstantMsg.HEADER_AUTH: "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN)
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN)
       };
 
       // make POST request
@@ -178,7 +178,7 @@ class _MyDrawerState extends State<MyDrawer> {
           timeInSecForIosWeb: 1,
         );
 
-        preferences.setString(ConstantMsg.LOGIN_STATUS,"false");
+        preferences.setString(Constants.LOGIN_STATUS,"false");
 
         Navigator.of(context).pushAndRemoveUntil(
           // the new route

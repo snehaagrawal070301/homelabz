@@ -10,7 +10,7 @@ import 'package:homelabz/Models/UserDetails.dart';
 import 'package:homelabz/Screens/address_search.dart';
 import 'package:homelabz/Services/place_service.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
@@ -73,13 +73,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
 
       var url = Uri.parse(ApiConstants.GET_USER_DETAILS +
-          preferences.getString(ConstantMsg.ID).toString());
+          preferences.getString(Constants.ID).toString());
       print(url);
-      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
+      print(preferences.getString(Constants.ACCESS_TOKEN));
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
       Response response = await get(
@@ -96,13 +96,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _name = new TextEditingController(text: model.name);
           _phone = new TextEditingController(text: model.mobileNumber);
           _dob = new TextEditingController(text: model.dob);
-          print(_dob.text);
-          print(selectedDate);
-         // tempDate = DateFormat().parse(_dob.text);
           //_education = new TextEditingController(text: model.education);
           _address = new TextEditingController(text: model.address);
           _email = new TextEditingController(text: model.email);
           gender = model.gender.toUpperCase();
+
+          if(model.dob!=null && model.dob.length>0){
+            selectedDate = new DateFormat("yyyy-MM-dd").parse(model.dob);
+          }
 
           preferences.setString("name", model.name);
           preferences.setString("dob", model.dob);
@@ -111,7 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
             oldImagePath = model.imagePath;
-            // downloadImageUrl(model.imagePath);
             imageUrl = model.imagePresignedURL;
             preferences.setString("image", imageUrl);
           }
@@ -235,21 +235,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       var url = Uri.parse(ApiConstants.PRE_SIGNED_URL);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       List list = [];
       Map list1 = {
-        ConstantMsg.KEY_NAME: imageName,
+        Constants.KEY_NAME: imageName,
       };
       list.add(list1);
 
       Map mapBody = {
-        ConstantMsg.USER_ID: preferences.getString(ConstantMsg.ID),
-        ConstantMsg.DOC_CATEGORY: "PROFILE_IMAGE",
-        ConstantMsg.PRE_SIGNED_LIST: list
+        Constants.USER_ID: preferences.getString(Constants.ID),
+        Constants.DOC_CATEGORY: "PROFILE_IMAGE",
+        Constants.PRE_SIGNED_LIST: list
       };
       print(mapBody);
       // make POST request
@@ -264,6 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         responseModel = PreSignedUrlResponse.fromJson(json.decode(body));
         urlList.addAll(responseModel.documentPresignedURLModelList);
         print(urlList[0].presignedURL);
+        preferences.setString("image", urlList[0].presignedURL);
         uploadImage();
       } else {}
     } catch (e) {
@@ -287,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future selectDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-        initialDate: DateTime.now(),
+        initialDate: selectedDate,
         firstDate: DateTime(1950),
         lastDate: DateTime.now(),
         fieldLabelText: 'Date of Birth',
@@ -313,10 +314,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context: context);
     if (pickedDate != null) {
       setState(() {
-        selectedDate=pickedDate;
         convertedDateTime =
         "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
         _dob.text = convertedDateTime;
+        selectedDate=pickedDate;
       });
     }
   }
@@ -325,34 +326,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       var url = Uri.parse(ApiConstants.UPDATE_USER_DETAILS);
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       Map map;
       if (uploadFlag == true) {
         map = {
-          ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-          ConstantMsg.NAME: _name.text,
-          ConstantMsg.MOBILE_NUM: _phone.text,
-          ConstantMsg.DOB: _dob.text,
-          ConstantMsg.EMAIL: _email.text,
-          ConstantMsg.GENDER:gender,
-          ConstantMsg.ADDRESS: _address.text,
-          ConstantMsg.IMAGE_PATH: urlList[0].keyPath,
-          ConstantMsg.IMG_PRE_SIGNED_URL: urlList[0].presignedURL,
+          Constants.ID: preferences.getString(Constants.ID),
+          Constants.NAME: _name.text,
+          Constants.MOBILE_NUM: _phone.text,
+          Constants.DOB: _dob.text,
+          Constants.EMAIL: _email.text,
+          Constants.GENDER:gender,
+          Constants.ADDRESS: _address.text,
+          Constants.IMAGE_PATH: urlList[0].keyPath,
+          Constants.IMG_PRE_SIGNED_URL: urlList[0].presignedURL,
         };
       } else {
         map = {
-          ConstantMsg.ID: preferences.getString(ConstantMsg.ID),
-          ConstantMsg.NAME: _name.text,
-          ConstantMsg.MOBILE_NUM: _phone.text,
-          ConstantMsg.DOB: _dob.text,
-          ConstantMsg.EMAIL: _email.text,
-          ConstantMsg.GENDER:gender,
-          ConstantMsg.ADDRESS: _address.text,
-          ConstantMsg.IMAGE_PATH:oldImagePath,
+          Constants.ID: preferences.getString(Constants.ID),
+          Constants.NAME: _name.text,
+          Constants.MOBILE_NUM: _phone.text,
+          Constants.DOB: _dob.text,
+          Constants.EMAIL: _email.text,
+          Constants.GENDER:gender,
+          Constants.ADDRESS: _address.text,
+          Constants.IMAGE_PATH:oldImagePath,
         };
       }
 
@@ -366,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var data = json.decode(body);
       if (response.statusCode == 200) {
         showToast(ValidationMsgs.PROFILE_UPDATE_SUCCESS);
-        preferences.setString(ConstantMsg.NAME, data['name'].toString());
+        preferences.setString(Constants.NAME, data['name'].toString());
 
         String dob = data['dob'].toString();
         if (dob != null && dob.length > 0) preferences.setString("dob", dob);
@@ -374,6 +375,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String address = data['address'].toString();
         if (address != null && address.length > 0)
           preferences.setString("address", address);
+
+        if(uploadFlag==true){
+          String imageUrl = data['imagePresignedURL'].toString();
+          preferences.setString("image", imageUrl);
+          uploadFlag = false;
+        }
       }
       await dialog.hide();
     } catch (ex) {
@@ -416,7 +423,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Color(ColorValues.THEME_TEXT_COLOR),
+        backgroundColor: Color(ColorValues.WHITE),
         leading: IconButton(
           // iconSize: 20,
           icon: ImageIcon(
@@ -429,511 +436,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         title: Text("Profile",style: TextStyle(fontFamily: "Regular",fontSize: 18,
-            color: Color(ColorValues.WHITE)),),
+            color: Color(ColorValues.THEME_COLOR)),),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        // height: MediaQuery.of(context).size.height,
-        // child: Column(
-        //     children: [
-        //       Stack(clipBehavior: Clip.none, children: [
-        //         Container(
-        //           margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-        //           width: MediaQuery.of(context).size.width,
-        //           height: MediaQuery.of(context).size.height * 0.846,
-        //           decoration: BoxDecoration(
-        //               color: const Color(ColorValues.WHITE),
-        //               borderRadius: BorderRadius.only(
-        //                   topLeft: Radius.circular(50.0),
-        //                   topRight: Radius.circular(50.0))),
-        //         ),
-        //         imageFile != null
-        //             ? Positioned(
-        //                 left: 0,
-        //                 right: 0,
-        //                 child: CircleAvatar(
-        //                   radius: 45,
-        //                   backgroundColor: Colors.white,
-        //                   child: ClipOval(
-        //                     child: Image.file(
-        //                       imageFile,
-        //                       width: 85,
-        //                       height: 85,
-        //                       fit: BoxFit.fitHeight,
-        //                     ),
-        //                   ),
-        //                 ),
-        //               )
-        //             : imageUrl != null
-        //                 ? Positioned(
-        //                     left: 0,
-        //                     right: 0,
-        //                     child: CircleAvatar(
-        //                       radius: 45,
-        //                       backgroundColor: Colors.white,
-        //                       child: ClipOval(
-        //                         child: Image.network(
-        //                           imageUrl,
-        //                           height: 85,
-        //                           width: 85,
-        //                           fit: BoxFit.fill,
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   )
-        //                 : Positioned(
-        //                     left: 0,
-        //                     right: 0,
-        //                     child: Container(
-        //                       width: 100,
-        //                       height: 100,
-        //                       alignment: Alignment.center,
-        //                       decoration: BoxDecoration(
-        //                         shape: BoxShape.circle,
-        //                       ),
-        //                       child: Image.asset('assets/images/profile_pic.png'),
-        //                     ),
-        //                   ),
-        //         Positioned(
-        //             top: 60,
-        //             left: 60,
-        //             right: 0,
-        //             child: InkWell(
-        //                 onTap: () {
-        //                   changeProfilePic();
-        //                 },
-        //                 child: Container(
-        //                   height: 45,
-        //                   width: 45,
-        //                   decoration: BoxDecoration(
-        //                     shape: BoxShape.circle,
-        //                   ),
-        //                   child: Image.asset('assets/images/Camera.png'),
-        //                 ))),
-        //         Positioned(
-        //           top: 70,
-        //           width: MediaQuery.of(context).size.width,
-        //           // height: MediaQuery.of(context).size.height,
-        //           child: isLoading
-        //               ? new Center(
-        //                   child: CircularProgressIndicator(
-        //                       valueColor: AlwaysStoppedAnimation<Color>(
-        //                           ColorValues.TEXT_COLOR)))
-        //               : Container(
-        //                   margin: EdgeInsets.fromLTRB(40, 50, 40, 50),
-        //                   decoration: BoxDecoration(
-        //                     color: Color(ColorValues.WHITE),
-        //                     shape: BoxShape.rectangle,
-        //                     boxShadow: [
-        //                       BoxShadow(
-        //                         color: Colors.grey,
-        //                         blurRadius: 7.0, // soften the shadow
-        //                         spreadRadius: 0.0, //extend the shadow
-        //                       )
-        //                     ],
-        //                   ),
-        //                   child: Padding(
-        //                     padding: const EdgeInsets.all(8.0),
-        //                     child: Column(
-        //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                       crossAxisAlignment: CrossAxisAlignment.start,
-        //                       children: <Widget>[
-        //                         Container(
-        //                           padding: const EdgeInsets.all(10.0),
-        //                           child: TextField(
-        //                             controller: _name,
-        //                             onEditingComplete: () {
-        //                               _flag = true;
-        //                             },
-        //                             autofocus: false,
-        //                             cursorColor: Colors.black,
-        //                             style: TextStyle(
-        //                               fontSize: 12,
-        //                               fontFamily: "Regular",
-        //                               color: Color(ColorValues.BLACK_TEXT_COL),
-        //                             ),
-        //                             decoration: new InputDecoration(
-        //                               labelText: 'Name',
-        //                               labelStyle: TextStyle(
-        //                                 fontSize: 14,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w700,
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                     .withOpacity(0.5),
-        //                               ),
-        //                               contentPadding: EdgeInsets.only(
-        //                                   left: 15, bottom: 11, top: 11, right: 15),
-        //                               icon: ImageIcon(
-        //                                 AssetImage("assets/images/user_name.png"),
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
-        //                               ),
-        //                               hintStyle: TextStyle(
-        //                                 fontSize: 12,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w400,
-        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
-        //                               ),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                           padding: const EdgeInsets.all(10.0),
-        //                           child: TextField(
-        //                             controller: _phone,
-        //                             onEditingComplete: () {
-        //                               _flag = true;
-        //                             },
-        //                             autofocus: false,
-        //                             readOnly: true,
-        //                             cursorColor: Colors.black,
-        //                             style: TextStyle(
-        //                               fontSize: 12,
-        //                               fontFamily: "Regular",
-        //                               color: Color(ColorValues.BLACK_TEXT_COL),
-        //                             ),
-        //                             decoration: new InputDecoration(
-        //                               labelText: 'Phone',
-        //                               labelStyle: TextStyle(
-        //                                 fontSize: 14,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w700,
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                     .withOpacity(0.5),
-        //                               ),
-        //                               contentPadding: EdgeInsets.only(
-        //                                   left: 15, bottom: 11, top: 11, right: 15),
-        //                               icon: ImageIcon(
-        //                                 AssetImage("assets/images/contact.png"),
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
-        //                               ),
-        //                               hintStyle: TextStyle(
-        //                                 fontSize: 10,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w400,
-        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
-        //                               ),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                             padding: const EdgeInsets.all(10.0),
-        //                             child: TextField(
-        //                               autofocus: false,
-        //                               readOnly: true,
-        //                               onTap: () {
-        //                                 selectDate(context);
-        //                               },
-        //                               controller: _dob,
-        //                               onEditingComplete: () {
-        //                                 _flag = true;
-        //                               },
-        //                               cursorColor: Colors.black,
-        //                               style: TextStyle(
-        //                                 fontSize: 12,
-        //                                 fontFamily: "Regular",
-        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
-        //                               ),
-        //                               decoration: new InputDecoration(
-        //                                 labelText: 'Date of Birth',
-        //                                 labelStyle: TextStyle(
-        //                                   fontSize: 14,
-        //                                   fontFamily: "Regular",
-        //                                   fontWeight: FontWeight.w700,
-        //                                   color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                       .withOpacity(0.5),
-        //                                 ),
-        //                                 contentPadding: EdgeInsets.only(
-        //                                     left: 15,
-        //                                     bottom: 11,
-        //                                     top: 11,
-        //                                     right: 15),
-        //                                 icon: ImageIcon(
-        //                                   AssetImage("assets/images/calendar.png"),
-        //                                   color:
-        //                                       Color(ColorValues.THEME_TEXT_COLOR),
-        //                                 ),
-        //                                 suffixIconConstraints: BoxConstraints(
-        //                                     minHeight: 22, minWidth: 22),
-        //                                 suffixIcon: IconButton(
-        //                                   icon: ImageIcon(
-        //                                     AssetImage(
-        //                                         "assets/images/cal_sign_up.png"),
-        //                                     color:
-        //                                         Color(ColorValues.THEME_TEXT_COLOR),
-        //                                   ),
-        //                                 ),
-        //                                 hintStyle: TextStyle(
-        //                                   fontSize: 10,
-        //                                   fontFamily: "Regular",
-        //                                   fontWeight: FontWeight.w400,
-        //                                   color: Color(ColorValues.BLACK_TEXT_COL),
-        //                                 ),
-        //                               ),
-        //                             )),
-        //                         Container(
-        //                           padding: const EdgeInsets.all(10.0),
-        //                           child: TextField(
-        //                             controller: _email,
-        //                             onEditingComplete: () {
-        //                               _flag = true;
-        //                             },
-        //                             autofocus: false,
-        //                             cursorColor: Colors.black,
-        //                             style: TextStyle(
-        //                               fontSize: 12,
-        //                               fontFamily: "Regular",
-        //                               color: Color(ColorValues.BLACK_TEXT_COL),
-        //                             ),
-        //                             decoration: new InputDecoration(
-        //                               labelText: 'Email',
-        //                               labelStyle: TextStyle(
-        //                                 fontSize: 14,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w700,
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                     .withOpacity(0.5),
-        //                               ),
-        //                               contentPadding: EdgeInsets.only(
-        //                                   left: 15, bottom: 11, top: 11, right: 15),
-        //                               icon: ImageIcon(
-        //                                 AssetImage("assets/images/eduction.png"),
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
-        //                               ),
-        //                               hintStyle: TextStyle(
-        //                                 fontSize: 10,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w400,
-        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
-        //                               ),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                           padding: const EdgeInsets.all(10.0),
-        //                           child: TextField(
-        //                             controller: _address,
-        //                             onTap: () {
-        //                               callPlacesApi();
-        //                             },
-        //                             onEditingComplete: () {
-        //                               _flag = true;
-        //                             },
-        //                             autofocus: false,
-        //                             cursorColor: Colors.black,
-        //                             style: TextStyle(
-        //                               fontSize: 12,
-        //                               fontFamily: "Regular",
-        //                               color: Color(ColorValues.BLACK_TEXT_COL),
-        //                             ),
-        //                             decoration: new InputDecoration(
-        //                               labelText: 'Address',
-        //                               labelStyle: TextStyle(
-        //                                 fontSize: 14,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w700,
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                     .withOpacity(0.5),
-        //                               ),
-        //                               contentPadding: EdgeInsets.only(
-        //                                   left: 15, bottom: 11, top: 11, right: 15),
-        //                               icon: ImageIcon(
-        //                                 AssetImage("assets/images/location.png"),
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR),
-        //                               ),
-        //                               hintStyle: TextStyle(
-        //                                 fontSize: 10,
-        //                                 fontFamily: "Regular",
-        //                                 fontWeight: FontWeight.w400,
-        //                                 color: Color(ColorValues.BLACK_TEXT_COL),
-        //                               ),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                           margin:
-        //                               EdgeInsets.only(top: 14, left: 20, right: 20),
-        //                           child: Text(
-        //                             "Gender",
-        //                             style: TextStyle(
-        //                                 fontFamily: "Black",
-        //                                 fontSize: 12,
-        //                                 color: Color(ColorValues.THEME_TEXT_COLOR)
-        //                                     .withOpacity(0.5)),
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                           height: 36,
-        //                           width: MediaQuery.of(context).size.width,
-        //                           margin:
-        //                               EdgeInsets.only(top: 11, left: 20, right: 20),
-        //                           child: Row(
-        //                             children: [
-        //                               Expanded(
-        //                                   flex: 1,
-        //                                   child: GestureDetector(
-        //                                       onTap: () {
-        //                                         setState(() {
-        //                                           gender = "MALE";
-        //                                         });
-        //                                       },
-        //                                       child: gender == "MALE"
-        //                                           ? Container(
-        //                                               decoration: BoxDecoration(
-        //                                                 color: Color(ColorValues
-        //                                                     .THEME_COLOR),
-        //                                                 borderRadius:
-        //                                                     BorderRadius.only(
-        //                                                         bottomLeft: Radius
-        //                                                             .circular(10),
-        //                                                         topLeft:
-        //                                                             Radius.circular(
-        //                                                                 10)),
-        //                                               ),
-        //                                               child: Center(
-        //                                                   child: Text(
-        //                                                 "Male",
-        //                                                 style: TextStyle(
-        //                                                     fontFamily: "Regular",
-        //                                                     fontSize: 12,
-        //                                                     color: Color(ColorValues
-        //                                                         .WHITE_COLOR),
-        //                                                     fontWeight:
-        //                                                         FontWeight.bold),
-        //                                                 textAlign: TextAlign.center,
-        //                                               )),
-        //                                             )
-        //                                           : Container(
-        //                                               decoration: BoxDecoration(
-        //                                                 color: Color(
-        //                                                     ColorValues.LIGHT_GRAY),
-        //                                                 borderRadius:
-        //                                                     BorderRadius.only(
-        //                                                         bottomLeft: Radius
-        //                                                             .circular(10),
-        //                                                         topLeft:
-        //                                                             Radius.circular(
-        //                                                                 10)),
-        //                                                 border: Border.all(
-        //                                                     color: Color(ColorValues
-        //                                                             .BLACK_COLOR)
-        //                                                         .withOpacity(0.5),
-        //                                                     width: 1),
-        //                                               ),
-        //                                               child: Center(
-        //                                                   child: Text(
-        //                                                 "Male",
-        //                                                 style: TextStyle(
-        //                                                     fontFamily: "Regular",
-        //                                                     fontSize: 12,
-        //                                                     color: Color(ColorValues
-        //                                                         .THEME_TEXT_COLOR),
-        //                                                     fontWeight:
-        //                                                         FontWeight.bold),
-        //                                                 textAlign: TextAlign.center,
-        //                                               )),
-        //                                             ))),
-        //                               Expanded(
-        //                                   flex: 1,
-        //                                   child: GestureDetector(
-        //                                       onTap: () {
-        //                                         setState(() {
-        //                                           gender = "FEMALE";
-        //                                         });
-        //                                       },
-        //                                       child: gender == "FEMALE"
-        //                                           ? Container(
-        //                                               decoration: BoxDecoration(
-        //                                                 color: Color(ColorValues
-        //                                                     .THEME_COLOR),
-        //                                                 borderRadius:
-        //                                                     BorderRadius.only(
-        //                                                         bottomRight: Radius
-        //                                                             .circular(10),
-        //                                                         topRight:
-        //                                                             Radius.circular(
-        //                                                                 10)),
-        //                                               ),
-        //                                               child: Center(
-        //                                                 child: Text(
-        //                                                   "Female",
-        //                                                   style: TextStyle(
-        //                                                       fontFamily: "Regular",
-        //                                                       fontSize: 12,
-        //                                                       color: Color(
-        //                                                           ColorValues
-        //                                                               .WHITE),
-        //                                                       fontWeight:
-        //                                                           FontWeight.bold),
-        //                                                   textAlign:
-        //                                                       TextAlign.center,
-        //                                                 ),
-        //                                               ))
-        //                                           : Container(
-        //                                               decoration: BoxDecoration(
-        //                                                 color: Color(
-        //                                                     ColorValues.LIGHT_GRAY),
-        //                                                 borderRadius:
-        //                                                     BorderRadius.only(
-        //                                                         bottomRight: Radius
-        //                                                             .circular(10),
-        //                                                         topRight:
-        //                                                             Radius.circular(
-        //                                                                 10)),
-        //                                                 border: Border.all(
-        //                                                     color: Color(ColorValues
-        //                                                             .BLACK_COLOR)
-        //                                                         .withOpacity(0.5),
-        //                                                     width: 1),
-        //                                               ),
-        //                                               child: Center(
-        //                                                   child: Text(
-        //                                                 "Female",
-        //                                                 style: TextStyle(
-        //                                                     fontFamily: "Regular",
-        //                                                     fontSize: 12,
-        //                                                     color: Color(ColorValues
-        //                                                         .THEME_COLOR),
-        //                                                     fontWeight:
-        //                                                         FontWeight.bold),
-        //                                                 textAlign: TextAlign.center,
-        //                                               )),
-        //                                             ))),
-        //                             ],
-        //                           ),
-        //                         ),
-        //                         Container(
-        //                           margin:
-        //                               EdgeInsets.only(left: 40, right: 40, top: 30, bottom: 20),
-        //                           height: 40,
-        //                           width: MediaQuery.of(context).size.width,
-        //                           decoration: BoxDecoration(
-        //                             color:
-        //                                 const Color(ColorValues.THEME_TEXT_COLOR),
-        //                           ),
-        //                           child: TextButton(
-        //                             onPressed: () {
-        //                               validateData();
-        //                             },
-        //                             child: Text(
-        //                               'Save',
-        //                               style: TextStyle(
-        //                                   color: Color(ColorValues.WHITE),
-        //                                   fontSize: 14),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                       ],
-        //                     ),
-        //                   )),
-        //         ),
-        //       ]),
-        //     ],
-        //   ),
-
-////////
-
-          // width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         child: Stack(clipBehavior: Clip.none, children: [
             Container(
               margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
@@ -957,7 +464,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     imageFile,
                     width: 85,
                     height: 85,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -974,7 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     imageUrl,
                     height: 85,
                     width: 85,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -1045,6 +552,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(10.0),
                             child: TextField(
                               controller: _name,
+                              onSubmitted: (String val){
+                                FocusScope.of(context).unfocus();
+                              },
                               onEditingComplete: () {
                                 _flag = true;
                               },
@@ -1056,8 +566,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                               decoration: new InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.GRAY)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.THEME_TEXT_COLOR)),
+                                ),
                                 labelText: 'Name',
                                 labelStyle: TextStyle(
+                                  height: 0.5,
                                   fontSize: 14,
                                   fontFamily: "Regular",
                                   fontWeight: FontWeight.w700,
@@ -1082,6 +599,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(10.0),
                             child: TextField(
                               controller: _phone,
+                              onSubmitted: (String val){
+                                FocusScope.of(context).unfocus();
+                              },
                               onEditingComplete: () {
                                 _flag = true;
                               },
@@ -1095,8 +615,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                               decoration: new InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.GRAY)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.THEME_TEXT_COLOR)),
+                                ),
                                 labelText: 'Phone',
                                 labelStyle: TextStyle(
+                                  height: 0.5,
                                   fontSize: 14,
                                   fontFamily: "Regular",
                                   fontWeight: FontWeight.w700,
@@ -1126,6 +653,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   selectDate(context);
                                 },
                                 controller: _dob,
+                                onSubmitted: (String val){
+                                  FocusScope.of(context).unfocus();
+                                },
                                 onEditingComplete: () {
                                   _flag = true;
                                 },
@@ -1136,8 +666,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Color(ColorValues.BLACK_TEXT_COL),
                                 ),
                                 decoration: new InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(ColorValues.GRAY)),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(ColorValues.THEME_TEXT_COLOR)),
+                                  ),
                                   labelText: 'Date of Birth',
                                   labelStyle: TextStyle(
+                                    height: 0.5,
                                     fontSize: 14,
                                     fontFamily: "Regular",
                                     fontWeight: FontWeight.w700,
@@ -1171,6 +708,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(10.0),
                             child: TextField(
                               controller: _email,
+                              onSubmitted: (String val){
+                                FocusScope.of(context).unfocus();
+                              },
                               onEditingComplete: () {
                                 _flag = true;
                               },
@@ -1182,8 +722,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                               decoration: new InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.GRAY)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.THEME_TEXT_COLOR)),
+                                ),
                                 labelText: 'Email',
                                 labelStyle: TextStyle(
+                                  height: 0.5,
                                   fontSize: 14,
                                   fontFamily: "Regular",
                                   fontWeight: FontWeight.w700,
@@ -1208,6 +755,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(10.0),
                             child: TextField(
                               controller: _address,
+                              onSubmitted: (String val){
+                                FocusScope.of(context).unfocus();
+                              },
                               onTap: () {
                                 callPlacesApi();
                               },
@@ -1222,8 +772,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(ColorValues.BLACK_TEXT_COL),
                               ),
                               decoration: new InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.GRAY)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(ColorValues.THEME_TEXT_COLOR)),
+                                ),
                                 labelText: 'Address',
                                 labelStyle: TextStyle(
+                                  height: 0.5,
                                   fontSize: 14,
                                   fontFamily: "Regular",
                                   fontWeight: FontWeight.w700,
@@ -1370,6 +927,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: const Color(ColorValues.THEME_TEXT_COLOR),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: TextButton(
                               onPressed: () {

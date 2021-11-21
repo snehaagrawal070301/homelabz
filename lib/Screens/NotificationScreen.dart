@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/NotificationModel.dart';
 import 'package:homelabz/components/colorValues.dart';
-import 'package:homelabz/constants/ConstantMsg.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -44,15 +44,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
       });
 
       var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
-          preferences.getString(ConstantMsg.ID).toString());
+          preferences.getString(Constants.ID).toString());
 
-      print(preferences.getString(ConstantMsg.ACCESS_TOKEN));
-      print(preferences.getString(ConstantMsg.ID));
+      print(preferences.getString(Constants.ACCESS_TOKEN));
+      print(preferences.getString(Constants.ID));
 
       Map<String, String> headers = {
-        ConstantMsg.HEADER_CONTENT_TYPE: ConstantMsg.HEADER_VALUE,
-        ConstantMsg.HEADER_AUTH:
-        "bearer " + preferences.getString(ConstantMsg.ACCESS_TOKEN),
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
       Response response = await get(

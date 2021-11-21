@@ -38,6 +38,7 @@ class ColorValues {
   static const int LIGHT_GREY_TEXT_COLOR= 0xFFE9E9EC;
   static const int RADIO_BLACK= 0xFF151515;
   static const int GRAY_HEADER_PRESSO_VIEW = 0xffCACACA;
+  static const int GRAY = 0xffCACACA;
   static const int LIGHT_GRAY_BG= 0xffF8F9F8;
   static const int OPPORTUNITY_GROUP_SELECTION_GRP = 0xffF0F0F0;
   static const int GRAY_BG = 0xffF8F8F8;

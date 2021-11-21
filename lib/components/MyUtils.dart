@@ -114,7 +114,7 @@ class MyUtils{
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: Duration(seconds: 3),
     );
   }
 

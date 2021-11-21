@@ -30,19 +30,19 @@ class UploadData {
   UploadData(this.imageFile, this.fileExt, this.imageName);
 }
 
-class BookingScreen extends StatefulWidget {
+class BookingUpdate extends StatefulWidget {
   final String date;
   final String startTime, endTime;
 
-  const BookingScreen(this.date, this.startTime, this.endTime);
+  const BookingUpdate(this.date, this.startTime, this.endTime);
 
   @override
   State<StatefulWidget> createState() {
-    return BookingScreenState();
+    return BookingUpdateState();
   }
 }
 
-class BookingScreenState extends State<BookingScreen> {
+class BookingUpdateState extends State<BookingUpdate> {
 //  final AppointmentScreen obj;
 //  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
 
