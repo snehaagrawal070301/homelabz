@@ -182,29 +182,30 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              imageName!=""
-                  ? Expanded(
-                      flex: 2,
-                      child: GestureDetector(
-                        onTap: () {
-                          //call Profile Screen\
-                          callProfileScreen();
-                        },
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.white,
-                          child: ClipOval(
-                            child: Image.network(
-                              imageName,
-                              width: 42,
-                              height: 42,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Expanded(
+              // imageName!=""
+              //     ? Expanded(
+              //         flex: 2,
+              //         child: GestureDetector(
+              //           onTap: () {
+              //             //call Profile Screen\
+              //             callProfileScreen();
+              //           },
+              //           child: CircleAvatar(
+              //             radius: 20,
+              //             backgroundColor: Colors.white,
+              //             child: ClipOval(
+              //               child: Image.network(
+              //                 imageName,
+              //                 width: 42,
+              //                 height: 42,
+              //                 fit: BoxFit.cover,
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       )
+              //     :
+              Expanded(
                       flex: 2,
                       child: GestureDetector(
                         onTap: () {
@@ -1217,8 +1218,8 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callLoginApi(String mobileNumber) async {
-    getFcmToken();
-    print("FCM Token :" + fcmToken);
+    // getFcmToken();
+    // print("FCM Token :" + fcmToken);
 
     ProgressDialog dialog = new ProgressDialog(context);
     dialog.style(message: 'Please wait...');
@@ -1235,7 +1236,7 @@ class HomeScreenState extends State<HomeScreen> {
         Constants.MOBILE_NUM: mobileNumber,
         Constants.OTP: otp.text,
         Constants.ROLE: Constants.ROLE_ID,
-        Constants.DEVICE_ID: fcmToken
+        // Constants.DEVICE_ID: fcmToken
 
 //        ConstantMsg.MOBILE_NUM: "1111111110",
 //        ConstantMsg.OTP: 123456
