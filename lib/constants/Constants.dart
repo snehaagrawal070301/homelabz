@@ -40,6 +40,7 @@ class Constants{
   static final String IMAGE_PATH = "imagePath";
   static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
   static final String ROLE = "role";
+  static final String ROLE_ID = "ROLE_PATIENT";
   static final String BOOKING_ID = "bookingId";
   static final String STATUS = "status";
   static final String BALANCE_TRANSACTION = "balanceTransaction";

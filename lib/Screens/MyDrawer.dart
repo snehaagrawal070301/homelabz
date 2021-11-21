@@ -1,14 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/ErrorModel.dart';
 import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/HomeScreen.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -158,25 +161,29 @@ class _MyDrawerState extends State<MyDrawer> {
 
   callLogout() async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.LOGOUT);
       Map<String, String> headers = {"Content-type": "application/json",
         Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN)
       };
 
       // make POST request
-      Response response = await post(url, headers: headers);
+      var response = await _ioClient.post(url, headers: headers);
 
       print(response.statusCode);
       String body = response.body;
 
       if (response.statusCode == 200) {
         print(body);
-        Fluttertoast.showToast(
-          msg: "Logout",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-        );
+        // Fluttertoast.showToast(
+        //   msg: "Logout",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   timeInSecForIosWeb: 1,
+        // );
 
         preferences.setString(Constants.LOGIN_STATUS,"false");
 
@@ -193,12 +200,8 @@ class _MyDrawerState extends State<MyDrawer> {
         );
 
       } else {
-        // var data = json.decode(body);
-        // ErrorModel model = ErrorModel.fromJson(data);
-        // if (model.message != null && model.message.length > 0) {
-        //   String msg = model.message;
-        //   print(model.message);
-        // }
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (e) {}
 

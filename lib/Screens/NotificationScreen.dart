@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/NotificationModel.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,6 +46,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         isData = true;
       });
 
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
           preferences.getString(Constants.ID).toString());
 
@@ -55,10 +62,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -80,6 +84,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
         setState(() {
           isData = false;
         });
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
       await dialog.hide();
     } catch (ex) {

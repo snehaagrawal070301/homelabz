@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallForBooking extends StatefulWidget {
@@ -286,15 +289,16 @@ class _CallForBookingState extends State<CallForBooking> {
 
   void callApi() async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.CALL_API);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
       };
       // make POST request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);

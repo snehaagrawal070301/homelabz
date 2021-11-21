@@ -9,11 +9,13 @@ import 'package:homelabz/Models/PreSignedUrlResponse.dart';
 import 'package:homelabz/Models/UserDetails.dart';
 import 'package:homelabz/Screens/address_search.dart';
 import 'package:homelabz/Services/place_service.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -58,6 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     //print(_dob.text);
     //print(convertedDateTime);
+    _address.text = "Indore, MP";
     getSharedPreferences();
   }
 
@@ -72,8 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         isLoading = true;
       });
 
-      var url = Uri.parse(ApiConstants.GET_USER_DETAILS +
-          preferences.getString(Constants.ID).toString());
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
+      var url = Uri.parse(ApiConstants.GET_USER_DETAILS + preferences.getString(Constants.ID).toString());
       print(url);
       print(preferences.getString(Constants.ACCESS_TOKEN));
       Map<String, String> headers = {
@@ -82,10 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -117,6 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
           isLoading = false;
         });
+      }else{
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (ex) {
       setState(() {
@@ -233,6 +239,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // await dialog.show();
 
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.PRE_SIGNED_URL);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -253,8 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       };
       print(mapBody);
       // make POST request
-      Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+      await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       print(body);
@@ -266,7 +276,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         print(urlList[0].presignedURL);
         preferences.setString("image", urlList[0].presignedURL);
         uploadImage();
-      } else {}
+      } else {
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
     } catch (e) {
       print("Error+++++" + e.toString());
     }
@@ -323,7 +336,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void updateUserDetails() async {
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.UPDATE_USER_DETAILS);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -358,8 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
 
       // make POST request
-      Response response =
-      await post(url, headers: headers, body: json.encode(map));
+      var response = await _ioClient.post(url, headers: headers, body: json.encode(map));
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -381,10 +401,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           preferences.setString("image", imageUrl);
           uploadFlag = false;
         }
+      }else{
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
       await dialog.hide();
     } catch (ex) {
-      // await dialog.hide();
+      await dialog.hide();
     }
   }
 

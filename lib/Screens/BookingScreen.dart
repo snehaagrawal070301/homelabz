@@ -10,10 +10,12 @@ import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/PaymentScreen.dart';
 import 'package:homelabz/Screens/address_search.dart';
 import 'package:homelabz/Services/place_service.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/Values.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +70,7 @@ class BookingScreenState extends State<BookingScreen> {
   LabResponse labName;
   DoctorResponse doctorName;
   SharedPreferences preferences;
-  String searchAddress = "";
+  String searchAddress = "Indore, MP";
   bool _loadingPath = false;
   bool _multiPick = true;
   String _fileName;
@@ -147,6 +149,10 @@ class BookingScreenState extends State<BookingScreen> {
 
   void callDoctorApi() async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GET_ALL_DOCTOR);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -154,10 +160,7 @@ class BookingScreenState extends State<BookingScreen> {
             "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make POST request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -179,6 +182,9 @@ class BookingScreenState extends State<BookingScreen> {
         //   _doctor.add(model);
         // }
         setState(() {});
+      }else{
+        // var data = json.decode(body);
+        // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
@@ -188,6 +194,10 @@ class BookingScreenState extends State<BookingScreen> {
   void callAllLabsApi() async {
     print(widget.date);
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GET_ALL_LABS);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -195,10 +205,7 @@ class BookingScreenState extends State<BookingScreen> {
             "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make POST request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -212,6 +219,9 @@ class BookingScreenState extends State<BookingScreen> {
           LabResponse model = LabResponse.fromJson(obj);
           _labs.add(model);
         }
+      }else{
+        // var data = json.decode(body);
+        // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
       setState(() {});
     } catch (ex) {
@@ -477,6 +487,10 @@ class BookingScreenState extends State<BookingScreen> {
     await dialog.show();
 
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.PRE_SIGNED_URL);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -498,8 +512,8 @@ class BookingScreenState extends State<BookingScreen> {
       };
       print(mapBody);
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       print(body);
@@ -511,7 +525,10 @@ class BookingScreenState extends State<BookingScreen> {
         for (int i = 0; i < urlList.length; i++) {
           uploadImage(urlList[i].presignedURL, imageList[i+1].imageFile);
         }
-      } else {}
+      } else {
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
     } catch (e) {
       print("Error+++++" + e.toString());
     }
@@ -542,6 +559,10 @@ class BookingScreenState extends State<BookingScreen> {
 
   void callBookAppointmentApiByDate(bool isASAP) async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -599,8 +620,8 @@ class BookingScreenState extends State<BookingScreen> {
 
       print(mapBody);
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       var data = json.decode(body);
@@ -610,7 +631,10 @@ class BookingScreenState extends State<BookingScreen> {
         int id = data["id"];
         print(id);
         callPaymentScreen(id);
-      } else {}
+      } else {
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
     } catch (e) {
       print("Error+++++" + e.toString());
     }

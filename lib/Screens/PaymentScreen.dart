@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,12 @@ import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/PaymentSuccess.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Services/payment-service.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +50,10 @@ class PaymentScreenState extends State<PaymentScreen>{
 
   Future<void> getPaymentInfo() async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GET_PAYMENT_INFO);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -58,8 +65,8 @@ class PaymentScreenState extends State<PaymentScreen>{
       };
       print(mapBody);
       // make POST request
-      Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+      await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       print(body);
@@ -67,7 +74,10 @@ class PaymentScreenState extends State<PaymentScreen>{
       if (response.statusCode == 200) {
         model = PaymentInfo.fromJson(json.decode(body));
         StripeService.init(model.stripePublicKey, key);
-      } else {}
+      } else {
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
     } catch (e) {
       print("Error+++++" + e.toString());
     }
@@ -95,6 +105,10 @@ class PaymentScreenState extends State<PaymentScreen>{
 
   Future<void> submitPaymentStatus(String status) async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.SUBMIT_PAYMENT_INFO);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -108,8 +122,8 @@ class PaymentScreenState extends State<PaymentScreen>{
       };
       print(mapBody);
       // make POST request
-      Response response =
-      await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+      await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       print(body);
@@ -124,7 +138,10 @@ class PaymentScreenState extends State<PaymentScreen>{
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => PaymentSuccess(paymentId, widget.bookingId)));
-      } else {}
+      } else {
+        var data = json.decode(body);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
     } catch (e) {
       print("Error+++++" + e.toString());
     }

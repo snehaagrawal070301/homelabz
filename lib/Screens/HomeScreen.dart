@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,13 +11,23 @@ import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/CallForBooking.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'MyDrawer.dart';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -27,6 +39,9 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   TextEditingController name = TextEditingController();
   String imageName="";
+  String fcmToken;
+  FirebaseMessaging _firebaseMessaging;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =FlutterLocalNotificationsPlugin();
 
   // String mobile;
   TextEditingController mobileController = TextEditingController();
@@ -42,12 +57,81 @@ class HomeScreenState extends State<HomeScreen> {
     getImagePath();
     fToast = FToast();
     fToast.init(context);
+
+    registerNotification();
+
+    var initializationSettingsAndroid =
+    AndroidInitializationSettings('flutter_devs');
+    var initializationSettingsIOs = IOSInitializationSettings();
+    var initSetttings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+    flutterLocalNotificationsPlugin.initialize(initSetttings,
+        onSelectNotification: onSelectNotification);
+
+  }
+
+  void registerNotification() async {
+    await Firebase.initializeApp();
+    _firebaseMessaging = FirebaseMessaging.instance;
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    getFcmToken();
+
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print(
+            'Message title: ${message.notification?.title}, body: ${message.notification?.body}, data: ${message.data}');
+        // MyUtils.showCustomToast("Title : ${message.notification?.title} \n Body: ${message.notification?.body}"
+        //     , true, context);
+        showNotification("${message.notification?.title}","${message.notification?.body}");
+
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  void getFcmToken() async {
+    _firebaseMessaging.getToken().then((token) {
+      fcmToken = token;
+      print("token : " + fcmToken);
+    });
+  }
+
+  showNotification(title,description) async {
+    // MyUtils.showCustomToast("showNotification : ${title} \n showNotification: ${description}"
+    //     , true, context);
+    var android = new AndroidNotificationDetails(
+        'id', 'channel ', channelDescription: 'description',
+        priority: Priority.high, importance: Importance.max);
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android: android, iOS: iOS);
+    await flutterLocalNotificationsPlugin.show(
+        0, '${title}', '${description}', platform,
+        payload: 'Welcome to the Local Notification demo ');
   }
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
     imageName = preferences.getString("image");
     setState(() {});
+  }
+
+  Future onSelectNotification(String payload) {
+    /*Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return NewScreen(
+        payload: payload,
+      );
+    }));*/
   }
 
   @override
@@ -1133,20 +1217,31 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callLoginApi(String mobileNumber) async {
+    getFcmToken();
+    print("FCM Token :" + fcmToken);
+
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.VERIFY_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         Constants.MOBILE_NUM: mobileNumber,
         Constants.OTP: otp.text,
-        Constants.ROLE: "ROLE_PATIENT"
+        Constants.ROLE: Constants.ROLE_ID,
+        Constants.DEVICE_ID: fcmToken
 
 //        ConstantMsg.MOBILE_NUM: "1111111110",
 //        ConstantMsg.OTP: 123456
       };
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response = await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       var data = json.decode(body);
@@ -1173,13 +1268,15 @@ class HomeScreenState extends State<HomeScreen> {
           print(preferences.getString(Constants.ID));
           print(preferences.getString(Constants.ACCESS_TOKEN));
         }
-
+        await dialog.hide();
         callUpcomingScreen();
       } else {
         showToast(data['mobileMessage']);
+        await dialog.hide();
       }
     } catch (e) {
       print("Error+++++" + e.toString());
+      await dialog.hide();
     }
   }
 
@@ -1245,6 +1342,10 @@ class HomeScreenState extends State<HomeScreen> {
 
   void isnewUser(String mobileNumber) async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.NEW_USER);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
@@ -1252,8 +1353,8 @@ class HomeScreenState extends State<HomeScreen> {
         Constants.ROLE: "ROLE_PATIENT",
       };
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1276,6 +1377,10 @@ class HomeScreenState extends State<HomeScreen> {
 
   void signIn(String mobileNumber) async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.SIGN_IN_API);
       Map<String, String> headers = {"Content-type": "application/json"};
 
@@ -1286,7 +1391,7 @@ class HomeScreenState extends State<HomeScreen> {
         mapBody = {
           Constants.MOBILE_NUM: mobileNumber,
           Constants.NAME: userName,
-          Constants.ROLE: "ROLE_PATIENT",
+          Constants.ROLE: Constants.ROLE_ID,
         };
       } else {
         mapBody = {
@@ -1296,8 +1401,8 @@ class HomeScreenState extends State<HomeScreen> {
       }
 
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1309,8 +1414,7 @@ class HomeScreenState extends State<HomeScreen> {
         _bottomSheet3(context, mobileNumber);
       } else {
         var data = json.decode(body);
-        ErrorModel model = ErrorModel.fromJson(data);
-        showToast(model.message);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -1319,15 +1423,19 @@ class HomeScreenState extends State<HomeScreen> {
 
   void generateOTP(String mobileNumber) async {
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GENERATE_OTP_API);
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         Constants.MOBILE_NUM: mobileNumber,
-        Constants.ROLE: "ROLE_PATIENT",
+        Constants.ROLE: Constants.ROLE_ID,
       };
       // make POST request
-      Response response =
-          await post(url, headers: headers, body: json.encode(mapBody));
+      var response =
+          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       //var data = json.decode(body);
@@ -1336,6 +1444,8 @@ class HomeScreenState extends State<HomeScreen> {
         print(body);
         showToast(
             "The code has been sent to your mobile number. Please check!");
+      }else{
+        // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (e) {
       print("Error+++++" + e.toString());

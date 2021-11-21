@@ -38,6 +38,7 @@ dependencies:
   progress_dialog: ^1.2.2
   firebase_core: ^1.2.0
   firebase_messaging: ^10.0.0
+  flutter_local_notifications: ^9.1.1
   overlay_support: ^1.2.1
   image_picker: ^0.8.0+1
   flutter_google_places: ^0.3.0

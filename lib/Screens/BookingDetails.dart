@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/BookingDetailsModel.dart';
 import 'package:homelabz/Models/PrescriptionModel.dart';
+import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/colorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/Values.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,6 +47,10 @@ class _BookingDetailsState extends State<BookingDetails> {
     await dialog.show();
 
     try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var url = Uri.parse(ApiConstants.GET_BOOKING_DETAILS + widget.bookingId.toString());
       print(url);
       print(preferences.getString(Constants.ACCESS_TOKEN));
@@ -53,10 +60,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make GET request
-      Response response = await get(
-        url,
-        headers: headers,
-      );
+      var response = await _ioClient.get(url, headers: headers,);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -84,10 +88,14 @@ class _BookingDetailsState extends State<BookingDetails> {
         "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
       var uri = Uri.parse(ApiConstants.DOWNLOAD_ALL_DOCS+booking);
 
       // make GET request with query params
-      final response = await get(uri, headers: headers);
+      final response = await _ioClient.get(uri, headers: headers);
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -127,6 +135,10 @@ class _BookingDetailsState extends State<BookingDetails> {
 
   Future<void> downloadPrescription(String imagePath) async {
       try {
+        HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+        _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+        IOClient _ioClient = new IOClient(_client);
+
         var url = Uri.parse(ApiConstants.GET_DOWNLOAD_URL);
         Map<String, String> headers = {
           Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
@@ -139,7 +151,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         };
 
         // make POST request
-        Response response = await post(url, headers: headers, body: json.encode(map));
+        var response = await _ioClient.post(url, headers: headers, body: json.encode(map));
         // check the status code for the result
         String body = response.body;
         print(body);
