@@ -36,6 +36,7 @@ class Constants{
   static final String PRE_SIGNED_LIST = "documentPresignedURLModelList";
   static final String KEY_NAME = "keyName";
   static final String KEY_PATH = "keyPath";
+  static final String PATH = "path";
   static final String PRE_SIGNED_URL = "presignedURL";
   static final String IMAGE_PATH = "imagePath";
   static final String IMG_PRE_SIGNED_URL = "imagePresignedURL";
@@ -51,6 +52,8 @@ class Constants{
   static final String EMAIL = "email";
   static final String CAT_PRESCRIPTION = "BOOKING";
   static final String CAT_SAMPLE = "TEST_SAMPLE";
+  static final String USER = "user";
+  static final String NUMBER_OF_FILES = "noOfFiles";
 
 
   //_________________VALIDATION MESSAGES___________________
@@ -63,5 +66,6 @@ class Constants{
   static final String NMAE_VALIDATION = "Please enter Name";
   static final String PRESCRIPTION_VALIDATION = "Please attach prescription";
   static final String REMARKS_VALIDATION = "Please attach prescription or add remarks";
+  static final String SLOT_VALIDATION = "Please choose slot!";
 
 }

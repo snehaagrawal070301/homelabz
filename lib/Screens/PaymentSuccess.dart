@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 
 class PaymentSuccess extends StatefulWidget{
 

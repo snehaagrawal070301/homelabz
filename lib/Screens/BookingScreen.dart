@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/DoctorModel.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
@@ -19,7 +18,7 @@ import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -201,8 +200,7 @@ class BookingScreenState extends State<BookingScreen> {
       var url = Uri.parse(ApiConstants.GET_ALL_LABS);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
-        Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make POST request
       var response = await _ioClient.get(url, headers: headers,);
@@ -247,20 +245,25 @@ class BookingScreenState extends State<BookingScreen> {
                   callBookAppointmentApiByDate(false);
                 }
               } else {
-                showToast(Constants.REMARKS_VALIDATION);
+                MyUtils.showCustomToast(Constants.REMARKS_VALIDATION, true, context);
+                // showToast(Constants.REMARKS_VALIDATION);
               }
             }
           } else {
-            showToast(Constants.GENDER_VALIDATION);
+            MyUtils.showCustomToast(Constants.GENDER_VALIDATION, true, context);
+            // showToast(Constants.GENDER_VALIDATION);
           }
         } else {
-          showToast(Constants.DOB_VALIDATION);
+          MyUtils.showCustomToast(Constants.DOB_VALIDATION, true, context);
+          // showToast(Constants.DOB_VALIDATION);
         }
       } else {
-        showToast(Constants.ADDRESS_VALIDATION);
+        MyUtils.showCustomToast(Constants.ADDRESS_VALIDATION, true, context);
+        // showToast(Constants.ADDRESS_VALIDATION);
       }
     } else {
-      showToast(Constants.LAB_VALIDATION);
+      MyUtils.showCustomToast(Constants.LAB_VALIDATION, true, context);
+      // showToast(Constants.LAB_VALIDATION);
     }
   }
 
@@ -310,14 +313,14 @@ class BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-    );
-  }
+  // void showToast(String message) {
+  //   Fluttertoast.showToast(
+  //     msg: message,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.CENTER,
+  //     timeInSecForIosWeb: 1,
+  //   );
+  // }
 
   // void showImage(context) {
   //   showDialog(context: context, builder: (context){
@@ -566,8 +569,7 @@ class BookingScreenState extends State<BookingScreen> {
       var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
-        Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       print(preferences.getString(Constants.ACCESS_TOKEN));
       Map patient = {
@@ -774,8 +776,8 @@ class BookingScreenState extends State<BookingScreen> {
                               focusColor: Color(ColorValues.WHITE_COLOR),
                               elevation: 16,
                               style: TextStyle(
-                                  color: Color(ColorValues.BLACK_TEXT_COL),
-                                  fontSize: 12,
+                                  color: Color(ColorValues.BLACK_COL),
+                                  fontSize: 13,
                                   fontFamily: "Regular"),
                               onChanged: (LabResponse newValue) {
                                 setState(() {
@@ -817,8 +819,8 @@ class BookingScreenState extends State<BookingScreen> {
                               focusColor: Color(ColorValues.WHITE_COLOR),
                               elevation: 16,
                               style: TextStyle(
-                                  color: Color(ColorValues.BLACK_TEXT_COL),
-                                  fontSize: 12,
+                                  color: Color(ColorValues.BLACK_COL),
+                                  fontSize: 13,
                                   fontFamily: "Regular"),
                               onChanged: (DoctorResponse newValue) {
                                 setState(() {
@@ -864,7 +866,7 @@ class BookingScreenState extends State<BookingScreen> {
                                   style: TextStyle(
                                     fontFamily: 'customLight',
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 12.0,
+                                    fontSize: 13.0,
                                     color: Color(ColorValues.HINT_COL),
                                   ),
                                   maxLines: 1,
@@ -907,14 +909,14 @@ class BookingScreenState extends State<BookingScreen> {
                             if (convertedDateTime == null)
                               Text("Date of Birth",
                                   style: TextStyle(
-                                      color: Color(ColorValues.BLACK_TEXT_COL),
-                                      fontSize: 12.0,
+                                      color: Color(ColorValues.BLACK_COL),
+                                      fontSize: 13.0,
                                       fontFamily: "Regular"))
                             else
                               Text(convertedDateTime,
                                   style: TextStyle(
-                                      color: Color(ColorValues.BLACK_TEXT_COL),
-                                      fontSize: 12.0,
+                                      color: Color(ColorValues.BLACK_COL),
+                                      fontSize: 13.0,
                                       fontFamily: "Regular")),
                             GestureDetector(
                               onTap: () {
@@ -953,9 +955,10 @@ class BookingScreenState extends State<BookingScreen> {
                         top: 5, left: 20, right: 20, bottom: 10),
                     child: Row(
                       children: [
-                        Expanded(
-                            flex: 1,
-                            child: GestureDetector(
+                        // Expanded(
+                        //     flex: 1,
+                        //     child:
+                            GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     gender = "MALE";
@@ -963,6 +966,7 @@ class BookingScreenState extends State<BookingScreen> {
                                 },
                                 child: gender == "MALE"
                                     ? Container(
+                                  width: MediaQuery.of(context).size.width/3,
                                         decoration: BoxDecoration(
                                           color: Color(ColorValues.THEME_COLOR),
                                           borderRadius: BorderRadius.only(
@@ -974,7 +978,7 @@ class BookingScreenState extends State<BookingScreen> {
                                           "Male",
                                           style: TextStyle(
                                               fontFamily: "Regular",
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               color: Color(
                                                   ColorValues.WHITE_COLOR),
                                               fontWeight: FontWeight.bold),
@@ -982,6 +986,7 @@ class BookingScreenState extends State<BookingScreen> {
                                         )),
                                       )
                                     : Container(
+                                  width: MediaQuery.of(context).size.width/3,
                                         decoration: BoxDecoration(
                                           color: Color(ColorValues.LIGHT_GRAY),
                                           borderRadius: BorderRadius.only(
@@ -997,16 +1002,17 @@ class BookingScreenState extends State<BookingScreen> {
                                           "Male",
                                           style: TextStyle(
                                               fontFamily: "Regular",
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               color: Color(
-                                                  ColorValues.THEME_TEXT_COLOR),
-                                              fontWeight: FontWeight.bold),
+                                                  ColorValues.BLACK_COL),),
                                           textAlign: TextAlign.center,
                                         )),
-                                      ))),
-                        Expanded(
-                            flex: 1,
-                            child: GestureDetector(
+                                      )),
+                        // ),
+                        // Expanded(
+                        //     flex: 1,
+                        //     child:
+                            GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     gender = "FEMALE";
@@ -1014,6 +1020,7 @@ class BookingScreenState extends State<BookingScreen> {
                                 },
                                 child: gender == "FEMALE"
                                     ? Container(
+                                    width: MediaQuery.of(context).size.width/3,
                                         decoration: BoxDecoration(
                                           color: Color(ColorValues.THEME_COLOR),
                                           borderRadius: BorderRadius.only(
@@ -1025,13 +1032,14 @@ class BookingScreenState extends State<BookingScreen> {
                                             "Female",
                                             style: TextStyle(
                                                 fontFamily: "Regular",
-                                                fontSize: 12,
+                                                fontSize: 13,
                                                 color: Color(ColorValues.WHITE),
                                                 fontWeight: FontWeight.bold),
                                             textAlign: TextAlign.center,
                                           ),
                                         ))
                                     : Container(
+                                  width: MediaQuery.of(context).size.width/3,
                                         decoration: BoxDecoration(
                                           color: Color(ColorValues.LIGHT_GRAY),
                                           borderRadius: BorderRadius.only(
@@ -1047,13 +1055,13 @@ class BookingScreenState extends State<BookingScreen> {
                                           "Female",
                                           style: TextStyle(
                                               fontFamily: "Regular",
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               color: Color(
-                                                  ColorValues.THEME_COLOR),
-                                              fontWeight: FontWeight.bold),
+                                                  ColorValues.BLACK_COL),),
                                           textAlign: TextAlign.center,
                                         )),
-                                      ))),
+                                      )),
+                        // ),
                       ],
                     ),
                   ),
@@ -1218,10 +1226,10 @@ class BookingScreenState extends State<BookingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                                margin: EdgeInsets.only(top:10.0),
+                                margin: EdgeInsets.only(top:10.0, bottom: 10),
                                 child: imageList.length==1?
                                    Container(
-                                  margin: EdgeInsets.fromLTRB(15,5,15,15),
+                                  margin: EdgeInsets.fromLTRB(15,5,15,5),
                                   child: Center(
                                     child: GestureDetector(
                                       onTap: () async {
@@ -1275,7 +1283,7 @@ class BookingScreenState extends State<BookingScreen> {
                                                     ? AssetImage(
                                                         "assets/images/uploadLogo.png")
                                                     : AssetImage(
-                                                        "assets/images/ic_sample.png"),
+                                                        "assets/images/prescription_logo.jpg"),
                                                 height: 50,
                                                 width: 50,
                                                 // alignment: Alignment.centerLeft,
@@ -1285,6 +1293,7 @@ class BookingScreenState extends State<BookingScreen> {
                                           Positioned(
                                               // right: 0,
                                               left: 48,
+                                              top:2,
                                               child: GestureDetector(
                                                 onTap: () {
                                                   showAlertDialog(context, pos);
@@ -1345,7 +1354,7 @@ class BookingScreenState extends State<BookingScreen> {
                             hintText: "Remarks!",
                             hintStyle: TextStyle(
                                 color: Color(ColorValues.BLACK_TEXT_COL),
-                                fontSize: 12.0,
+                                fontSize: 12.5,
                                 fontFamily: "Regular")),
                       ),
                     ),

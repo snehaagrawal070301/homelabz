@@ -1,4 +1,4 @@
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -11,8 +11,8 @@ import 'package:flutter/services.dart';
 class MyUtils{
   static String changeDateFormat(String date){
     // String to date
-    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(date);
-    final DateFormat formatter = DateFormat('dd MMM yyyy');
+    DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted = formatter.format(tempDate);
     return formatted;
   }

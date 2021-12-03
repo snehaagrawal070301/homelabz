@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homelabz/Services/place_service.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 
 class AddressSearch extends SearchDelegate<Suggestion> {
   AddressSearch(this.sessionToken) {

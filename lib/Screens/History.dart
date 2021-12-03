@@ -5,7 +5,7 @@ import 'package:homelabz/Models/BookingListResponse.dart';
 import 'package:homelabz/Models/CompletedBookingResponse.dart';
 import 'package:homelabz/Screens/BookingDetails.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';

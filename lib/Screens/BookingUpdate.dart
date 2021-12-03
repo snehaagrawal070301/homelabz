@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homelabz/Models/BookingDetailsModel.dart';
 import 'package:homelabz/Models/DoctorModel.dart';
 import 'package:homelabz/Models/LabResponse.dart';
 import 'package:homelabz/Models/PreSignedUrlResponse.dart';
+import 'package:homelabz/Models/PrescriptionModel.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/PaymentScreen.dart';
 import 'package:homelabz/Screens/address_search.dart';
@@ -19,7 +21,7 @@ import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,10 +35,9 @@ class UploadData {
 }
 
 class BookingUpdate extends StatefulWidget {
-  final String date;
-  final String startTime, endTime;
+  final int bookingId;
 
-  const BookingUpdate(this.date, this.startTime, this.endTime);
+  const BookingUpdate(this.bookingId);
 
   @override
   State<StatefulWidget> createState() {
@@ -45,15 +46,8 @@ class BookingUpdate extends StatefulWidget {
 }
 
 class BookingUpdateState extends State<BookingUpdate> {
-//  final AppointmentScreen obj;
-//  AppointmentScreenState({Key key, @required this.obj}) : super(key: key);
-
   String gender;
-
-  // TextEditingController address = TextEditingController();
   TextEditingController remarks = TextEditingController();
-
-  // TextEditingController dob = TextEditingController();
   PreSignedUrlResponse responseModel;
   List<DocumentPresignedURLModelList> urlList;
   String fileExt;
@@ -70,11 +64,13 @@ class BookingUpdateState extends State<BookingUpdate> {
   LabResponse labName;
   DoctorResponse doctorName;
   SharedPreferences preferences;
-  String searchAddress = "";
-  bool _loadingPath = false;
+  String searchAddress = "Indore, MP";
   bool _multiPick = true;
-  String _fileName;
+  bool _loadingPath = false;
   List<PlatformFile> listOfImages;
+  BookingDetailsModel _model;
+  String widgetDate, widgetStartTime, widgetEndTime;
+  List<PrescriptionModel> prescriptionList = [];
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -83,20 +79,106 @@ class BookingUpdateState extends State<BookingUpdate> {
     UploadData obj = new UploadData(
         new File("assets/images/uploadLogo.png"), "png", "addIcon");
     imageList.add(obj);
-    if (preferences.getString("address") != null) {
-      searchAddress = preferences.getString("address");
-    }
 
-    if (preferences.getString("dob") != null) {
-      convertedDateTime = preferences.getString("dob");
-      selectedDate = new DateFormat("yyyy-MM-dd").parse(convertedDateTime);
-    }
 
-    if (preferences.getString("gender") != null) {
-      gender = preferences.getString("gender");
-    }
+    // if (preferences.getString("address") != null) {
+    //   searchAddress = preferences.getString("address");
+    // }
+    //
+    // if (preferences.getString("dob") != null) {
+    //   convertedDateTime = preferences.getString("dob");
+    //   selectedDate = new DateFormat("yyyy-MM-dd").parse(convertedDateTime);
+    // }
+    //
+    // if (preferences.getString("gender") != null) {
+    //   gender = preferences.getString("gender");
+    // }
 
     setState(() {});
+  }
+
+  callBookingDetailsApi() async {
+    ProgressDialog dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+
+    try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
+      var url = Uri.parse(ApiConstants.GET_BOOKING_DETAILS + widget.bookingId.toString());
+      print(url);
+      print(preferences.getString(Constants.ACCESS_TOKEN));
+      Map<String, String> headers = {
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+      };
+      // make GET request
+      var response = await _ioClient.get(url, headers: headers,);
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+
+      if (response.statusCode == 200) {
+        _model = BookingDetailsModel.fromJson(json.decode(body));
+        setState(() {
+          if(_model.bookingStatus!=null){
+            selectedLabId = _model.lab.id;
+            selectedDoctorId = _model.doctor.id;
+            searchAddress = _model.address;
+            convertedDateTime = _model.dob;
+            gender = _model.gender.toUpperCase();
+            // remarks = new TextEditingController(_model.);
+
+          }
+        });
+        getDocUrl();
+      }
+      await dialog.hide();
+    } catch (ex) {
+      await dialog.hide();
+    }
+  }
+
+  getDocUrl() async {
+    try {
+      String booking = widget.bookingId.toString();
+      Map<String, String> headers = {
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH:
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+      };
+
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
+      var uri = Uri.parse(ApiConstants.DOWNLOAD_ALL_DOCS+booking);
+
+      // make GET request with query params
+      final response = await _ioClient.get(uri, headers: headers);
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+      var data = json.decode(body);
+      List list = data;
+
+      if (response.statusCode == 200) {
+        for (int i = 0; i < list.length; i++) {
+          PrescriptionModel model = PrescriptionModel.fromJson(data[i]);
+          if(model.category.compareTo(Constants.CAT_PRESCRIPTION)==0) {
+            prescriptionList.add(model);
+          }
+
+          setState(() {});
+        }
+
+      }
+    } catch (ex) {
+
+    }
   }
 
   @override
@@ -135,7 +217,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       setState(() {
         selectedDate = pickedDate;
         convertedDateTime =
-            "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+        "${pickedDate.year.toString()}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
       });
     }
   }
@@ -157,7 +239,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
         Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make POST request
       var response = await _ioClient.get(url, headers: headers,);
@@ -176,10 +258,15 @@ class BookingUpdateState extends State<BookingUpdate> {
           if (model.name != null && model.name.length > 0) _doctor.add(model);
         }
 
+        // for (int i = 0; i < list.length; i++) {
+        //   DoctorResponse model = DoctorResponse.fromJson(data[i]);
+        //   if(model.name!=null && model.name.length>0)
+        //   _doctor.add(model);
+        // }
         setState(() {});
       }else{
-        var data = json.decode(body);
-        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+        // var data = json.decode(body);
+        // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
@@ -187,7 +274,7 @@ class BookingUpdateState extends State<BookingUpdate> {
   }
 
   void callAllLabsApi() async {
-    print(widget.date);
+    print(widgetDate);
     try {
       HttpClient _client = HttpClient(context: await MyUtils.globalContext);
       _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
@@ -197,7 +284,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
         Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       // make POST request
       var response = await _ioClient.get(url, headers: headers,);
@@ -214,11 +301,11 @@ class BookingUpdateState extends State<BookingUpdate> {
           LabResponse model = LabResponse.fromJson(obj);
           _labs.add(model);
         }
-        setState(() {});
       }else{
         // var data = json.decode(body);
         // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
+      setState(() {});
     } catch (ex) {
       print("ERROR+++++++++++++  ${ex}");
     }
@@ -235,27 +322,32 @@ class BookingUpdateState extends State<BookingUpdate> {
               // showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
               String remarkVal = remarks.text;
               if (remarkVal != null && remarkVal.length > 0) {
-                if (widget.date == null) {
+                if (widgetDate == null) {
                   // callBookAppointmentApi();
                   callBookAppointmentApiByDate(true);
                 } else {
                   callBookAppointmentApiByDate(false);
                 }
               } else {
-                showToast(Constants.REMARKS_VALIDATION);
+                MyUtils.showCustomToast(Constants.REMARKS_VALIDATION, true, context);
+                // showToast(Constants.REMARKS_VALIDATION);
               }
             }
           } else {
-            showToast(Constants.GENDER_VALIDATION);
+            MyUtils.showCustomToast(Constants.GENDER_VALIDATION, true, context);
+            // showToast(Constants.GENDER_VALIDATION);
           }
         } else {
-          showToast(Constants.DOB_VALIDATION);
+          MyUtils.showCustomToast(Constants.DOB_VALIDATION, true, context);
+          // showToast(Constants.DOB_VALIDATION);
         }
       } else {
-        showToast(Constants.ADDRESS_VALIDATION);
+        MyUtils.showCustomToast(Constants.ADDRESS_VALIDATION, true, context);
+        // showToast(Constants.ADDRESS_VALIDATION);
       }
     } else {
-      showToast(Constants.LAB_VALIDATION);
+      MyUtils.showCustomToast(Constants.LAB_VALIDATION, true, context);
+      // showToast(Constants.LAB_VALIDATION);
     }
   }
 
@@ -304,56 +396,6 @@ class BookingUpdateState extends State<BookingUpdate> {
       },
     );
   }
-
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-    );
-  }
-
-  // void showImage(context) {
-  //   showDialog(context: context, builder: (context){
-  //     return Dialog(
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.0)),
-  //       child: Container(
-  //         height: 250,
-  //         width: 250,
-  //         child: Padding(
-  //           padding: EdgeInsets.all(5.0),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.end,
-  //                 children: [
-  //                   GestureDetector(
-  //                     onTap: () {
-  //                       Navigator.pop(context);
-  //                     },
-  //                     child: Icon(
-  //                         Icons.cancel
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //               Image.file(
-  //               imageToDisplay,
-  //               width: 250,
-  //               height: 200,
-  //               fit: BoxFit.fill,
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //   }
-  //   );
-  // }
 
   void showImage(context, pos) {
     showDialog(
@@ -420,15 +462,7 @@ class BookingUpdateState extends State<BookingUpdate> {
 
   _imgFromCamera() async {
     PickedFile pickedFile =
-        await ImagePicker.platform.pickImage(source: ImageSource.camera);
-    File imageFile = File(pickedFile.path);
-    imageToDisplay = imageFile;
-    setData(imageFile);
-  }
-
-  _imgFromGallery() async {
-    PickedFile pickedFile =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    await ImagePicker.platform.pickImage(source: ImageSource.camera);
     File imageFile = File(pickedFile.path);
     imageToDisplay = imageFile;
     setData(imageFile);
@@ -438,9 +472,9 @@ class BookingUpdateState extends State<BookingUpdate> {
     setState(() => _loadingPath = true);
     try {
       listOfImages = (await FilePicker.platform.pickFiles(
-              allowMultiple: _multiPick,
-              type: FileType.custom,
-              allowedExtensions: ['jpg', 'pdf', 'doc', 'docx', 'png', 'jpeg']))
+          allowMultiple: _multiPick,
+          type: FileType.custom,
+          allowedExtensions: ['jpg', 'pdf', 'doc', 'docx', 'png', 'jpeg']))
           ?.files;
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
@@ -490,7 +524,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
         Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
 
       List list = [];
@@ -508,7 +542,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       print(mapBody);
       // make POST request
       var response =
-          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
+      await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       print(body);
@@ -540,7 +574,7 @@ class BookingUpdateState extends State<BookingUpdate> {
         if (uploadCount == urlList.length) {
           // call Save api here
           uploadCount = 0;
-          if (widget.date == null) {
+          if (widgetDate == null) {
             callBookAppointmentApiByDate(true);
           } else {
             callBookAppointmentApiByDate(false);
@@ -562,7 +596,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
         Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       print(preferences.getString(Constants.ACCESS_TOKEN));
       Map patient = {
@@ -603,9 +637,9 @@ class BookingUpdateState extends State<BookingUpdate> {
         Constants.LAB: lab,
         if (selectedDoctorId != null) Constants.DOCTOR: doctor,
         Constants.ADDRESS: searchAddress,
-        Constants.DATE: widget.date,
-        Constants.TIME_FROM: widget.startTime,
-        Constants.TIME_TO: widget.endTime,
+        Constants.DATE: widgetDate,
+        Constants.TIME_FROM: widgetStartTime,
+        Constants.TIME_TO: widgetEndTime,
         Constants.GENDER: gender,
         Constants.REMARKS: remarks.text,
         Constants.IS_ASAP: isASAP,
@@ -616,7 +650,7 @@ class BookingUpdateState extends State<BookingUpdate> {
       print(mapBody);
       // make POST request
       var response =
-          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
+      await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
 
       String body = response.body;
       var data = json.decode(body);
@@ -639,9 +673,9 @@ class BookingUpdateState extends State<BookingUpdate> {
     // generate a new token here
     final sessionToken = Uuid().v4();
     final Suggestion result =
-        await showSearch(context: context, delegate: AddressSearch(sessionToken)
-            // delegate: AddressSearch(sessionToken),
-            );
+    await showSearch(context: context, delegate: AddressSearch(sessionToken)
+      // delegate: AddressSearch(sessionToken),
+    );
     // This will change the text displayed in the TextField
     if (result != null) {
       final placeDetails = await PlaceApiProvider(sessionToken)
@@ -760,34 +794,34 @@ class BookingUpdateState extends State<BookingUpdate> {
                     ),
                     child: _labs != null
                         ? DropdownButtonHideUnderline(
-                            child: DropdownButton<LabResponse>(
-                              value: labName,
-                              iconSize: 24,
-                              hint: Text(" Preferred Lab"),
-                              dropdownColor: Color(ColorValues.WHITE_COLOR),
-                              iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                              focusColor: Color(ColorValues.WHITE_COLOR),
-                              elevation: 16,
-                              style: TextStyle(
-                                  color: Color(ColorValues.BLACK_TEXT_COL),
-                                  fontSize: 12,
-                                  fontFamily: "Regular"),
-                              onChanged: (LabResponse newValue) {
-                                setState(() {
-                                  selectedLabId = newValue.id;
-                                  print(selectedLabId);
-                                  labName = newValue;
-                                });
-                              },
-                              items: _labs.map<DropdownMenuItem<LabResponse>>(
-                                  (LabResponse value) {
-                                return DropdownMenuItem<LabResponse>(
-                                  value: value,
-                                  child: Text(value.user.name),
-                                );
-                              }).toList(),
-                            ),
-                          )
+                      child: DropdownButton<LabResponse>(
+                        value: labName,
+                        iconSize: 24,
+                        hint: Text(" Preferred Lab"),
+                        dropdownColor: Color(ColorValues.WHITE_COLOR),
+                        iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                        focusColor: Color(ColorValues.WHITE_COLOR),
+                        elevation: 16,
+                        style: TextStyle(
+                            color: Color(ColorValues.BLACK_TEXT_COL),
+                            fontSize: 12,
+                            fontFamily: "Regular"),
+                        onChanged: (LabResponse newValue) {
+                          setState(() {
+                            selectedLabId = newValue.id;
+                            print(selectedLabId);
+                            labName = newValue;
+                          });
+                        },
+                        items: _labs.map<DropdownMenuItem<LabResponse>>(
+                                (LabResponse value) {
+                              return DropdownMenuItem<LabResponse>(
+                                value: value,
+                                child: Text(value.user.name),
+                              );
+                            }).toList(),
+                      ),
+                    )
                         : Container(),
                   ),
                   Container(
@@ -803,35 +837,35 @@ class BookingUpdateState extends State<BookingUpdate> {
                     ),
                     child: _doctor != null
                         ? DropdownButtonHideUnderline(
-                            child: DropdownButton<DoctorResponse>(
-                              value: doctorName,
-                              iconSize: 24,
-                              hint: Text("Doctor"),
-                              dropdownColor: Color(ColorValues.WHITE_COLOR),
-                              iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                              focusColor: Color(ColorValues.WHITE_COLOR),
-                              elevation: 16,
-                              style: TextStyle(
-                                  color: Color(ColorValues.BLACK_TEXT_COL),
-                                  fontSize: 12,
-                                  fontFamily: "Regular"),
-                              onChanged: (DoctorResponse newValue) {
-                                setState(() {
-                                  selectedDoctorId = newValue.id;
-                                  print(selectedDoctorId);
-                                  doctorName = newValue;
-                                });
-                              },
-                              items: _doctor
-                                  .map<DropdownMenuItem<DoctorResponse>>(
-                                      (DoctorResponse value) {
-                                return DropdownMenuItem<DoctorResponse>(
-                                  value: value,
-                                  child: Text(value.name),
-                                );
-                              }).toList(),
-                            ),
-                          )
+                      child: DropdownButton<DoctorResponse>(
+                        value: doctorName,
+                        iconSize: 24,
+                        hint: Text("Doctor"),
+                        dropdownColor: Color(ColorValues.WHITE_COLOR),
+                        iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                        focusColor: Color(ColorValues.WHITE_COLOR),
+                        elevation: 16,
+                        style: TextStyle(
+                            color: Color(ColorValues.BLACK_TEXT_COL),
+                            fontSize: 12,
+                            fontFamily: "Regular"),
+                        onChanged: (DoctorResponse newValue) {
+                          setState(() {
+                            selectedDoctorId = newValue.id;
+                            print(selectedDoctorId);
+                            doctorName = newValue;
+                          });
+                        },
+                        items: _doctor
+                            .map<DropdownMenuItem<DoctorResponse>>(
+                                (DoctorResponse value) {
+                              return DropdownMenuItem<DoctorResponse>(
+                                value: value,
+                                child: Text(value.name),
+                              );
+                            }).toList(),
+                      ),
+                    )
                         : Container(),
                   ),
                   GestureDetector(
@@ -855,25 +889,25 @@ class BookingUpdateState extends State<BookingUpdate> {
                           alignment: Alignment.centerLeft,
                           child: searchAddress == ""
                               ? Text(
-                                  "Select Address",
-                                  style: TextStyle(
-                                    fontFamily: 'customLight',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12.0,
-                                    color: Color(ColorValues.HINT_COL),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
+                            "Select Address",
+                            style: TextStyle(
+                              fontFamily: 'customLight',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12.0,
+                              color: Color(ColorValues.HINT_COL),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )
                               : Text(
-                                  searchAddress,
-                                  style: TextStyle(
-                                      color: Color(ColorValues.BLACK_COL),
-                                      fontSize: 13.0,
-                                      fontFamily: "Regular"),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                            searchAddress,
+                            style: TextStyle(
+                                color: Color(ColorValues.BLACK_COL),
+                                fontSize: 13.0,
+                                fontFamily: "Regular"),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),
@@ -895,7 +929,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                       ),
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -958,47 +992,47 @@ class BookingUpdateState extends State<BookingUpdate> {
                                 },
                                 child: gender == "MALE"
                                     ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Male",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 12,
-                                              color: Color(
-                                                  ColorValues.WHITE_COLOR),
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                      )
+                                  decoration: BoxDecoration(
+                                    color: Color(ColorValues.THEME_COLOR),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        topLeft: Radius.circular(10)),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                        "Male",
+                                        style: TextStyle(
+                                            fontFamily: "Regular",
+                                            fontSize: 12,
+                                            color: Color(
+                                                ColorValues.WHITE_COLOR),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      )),
+                                )
                                     : Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Male",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 12,
-                                              color: Color(
-                                                  ColorValues.THEME_TEXT_COLOR),
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                      ))),
+                                  decoration: BoxDecoration(
+                                    color: Color(ColorValues.LIGHT_GRAY),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        topLeft: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Color(
+                                            ColorValues.BLACK_COLOR),
+                                        width: 1),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                        "Male",
+                                        style: TextStyle(
+                                            fontFamily: "Regular",
+                                            fontSize: 12,
+                                            color: Color(
+                                                ColorValues.THEME_TEXT_COLOR),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      )),
+                                ))),
                         Expanded(
                             flex: 1,
                             child: GestureDetector(
@@ -1009,46 +1043,46 @@ class BookingUpdateState extends State<BookingUpdate> {
                                 },
                                 child: gender == "FEMALE"
                                     ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            "Female",
-                                            style: TextStyle(
-                                                fontFamily: "Regular",
-                                                fontSize: 12,
-                                                color: Color(ColorValues.WHITE),
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ))
+                                    decoration: BoxDecoration(
+                                      color: Color(ColorValues.THEME_COLOR),
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Female",
+                                        style: TextStyle(
+                                            fontFamily: "Regular",
+                                            fontSize: 12,
+                                            color: Color(ColorValues.WHITE),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ))
                                     : Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Female",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 12,
-                                              color: Color(
-                                                  ColorValues.THEME_COLOR),
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                      ))),
+                                  decoration: BoxDecoration(
+                                    color: Color(ColorValues.LIGHT_GRAY),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(10),
+                                        topRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Color(
+                                            ColorValues.BLACK_COLOR),
+                                        width: 1),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                        "Female",
+                                        style: TextStyle(
+                                            fontFamily: "Regular",
+                                            fontSize: 12,
+                                            color: Color(
+                                                ColorValues.THEME_COLOR),
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      )),
+                                ))),
                       ],
                     ),
                   ),
@@ -1215,7 +1249,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                             Container(
                                 margin: EdgeInsets.only(top:10.0),
                                 child: imageList.length==1?
-                                   Container(
+                                Container(
                                   margin: EdgeInsets.fromLTRB(15,5,15,15),
                                   child: Center(
                                     child: GestureDetector(
@@ -1235,15 +1269,15 @@ class BookingUpdateState extends State<BookingUpdate> {
                                     ),
                                   ),
                                 )
-                                :GridView.builder(
+                                    :GridView.builder(
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                       // crossAxisSpacing: 5.0,
                                       // mainAxisSpacing: 5.0,
                                       childAspectRatio: (MediaQuery.of(context)
-                                              .size
-                                              .width) /
+                                          .size
+                                          .width) /
                                           (MediaQuery.of(context).size.height /
                                               3),
                                     ),
@@ -1254,49 +1288,49 @@ class BookingUpdateState extends State<BookingUpdate> {
                                     itemBuilder: (BuildContext ctx, pos) {
                                       return Container(
                                           child: Stack(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                top: 10, left: 10),
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                if (pos == 0)
-                                                  _showPicker(context);
-                                                else
-                                                  showImage(context, pos);
-                                              },
-                                              child: Image(
-                                                image: pos == 0
-                                                    ? AssetImage(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    top: 10, left: 10),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    if (pos == 0)
+                                                      _showPicker(context);
+                                                    else
+                                                      showImage(context, pos);
+                                                  },
+                                                  child: Image(
+                                                    image: pos == 0
+                                                        ? AssetImage(
                                                         "assets/images/uploadLogo.png")
-                                                    : AssetImage(
+                                                        : AssetImage(
                                                         "assets/images/ic_sample.png"),
-                                                height: 50,
-                                                width: 50,
-                                                // alignment: Alignment.centerLeft,
+                                                    height: 50,
+                                                    width: 50,
+                                                    // alignment: Alignment.centerLeft,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                              // right: 0,
-                                              left: 48,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showAlertDialog(context, pos);
-                                                },
-                                                child: pos != 0
-                                                    ? Image(
-                                                        image: AssetImage(
-                                                            "assets/images/close_red.png"),
-                                                        height: 18,
-                                                        width: 18,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Container(),
-                                              ))
-                                        ],
-                                      ));
+                                              Positioned(
+                                                // right: 0,
+                                                  left: 48,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      showAlertDialog(context, pos);
+                                                    },
+                                                    child: pos != 0
+                                                        ? Image(
+                                                      image: AssetImage(
+                                                          "assets/images/close_red.png"),
+                                                      height: 18,
+                                                      width: 18,
+                                                      alignment:
+                                                      Alignment.center,
+                                                    )
+                                                        : Container(),
+                                                  ))
+                                            ],
+                                          ));
                                     })),
                           ])),
 ////////////////////////////////////////////////////////////
@@ -1336,7 +1370,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                         maxLines: 3,
                         decoration: InputDecoration(
                             border:
-                                OutlineInputBorder(borderSide: BorderSide.none),
+                            OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: "Remarks!",
                             hintStyle: TextStyle(
                                 color: Color(ColorValues.BLACK_TEXT_COL),
@@ -1358,7 +1392,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                     },
                     child: Container(
                       margin:
-                          EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                      EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       height: 38,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(

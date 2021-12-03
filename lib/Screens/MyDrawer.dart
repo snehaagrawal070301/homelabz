@@ -6,8 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/ErrorModel.dart';
 import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/HomeScreen.dart';
+import 'package:homelabz/Screens/SettingsScreen.dart';
+import 'package:homelabz/Screens/Vault.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
@@ -62,7 +64,10 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   )),
               ListTile(
-                onTap: () => callSettingsScreen(),
+                onTap: () => Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => Vault())),
                 leading: ImageIcon(
                   AssetImage('assets/images/vault.png'),
                   color: Color(ColorValues.THEME_TEXT_COLOR),
@@ -153,10 +158,10 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   callSettingsScreen() {
-//     Navigator.push(
-//         context,
-//         new MaterialPageRoute(
-//             builder: (BuildContext context) => SettingsScreen()));
+    // Navigator.push(
+    //     context,
+    //     new MaterialPageRoute(
+    //         builder: (BuildContext context) => SettingsScreen()));
   }
 
   callLogout() async {
@@ -199,6 +204,20 @@ class _MyDrawerState extends State<MyDrawer> {
               (Route route) => false,
         );
 
+      } else if(response.statusCode == 401){
+        preferences.setString(Constants.LOGIN_STATUS,"false");
+
+        Navigator.of(context).pushAndRemoveUntil(
+          // the new route
+          MaterialPageRoute(
+            builder: (BuildContext context) => HomeScreen(),
+          ),
+
+          // this function should return true when we're done removing routes
+          // but because we want to remove all other screens, we make it
+          // always return false
+              (Route route) => false,
+        );
       } else {
         var data = json.decode(body);
         MyUtils.showCustomToast(data['mobileMessage'], true, context);

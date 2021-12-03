@@ -10,7 +10,7 @@ import 'package:homelabz/Models/UserDetails.dart';
 import 'package:homelabz/Screens/address_search.dart';
 import 'package:homelabz/Services/place_service.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -423,7 +423,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> validateData() async {
     if (_name.text.isEmpty) {
-      showToast("Please enter name");
+      // showToast("Please enter name");
+      MyUtils.showCustomToast(ValidationMsgs.NAME_VALIDATION, true, context);
       return;
     }
     FocusScope.of(context).unfocus();

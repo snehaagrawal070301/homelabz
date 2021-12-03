@@ -7,7 +7,8 @@ import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/AsapScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
+import 'package:homelabz/constants/Constants.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'BookingScreen.dart';
@@ -99,7 +100,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height ,
           color: Color(ColorValues.WHITE_COLOR),
           child: Stack(
             children: [
@@ -313,8 +314,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                               ),
                               Container(
                                 margin: EdgeInsets.all(20.0),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.33,
+                                height: MediaQuery.of(context).size.height * 0.35,
                                 child: GridView.builder(
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
@@ -327,6 +327,9 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                                           (MediaQuery.of(context).size.height /
                                               4),
                                     ),
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    scrollDirection: Axis.vertical,
                                     itemCount: slots.length,
                                     itemBuilder: (BuildContext ctx, pos) {
                                       return 1 == validateSlot(convertedDateTime, slots[pos].startTime + ":00")
@@ -506,14 +509,14 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     );
   }
 
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-    );
-  }
+  // void showToast(String message) {
+  //   Fluttertoast.showToast(
+  //     msg: message,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.CENTER,
+  //     timeInSecForIosWeb: 1,
+  //   );
+  // }
 
   void callBookingScreen() {
     if (convertedDateTime == null) {
@@ -525,7 +528,8 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     if (index == -1) {
       // Navigator.push(context, MaterialPageRoute(
       //         builder: (context) => AppointmentScreen(convertedDateTime, null)));
-      showToast("Please choose slot!");
+      MyUtils.showCustomToast(Constants.SLOT_VALIDATION, true, context);
+      // showToast("Please choose slot!");
     } else {
       String startTime = slots[index].startTime + ":00";
       String endTime = slots[index].endTime + ":00";

@@ -5,17 +5,18 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:homelabz/Models/ErrorModel.dart';
+import 'package:homelabz/Models/UserDetails.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/History.dart';
 import 'package:homelabz/Screens/ProfileScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Screens/CallForBooking.dart';
+import 'package:homelabz/Screens/Vault.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
+import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
-import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -49,25 +50,108 @@ class HomeScreenState extends State<HomeScreen> {
   SharedPreferences preferences;
   String mobile;
   FToast fToast;
+  ProgressDialog dialog;
 
   @override
   void initState() {
     super.initState();
     getSharedPreferences();
-    getImagePath();
-    fToast = FToast();
-    fToast.init(context);
 
-    registerNotification();
+    // fToast = FToast();
+    // fToast.init(context);
+    //
+    // registerNotification();
+    //
+    // var initializationSettingsAndroid =
+    // AndroidInitializationSettings('flutter_devs');
+    // var initializationSettingsIOs = IOSInitializationSettings();
+    // var initSetttings = InitializationSettings(
+    //     android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+    // flutterLocalNotificationsPlugin.initialize(initSetttings,
+    //     onSelectNotification: onSelectNotification);
 
-    var initializationSettingsAndroid =
-    AndroidInitializationSettings('flutter_devs');
-    var initializationSettingsIOs = IOSInitializationSettings();
-    var initSetttings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
-    flutterLocalNotificationsPlugin.initialize(initSetttings,
-        onSelectNotification: onSelectNotification);
+  }
 
+  Future<void> checkTokenValidity() async {
+    try {
+      var url = Uri.parse(ApiConstants.GET_USER_DETAILS + preferences.getString(Constants.ID).toString());
+
+      Map<String, String> headers = {
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+      };
+
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
+      // make POST request
+      var response = await _ioClient.get(url, headers: headers,);
+
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+
+      if (response.statusCode == 200) {
+        UserDetails model = UserDetails.fromJson(json.decode(body));
+
+        if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
+          imageName = model.imagePresignedURL;
+          preferences.setString("image", imageName);
+        }
+        setState(() {
+        });
+        registerNotification();
+
+        var initializationSettingsAndroid =
+        AndroidInitializationSettings('flutter_devs');
+        var initializationSettingsIOs = IOSInitializationSettings();
+        var initSetttings = InitializationSettings(
+            android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+        flutterLocalNotificationsPlugin.initialize(initSetttings,
+            onSelectNotification: onSelectNotification);
+
+      }else if(response.statusCode == 401){
+        showAlertForToken(context);
+      }
+    } catch (ex) {
+
+    }
+  }
+
+  showAlertForToken(BuildContext context) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK", style: TextStyle(
+        color: Color(ColorValues.THEME_TEXT_COLOR),
+      ),),
+      onPressed: () {
+        preferences.setString(Constants.LOGIN_STATUS,"false");
+
+        setState(() {
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Session Expired"),
+      content: Text("Your session has been expired. Please login again"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      //onWillPop: () async => false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   void registerNotification() async {
@@ -122,8 +206,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
-    imageName = preferences.getString("image");
-    setState(() {});
+    checkTokenValidity();
   }
 
   Future onSelectNotification(String payload) {
@@ -150,12 +233,8 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: () {
                 if (preferences.getString(Constants.LOGIN_STATUS) == null ||
-                    preferences
-                            .getString(Constants.LOGIN_STATUS)
-                            .compareTo("false") ==
-                        0) {
-                  // showCustomToast("Please login first!", false);
-                  showToast("Please login first!");
+                    preferences.getString(Constants.LOGIN_STATUS).compareTo("false") == 0) {
+                  _bottomSheet(context);
                 } else {
                   Scaffold.of(context).openDrawer();
                 }
@@ -182,38 +261,24 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // imageName!=""
-              //     ? Expanded(
-              //         flex: 2,
-              //         child: GestureDetector(
-              //           onTap: () {
-              //             //call Profile Screen\
-              //             callProfileScreen();
-              //           },
-              //           child: CircleAvatar(
-              //             radius: 20,
-              //             backgroundColor: Colors.white,
-              //             child: ClipOval(
-              //               child: Image.network(
-              //                 imageName,
-              //                 width: 42,
-              //                 height: 42,
-              //                 fit: BoxFit.cover,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       )
-              //     :
               Expanded(
                       flex: 2,
                       child: GestureDetector(
                         onTap: () {
-                          print(imageName);
-                          //call Profile Screen\
                           callProfileScreen();
                         },
-                        child: Image(
+                        child: imageName!=null?CircleAvatar(
+                          radius: 23,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            child: Image.network(
+                              imageName,
+                              height: 44,
+                              width: 44,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ):Image(
                           image: AssetImage('assets/images/profile.png'),
                           height: 44,
                           width: 44,
@@ -331,13 +396,8 @@ class HomeScreenState extends State<HomeScreen> {
                             GestureDetector(
                               onTap: () {
                                 // showToast("clicked");
-                                if (preferences.getString(
-                                            Constants.LOGIN_STATUS) ==
-                                        null ||
-                                    preferences
-                                            .getString(Constants.LOGIN_STATUS)
-                                            .compareTo("false") ==
-                                        0) {
+                                if (preferences.getString(Constants.LOGIN_STATUS) == null ||
+                                    preferences.getString(Constants.LOGIN_STATUS).compareTo("false") == 0) {
                                   print(preferences
                                       .getString(Constants.LOGIN_STATUS));
                                   _bottomSheet(context);
@@ -457,7 +517,18 @@ class HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                if (preferences
+                                    .getString(Constants.LOGIN_STATUS) ==
+                                    null) {
+                                  _bottomSheet(context);
+                                } else {
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => History()));
+                                }
+                              },
                               child: Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.17,
@@ -466,37 +537,50 @@ class HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(20.0),
                                   color: Color(ColorValues.THEME_COLOR),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image(
-                                          image: AssetImage(
-                                              'assets/images/vault.png'),
-                                          height: 50,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Vault",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: "Regular",
-                                            color:
-                                                Color(ColorValues.WHITE_COLOR),
-                                            fontSize: 14.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (preferences.getString(Constants.LOGIN_STATUS) == null||
+                                        preferences.getString(Constants.LOGIN_STATUS).compareTo("false") == 0) {
+                                      _bottomSheet(context);
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Vault()));
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                                'assets/images/vault.png'),
+                                            height: 50,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Vault",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: "Regular",
+                                              color:
+                                                  Color(ColorValues.WHITE_COLOR),
+                                              fontSize: 14.0,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -509,12 +593,9 @@ class HomeScreenState extends State<HomeScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (preferences
-                                        .getString(Constants.LOGIN_STATUS) ==
-                                    null) {
-                                  print(preferences
-                                      .getString(Constants.LOGIN_STATUS));
-                                  showToast("no data available");
+                                if (preferences.getString(Constants.LOGIN_STATUS) == null ||
+                                    preferences.getString(Constants.LOGIN_STATUS).compareTo("false") == 0) {
+                                  _bottomSheet(context);
                                 } else {
                                   Navigator.push(
                                       context,
@@ -774,33 +855,15 @@ class HomeScreenState extends State<HomeScreen> {
                         mobile = phone.completeNumber;
                       },
                     ),
-//                      child: TextFormField(
-//                        textAlign: TextAlign.center,
-//                        keyboardType: TextInputType.phone,
-//                        controller: mobile,
-//                        validator: (mobile) {
-//                            return mobile.isEmpty ? ConstantMsg.NAME_VALIDATION : null;
-//                          },
-//                        decoration: InputDecoration(
-//                          hintText: "Enter Mobile Number",
-//                          hintStyle: TextStyle(
-//                            color: Color(0xffBDBDBD),
-//                            fontSize: 12.0,
-//                            fontFamily: "Regular",
-//                          ),
-//                        ),
-//                      )
                   ),
                   GestureDetector(
                     onTap: () {
                       if (mobileController.text.toString() != null &&
                           mobileController.text.toString().length > 0) {
                         // String mobileNumber = mobileController.text.toString();
-                        isnewUser(mobile);
-//                        Navigator.pop(context);
-//                        _bottomSheet2(context);
+                        isNewUser(mobile);
                       } else {
-                        showToast(Constants.MOB_VALIDATION);
+                        MyUtils.showCustomToast(Constants.MOB_VALIDATION, true, context);
                       }
                     },
                     child: Container(
@@ -963,6 +1026,8 @@ class HomeScreenState extends State<HomeScreen> {
         builder: (context) {
           return FittedBox(
             child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               decoration: BoxDecoration(
                   color: Color(ColorValues.WHITE_COLOR),
                   borderRadius: BorderRadius.only(
@@ -1019,7 +1084,8 @@ class HomeScreenState extends State<HomeScreen> {
                           name.text.toString().length > 0) {
                         signIn(mobileNumber);
                       } else {
-                        showToast(Constants.NAME_VALIDATION);
+                        MyUtils.showCustomToast(Constants.NAME_VALIDATION, true, context);
+                        // showToast(Constants.NAME_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1189,7 +1255,8 @@ class HomeScreenState extends State<HomeScreen> {
                       if (otp.text != null && otp.text.length > 0) {
                         callLoginApi(mobileNumber);
                       } else {
-                        showToast(Constants.OTP_VALIDATION);
+                        MyUtils.showCustomToast(Constants.OTP_VALIDATION, true, context);
+                        // showToast(Constants.OTP_VALIDATION);
                       }
                     },
                     child: Container(
@@ -1272,7 +1339,8 @@ class HomeScreenState extends State<HomeScreen> {
         await dialog.hide();
         callUpcomingScreen();
       } else {
-        showToast(data['mobileMessage']);
+        // showToast(data['mobileMessage']);
+        MyUtils.showCustomToast(data['mobileMessage'], true, context);
         await dialog.hide();
       }
     } catch (e) {
@@ -1280,58 +1348,6 @@ class HomeScreenState extends State<HomeScreen> {
       await dialog.hide();
     }
   }
-
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-    );
-  }
-
-  // Custom Toast Position
-  // void showCustomToast(String message, bool isError) {
-  //
-  //   Widget toast = Container(
-  //     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7.0),
-  //     decoration: isError == false
-  //         ? BoxDecoration(
-  //       borderRadius: BorderRadius.circular(15.0),
-  //       color: Colors.green,
-  //     )
-  //         : BoxDecoration(
-  //       borderRadius: BorderRadius.circular(15.0),
-  //       color: Colors.red,
-  //     ),
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.min,
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       children: [
-  //         Icon(
-  //           Icons.check,
-  //           color: Color(ColorValues.WHITE),
-  //         ),
-  //         Padding(
-  //           padding: const EdgeInsets.only(left: 15.0),
-  //           child: Text(
-  //             message,
-  //             style: TextStyle(
-  //                 fontFamily: "Regular",
-  //                 fontSize: 14,
-  //                 color: Color(ColorValues.WHITE)),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  //
-  //   fToast.showToast(
-  //     child: toast,
-  //     gravity: ToastGravity.TOP,
-  //     toastDuration: Duration(seconds: 2),
-  //   );
-  // }
 
   void callUpcomingScreen() {
     Navigator.push(
@@ -1341,7 +1357,11 @@ class HomeScreenState extends State<HomeScreen> {
     ;
   }
 
-  void isnewUser(String mobileNumber) async {
+  void isNewUser(String mobileNumber) async {
+    dialog = new ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+
     try {
       HttpClient _client = HttpClient(context: await MyUtils.globalContext);
       _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
@@ -1363,10 +1383,11 @@ class HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         print(body);
         if (body == "false") {
-          // Navigator.pop(context);
+          Navigator.pop(context);
           // _bottomSheet3(context);
           signIn(mobileNumber);
         } else {
+          await dialog.hide();
           Navigator.pop(context);
           _bottomSheet2(context, mobileNumber);
         }
@@ -1377,6 +1398,12 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void signIn(String mobileNumber) async {
+    if(dialog.isShowing()==false){
+      dialog = new ProgressDialog(context);
+      dialog.style(message: 'Please wait...');
+      await dialog.show();
+    }
+
     try {
       HttpClient _client = HttpClient(context: await MyUtils.globalContext);
       _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
@@ -1410,12 +1437,16 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        showToast("Code has been sent to your mobile number");
+        // showToast("Code has been sent to your mobile number");
+        await dialog.hide();
+        MyUtils.showCustomToast(ValidationMsgs.OTP_SUCCESS, false, context);
         Navigator.pop(context);
         _bottomSheet3(context, mobileNumber);
+
       } else {
         var data = json.decode(body);
         MyUtils.showCustomToast(data['mobileMessage'], true, context);
+        await dialog.hide();
       }
     } catch (e) {
       print("Error+++++" + e.toString());
@@ -1443,8 +1474,8 @@ class HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         print(body);
-        showToast(
-            "The code has been sent to your mobile number. Please check!");
+        // showToast("The code has been sent to your mobile number. Please check!");
+        MyUtils.showCustomToast(ValidationMsgs.OTP_SUCCESS, false, context);
       }else{
         // MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
@@ -1455,30 +1486,16 @@ class HomeScreenState extends State<HomeScreen> {
 
   void callProfileScreen() {
     String val = preferences.getString(Constants.LOGIN_STATUS);
-    if (val != null) {
-      if (val.compareTo("true") == 0) {
+    if (val != null && val.compareTo("true") == 0) {
         Navigator.push(
             context,
             new MaterialPageRoute(
                 builder: (BuildContext context) => ProfileScreen()));
         setState(() {});
-      } else {
-        showToast("Please login first!");
-      }
     } else {
-      showToast("Please login first!");
+      //SHOW login Popup
+      _bottomSheet(context);
     }
   }
 
-  bool getImagePath() {
-    if (preferences != null) {
-      String img = preferences.getString("image");
-      if (img != null && img.length > 0) {
-        imageName = img;
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
 }

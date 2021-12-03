@@ -8,8 +8,9 @@ import 'package:homelabz/Screens/ChooseDateScreen.dart';
 import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
+import 'package:homelabz/constants/ValidationMsgs.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
@@ -28,7 +29,6 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
   List<UpcomingBookingList> _list;
   BookingListResponse _model;
   var isData = true;
-
 
   @override
   void initState() {
@@ -103,6 +103,52 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
     final DateFormat formatter = DateFormat('dd MMM yyyy');
     final String formatted = formatter.format(tempDate);
     return formatted;
+  }
+
+  void onConfirmed() {
+    // Fluttertoast.showToast(
+    //   msg: "clicked!",
+    //   toastLength: Toast.LENGTH_SHORT,
+    //   gravity: ToastGravity.CENTER,
+    //   timeInSecForIosWeb: 1,
+    // );
+  }
+
+  showPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              height: 300,
+              child: Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(Icons.cancel))
+                      ],
+                    ),
+                    Image(
+                        image: AssetImage(
+                            "assets/images/call_appointment.png"))
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -216,7 +262,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                       _list == null ? "" : "Upcoming Appointments",
                       style: TextStyle(
                           color: Color(ColorValues.BLACK_COLOR),
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: "Regular"),
                     )),
               ),
@@ -229,11 +275,8 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: FutureBuilder<List<UpcomingBookingList>>(builder:
-                    (BuildContext context,
-                        AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
-                  // print(snapshot.data);
-                  // if(snapshot.hasData)
+                child: FutureBuilder<List<UpcomingBookingList>>(
+                    builder: (BuildContext context, AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
                   if (_list != null && _list.length > 0) {
                     return RefreshIndicator(
                       onRefresh: callBookingList,
@@ -276,7 +319,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                               height: 22,
                                               width: MediaQuery.of(context)
                                                       .size
-                                                      .width * 0.35,
+                                                      .width * 0.4,
                                               decoration: BoxDecoration(
                                                   color: Color(0xff21C07D),
                                                   borderRadius:
@@ -295,7 +338,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                         : _list[pos].bookingStatus,
                                                     // "Confirmed",
                                                     style: TextStyle(
-                                                        fontSize: 11,
+                                                        fontSize: 13,
                                                         color: Color(
                                                             ColorValues.WHITE_COLOR),
                                                         fontFamily: "Regular"),
@@ -337,15 +380,15 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                             color: Color(ColorValues
                                                                 .THEME_COLOR),
                                                             fontFamily: "Regular",
-                                                            fontSize: 12),
+                                                            fontSize: 14),
                                                       )),
                                                       Row(
                                                         children: [
                                                           Image(
                                                               image: AssetImage(
                                                                   "assets/images/star.png"),
-                                                              height: 8.43,
-                                                              width: 49),
+                                                              height: 9,
+                                                              width: 50),
                                                           SizedBox(
                                                             width: 4,
                                                           ),
@@ -354,7 +397,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                             style: TextStyle(
                                                                 fontFamily:
                                                                     "Regular",
-                                                                fontSize: 8,
+                                                                fontSize: 10,
                                                                 color: Color(ColorValues
                                                                     .LIGHT_TEXT_COLOR)),
                                                           )
@@ -372,7 +415,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 11,
+                                                    fontSize: 12,
                                                     color: Color(
                                                         ColorValues.THEME_COLOR),
                                                     fontFamily: "Regular"),
@@ -386,12 +429,25 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                             child: Image(
                                               image: AssetImage(
                                                   "assets/images/dashedLine.png"),
-                                              width: 269,
+                                              width: 270,
                                               alignment: Alignment.center,
                                             ),
                                           ),
                                         ),
-                                        Container(
+                                        _list[pos].date == null?
+                                            Container(
+                                                margin: EdgeInsets.fromLTRB(30,15,10,20),
+                                              decoration: BoxDecoration(
+                                                  color: Color(ColorValues.GRAY_BG),
+                                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                              ),
+                                                child:Container(
+                                                  margin: EdgeInsets.fromLTRB(30,15,10,20),
+                                                    child: Text(ValidationMsgs.PHLEBOTOMIST_MSG,
+                                                      style:TextStyle(
+                                                          color: Color(ColorValues.BLACK_COL),
+                                                          fontSize: 14,))))
+                                        :Container(
                                           margin: EdgeInsets.only(
                                               top: 20, left: 30, bottom: 20),
                                           child: Row(
@@ -400,8 +456,9 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              _list[pos].isASAP == true
-                                                  ? _list[pos].date == null
+                                              // _list[pos].isASAP == true ?
+
+                                              _list[pos].date == null
                                                       ? Container(
                                                           padding:
                                                               EdgeInsets.all(5),
@@ -471,56 +528,57 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                        )
-                                                  : Container(
-                                                      padding: EdgeInsets.fromLTRB(
-                                                          5, 10, 5, 10),
-                                                      width: 45,
-                                                      // height: 85,
-                                                      color: Color(
-                                                          ColorValues.DATE_BG),
-                                                      child: Center(
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              MyUtils.getDayOfWeek("${_list[pos].date}"),
-                                                              // "TUE",
-                                                              style: TextStyle(
-                                                                  color: Color(
-                                                                      ColorValues
-                                                                          .LIGHT_TEXT_COLOR),
-                                                                  fontSize: 11),
-                                                            ),
-                                                            Text(
-                                                              MyUtils.getDateOfMonth("${_list[pos].date}"),
-                                                              // "25",
-                                                              style: TextStyle(
-                                                                  fontSize: 21,
-                                                                  color: Color(
-                                                                      0xff21CDC0),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            Text(
-                                                              MyUtils.getMonthName("${_list[pos].date}"),
-                                                              // "Feb",
-                                                              style: TextStyle(
-                                                                  color: Color(
-                                                                      ColorValues
-                                                                          .LIGHT_TEXT_COLOR),
-                                                                  fontSize: 11),
-                                                            ),
-                                                          ],
                                                         ),
-                                                      ),
-                                                    ),
+
+                                                  // : Container(
+                                                  //     padding: EdgeInsets.fromLTRB(
+                                                  //         5, 10, 5, 10),
+                                                  //     width: 45,
+                                                  //     // height: 85,
+                                                  //     color: Color(
+                                                  //         ColorValues.DATE_BG),
+                                                  //     child: Center(
+                                                  //       child: Column(
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .center,
+                                                  //         crossAxisAlignment:
+                                                  //             CrossAxisAlignment
+                                                  //                 .center,
+                                                  //         children: [
+                                                  //           Text(
+                                                  //             MyUtils.getDayOfWeek("${_list[pos].date}"),
+                                                  //             // "TUE",
+                                                  //             style: TextStyle(
+                                                  //                 color: Color(
+                                                  //                     ColorValues
+                                                  //                         .LIGHT_TEXT_COLOR),
+                                                  //                 fontSize: 12),
+                                                  //           ),
+                                                  //           Text(
+                                                  //             MyUtils.getDateOfMonth("${_list[pos].date}"),
+                                                  //             // "25",
+                                                  //             style: TextStyle(
+                                                  //                 fontSize: 22,
+                                                  //                 color: Color(
+                                                  //                     0xff21CDC0),
+                                                  //                 fontWeight:
+                                                  //                     FontWeight
+                                                  //                         .bold),
+                                                  //           ),
+                                                  //           Text(
+                                                  //             MyUtils.getMonthName("${_list[pos].date}"),
+                                                  //             // "Feb",
+                                                  //             style: TextStyle(
+                                                  //                 color: Color(
+                                                  //                     ColorValues
+                                                  //                         .LIGHT_TEXT_COLOR),
+                                                  //                 fontSize: 12),
+                                                  //           ),
+                                                  //         ],
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
                                               Container(
                                                   margin: EdgeInsets.symmetric(
                                                       vertical: 0, horizontal: 7),
@@ -528,7 +586,23 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                   child: VerticalDivider(
                                                       color:
                                                           Color(ColorValues.GREY))),
-                                              Column(
+
+                                              _list[pos].phlebotomist == null
+                                                  ? Expanded(
+                                                    child: Container(
+                                                    margin: EdgeInsets.fromLTRB(2,5,15,10),
+                                                    decoration: BoxDecoration(
+                                                        color: Color(ColorValues.GRAY_BG),
+                                                        borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                                    ),
+                                                    child:Container(
+                                                        margin: EdgeInsets.fromLTRB(15,15,10,20),
+                                                        child: Text(ValidationMsgs.PHLEBOTOMIST_MSG,
+                                                            style:TextStyle(
+                                                              color: Color(ColorValues.BLACK_COL),
+                                                              fontSize: 14,)))),
+                                                  )
+                                                  : Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   crossAxisAlignment:
@@ -551,7 +625,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                           color: Color(ColorValues
                                                               .BLACK_TEXT_COL),
                                                           fontFamily: "Regular",
-                                                          fontSize: 12),
+                                                          fontSize: 13),
                                                     ),
                                                     Container(
                                                       margin: EdgeInsets.only(
@@ -561,8 +635,8 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                           Image(
                                                               image: AssetImage(
                                                                   "assets/images/clock.png"),
-                                                              height: 16.35,
-                                                              width: 16.34),
+                                                              height: 17,
+                                                              width: 17),
                                                           SizedBox(
                                                             width: 7,
                                                           ),
@@ -588,12 +662,14 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                                       style: TextStyle(
                                                           color: Color(0xff21CDC0),
                                                           fontFamily: "Regular",
-                                                          fontSize: 10),
+                                                          fontSize: 12),
                                                     ),
                                                   ]),
+
                                             ],
                                           ),
-                                        )
+                                        ),
+
                                       ],
                                     ),
                                   ),
@@ -601,24 +677,23 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                               }),
                         );
                   } else {
-                    return isData
-                        ? new Container()
-                        : new Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Image(
-                              image: AssetImage("assets/images/NoAppointment.jpg",),
-                            ),
-                          ),
-                          Text("No Appointment available!"),
-                        ],
-                      ),
-                      // child: new Container(
-                      //   padding: EdgeInsets.all(40.0),
-                      //   child: Text("No data available"),
-                      // ),
+                    return Center(
+                      child:  isData? new Container(
+                        child: Center(
+                          child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Image(
+                                    height: 250,
+                                    width: 200,
+                                    image: AssetImage("assets/images/Nodatafound.jpg"),
+                                  ),
+                                ),
+                                Text("No data available!"),
+                              ]),
+                        ),
+                      ): new Container(),
                     );
                   }
                 }),
@@ -638,57 +713,4 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
     );
   }
 
-  void onConfirmed() {
-    Fluttertoast.showToast(
-      msg: "clicked!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-    );
-  }
-
-  showPopup(BuildContext context) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
-                    height: 300,
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Icon(Icons.cancel))
-                            ],
-                          ),
-                          Image(
-                              image: AssetImage(
-                                  "assets/images/call_appointment.png"))
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              });
-  }
-
-//  Future<bool> _onBackPressed() {
-//    return showDialog(context: context,
-//        builder: (context){
-//
-//        }
-//    );
-//  }
 }

@@ -9,7 +9,7 @@ import 'package:homelabz/Screens/PaymentSuccess.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/Services/payment-service.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
 import 'package:http/http.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:homelabz/Models/BookingDetailsModel.dart';
 import 'package:homelabz/Models/PrescriptionModel.dart';
 import 'package:homelabz/components/MyUtils.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/Values.dart';
 import 'package:homelabz/constants/apiConstants.dart';
@@ -103,21 +103,13 @@ class _BookingDetailsState extends State<BookingDetails> {
       List list = data;
 
       if (response.statusCode == 200) {
-        // prescriptionList = [];
-        // sampleList = [];
-
         for (int i = 0; i < list.length; i++) {
           PrescriptionModel model = PrescriptionModel.fromJson(data[i]);
           if(model.category.compareTo(Constants.CAT_PRESCRIPTION)==0) {
             prescriptionList.add(model);
           }
-          // else if(model.category.compareTo(ConstantMsg.CAT_SAMPLE)==0) {
-          //   sampleList.add(model);
-          // }
 
-          setState(() {
-
-          });
+          setState(() {});
         }
 
       }

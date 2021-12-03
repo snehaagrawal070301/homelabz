@@ -18,13 +18,16 @@ class ValidationMsgs{
   static final String CODE_VALIDATION = "Please Enter Code";
   static final String MOBILE_VALIDATION = "Please Enter Mobile Number";
   static final String EDIT_PROFILE_VALIDATION = "Please Update Something";
+  static final String PHLEBOTOMIST_MSG = "Our team working on assigning a phlebotomist quickly.";
+
 
 
   ///////////////// SUCCESS messages////////////////////////////
 
   static final String PROFILE_UPDATE_SUCCESS = "Profile Updated Successfully";
-  static final String OTP_SUCCESS = "Code has been sent on mobile number. Please check";
-
+  static final String OTP_SUCCESS = "Code has been sent to mobile number. Please check!";
+  static final String VAULT_DOC_SUCCESS = "Document(s) Uploaded Successfully";
+  static final String DELETE_FILE_SUCCESS = "Document Deleted Successfully";
 
   ///////////////// Toast messages////////////////////////////
 

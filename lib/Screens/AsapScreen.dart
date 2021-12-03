@@ -4,7 +4,7 @@ import 'package:homelabz/Screens/ChooseDateScreen.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/BookingScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
-import 'package:homelabz/components/colorValues.dart';
+import 'package:homelabz/components/ColorValues.dart';
 
 class AsapScreen extends StatefulWidget{
   @override
@@ -124,18 +124,28 @@ class AsapScreenState extends State<AsapScreen>{
                             children: [
                               Container(
                                 margin: EdgeInsets.only(left: 21),
-                                child: Image(image: AssetImage("assets/images/bookingImage.png"),height: 23,width: 23,),
+                                child: Image(image: AssetImage("assets/images/bookingImage.png"),height: 30,width: 30,),
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 17),
-                                child: Text("Lorem Ipsum is simply",style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontFamily: "Poppins",fontSize: 14),))
+                                child: Expanded(
+                                  child: Text("Book first available slot",
+                                      // "of our \nphlebotomists",
+                                    // "Lorem Ipsum is simply",
+                                    // overflow: TextOverflow.clip,
+                                    // textDirection: TextDirection.rtl,
+                                    // textAlign: TextAlign.justify,
+                                    style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontFamily: "Poppins",fontSize: 14),),
+                                ))
                             ],
                           ),
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(21, 19, 21, 20),
-                        child: Text("Get your labs done within 24hours by paying extra \n\$10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
-                        ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(21, 19, 21, 20),
+                          child: Text("Get your labs done within 24hours by paying extra \n\$10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
+                          ),
+                      ),
                     ],
                   ),
                 ),

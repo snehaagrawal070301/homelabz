@@ -1,10 +1,10 @@
 class ApiConstants{
 
   //dev
-  // static final String BaseURL = "http://43.231.127.173:3000/homelabz/api/v1/";
+  static final String BaseURL = "http://43.231.127.173:3000/homelabz/api/v1/";
+
   //prod
-  // static final String BaseURL = "http://3.142.38.4:3000/homelabz/api/v1/";
-  static final String BaseURL = "https://homelabz.com/homelabz/api/v1/";
+  // static final String BaseURL = "https://homelabz.com/homelabz/api/v1/";
 
   static final String LOGIN_API = BaseURL+"user/login";
   static final String VERIFY_OTP_API = BaseURL+"user/verifyOTP";
@@ -27,4 +27,19 @@ class ApiConstants{
   static final String GET_BOOKING_DETAILS = BaseURL+"booking/findById/";//{id}
   static final String GET_NOTIFICATION_LIST = BaseURL+"notification/findAll?userId=";
   static final String DOWNLOAD_ALL_DOCS = BaseURL+"document/findAll?bookingId=";
+  static final String GET_ALL_FOLDERS = BaseURL+"vault/findAll?userId=";
+  static final String DELETE_VAULT_FOLDER = BaseURL+"vault/delete";// id
+  static final String CREATE_VAULT_FOLDER = BaseURL+"vault/create";//
+//{"documentList":[{"category":"VAULT","name":"app-icon 1024_1638253522175.png",
+// "path":"713/VAULT/app-icon 1024_1638253522175.png",
+// "user":{"id":713}}],"id":null,"name":"Labs","noOfFiles":1,"userId":713}
+
+  static final String UPDATE_VAULT_FOLDERS = BaseURL+"vault/update";//
+//{"documentList":[{"category":"VAULT","name":"app-icon 1024_1638253522175.png",
+// "path":"713/VAULT/app-icon 1024_1638253522175.png",
+// "user":{"id":713}}],"id":65,"name":"Labs","noOfFiles":1,"userId":713}
+
+  static final String FIND_BY_VAULT_ID = BaseURL+"vault/findAllByVaultId?vaultId=";
+  static final String DELETE_FILE = BaseURL+"vault/deleteFile";
+
 }
