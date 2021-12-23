@@ -267,7 +267,7 @@ class HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           callProfileScreen();
                         },
-                        child: imageName!=null?CircleAvatar(
+                        child: imageName!=""?CircleAvatar(
                           radius: 23,
                           backgroundColor: Colors.white,
                           child: ClipOval(

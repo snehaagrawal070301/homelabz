@@ -717,12 +717,12 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                               )),
                         ),
                   Container(
+                    alignment: Alignment.bottomRight,
                     margin: EdgeInsets.all(10.0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           Container(
-                              margin: EdgeInsets.only(top: 10.0),
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
@@ -737,8 +737,7 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                 ),
                               )),
                           Container(
-                            margin: EdgeInsets.only(
-                                left: 20, right: 15, top: 30, bottom: 20),
+                            margin: EdgeInsets.only(left: 20, right: 15, top: 20, bottom: 20),
                             height: 40,
                             width: MediaQuery.of(context).size.width / 4,
                             decoration: imageList.length > 0

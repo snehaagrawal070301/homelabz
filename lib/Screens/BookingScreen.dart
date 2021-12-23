@@ -909,7 +909,7 @@ class BookingScreenState extends State<BookingScreen> {
                             if (convertedDateTime == null)
                               Text("Date of Birth",
                                   style: TextStyle(
-                                      color: Color(ColorValues.BLACK_COL),
+                                      color: Color(ColorValues.BLACK_COL).withOpacity(0.6),
                                       fontSize: 13.0,
                                       fontFamily: "Regular"))
                             else
@@ -929,6 +929,7 @@ class BookingScreenState extends State<BookingScreen> {
                               },
                               child: ImageIcon(
                                 AssetImage('assets/images/calendarImage.png'),
+                                color: Color(ColorValues.BLACK_COL),
                                 size: 20,
                               ),
                             ),
@@ -1353,7 +1354,7 @@ class BookingScreenState extends State<BookingScreen> {
                                 OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: "Remarks!",
                             hintStyle: TextStyle(
-                                color: Color(ColorValues.BLACK_TEXT_COL),
+                                color: Color(ColorValues.BLACK_TEXT_COL).withOpacity(0.6),
                                 fontSize: 12.5,
                                 fontFamily: "Regular")),
                       ),
