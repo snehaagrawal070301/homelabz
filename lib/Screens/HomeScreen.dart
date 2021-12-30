@@ -131,6 +131,7 @@ class HomeScreenState extends State<HomeScreen> {
 
         setState(() {
         });
+        Navigator.pop(context);
       },
     );
 

@@ -486,9 +486,10 @@ class _UploadDocVaultState extends State<UploadDocVault> {
           body: SingleChildScrollView(
             child: Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+             //   crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
                   Center(
                     child: Container(
                         margin: EdgeInsets.only(top: 30.0, bottom: 10),
@@ -716,74 +717,77 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                 ),
                               )),
                         ),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    margin: EdgeInsets.all(10.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Cancel",
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      fontFamily: "Regular",
-                                      fontSize: 16,
-                                      color: Color(ColorValues.BLACK_COL)),
-                                ),
-                              )),
-                          Container(
-                            margin: EdgeInsets.only(left: 20, right: 15, top: 20, bottom: 20),
-                            height: 40,
-                            width: MediaQuery.of(context).size.width / 4,
-                            decoration: imageList.length > 0
-                                ? BoxDecoration(
-                                    color: const Color(
-                                        ColorValues.THEME_TEXT_COLOR),
-                                    borderRadius: BorderRadius.circular(5),
-                                  )
-                                : BoxDecoration(
-                                    color: const Color(ColorValues.GRAY),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                            child: TextButton(
-                              onPressed: () {
-                                // Validate Data
-                                if (index != -1) {
-                                  if (imageList.length > 0) {
-                                    //PreSigned
-                                    getPreSignedUrl();
-                                  } else {
-                                    MyUtils.showCustomToast(
-                                        "Please attach document",
-                                        true,
-                                        context);
-                                  }
-                                } else {
-                                  MyUtils.showCustomToast(
-                                      "Please select any category to upload document",
-                                      true,
-                                      context);
-                                }
-                              },
-                              child: Text(
-                                'Upload',
-                                style: TextStyle(
-                                    color: Color(ColorValues.WHITE),
-                                    fontSize: 16),
-                              ),
-                            ),
-                          ),
-                        ]),
-                  ),
+
+
                 ],
               ),
             ),
           ),
+          bottomNavigationBar:    Container(
+          //  alignment: Alignment.bottomRight,
+            margin: EdgeInsets.all(10.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Cancel",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              fontFamily: "Regular",
+                              fontSize: 16,
+                              color: Color(ColorValues.BLACK_COL)),
+                        ),
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(left: 20, right: 15, top: 20, bottom: 20),
+                    height: 40,
+                    width: MediaQuery.of(context).size.width / 4,
+                    decoration: imageList.length > 0
+                        ? BoxDecoration(
+                      color: const Color(
+                          ColorValues.THEME_TEXT_COLOR),
+                      borderRadius: BorderRadius.circular(5),
+                    )
+                        : BoxDecoration(
+                      color: const Color(ColorValues.GRAY),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        // Validate Data
+                        if (index != -1) {
+                          if (imageList.length > 0) {
+                            //PreSigned
+                            getPreSignedUrl();
+                          } else {
+                            MyUtils.showCustomToast(
+                                "Please attach document",
+                                true,
+                                context);
+                          }
+                        } else {
+                          MyUtils.showCustomToast(
+                              "Please select any category to upload document",
+                              true,
+                              context);
+                        }
+                      },
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(
+                            color: Color(ColorValues.WHITE),
+                            fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ]),
+          ),
+
         ));
   }
 }

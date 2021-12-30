@@ -649,62 +649,115 @@ class _ViewDocVaultState extends State<ViewDocVault> {
                     ],
                   ),),
 
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(top:10.0),
-                            child: GestureDetector(
-                              onTap: (){
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                "Cancel",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontFamily: "Regular",
-                                    fontSize: 16,
-                                    color: Color(ColorValues.BLACK_COL)),
-                              ),
-                            )),
-
-                        Container(
-                          margin: EdgeInsets.only(left: 20, right: 5, top: 30, bottom: 20),
-                          height: 40,
-                          width: MediaQuery.of(context).size.width / 3,
-                          decoration: localFileCounter>0?BoxDecoration(
-                            color: const Color(ColorValues.THEME_TEXT_COLOR),
-                            borderRadius: BorderRadius.circular(5),
-                          ):BoxDecoration(
-                            color: const Color(ColorValues.GRAY),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // Validate Data
-                              if(localFileCounter>0){
-                                getPreSignedUrl();
-                              }else{
-                                MyUtils.showCustomToast("Please attach document", true, context);
-                              }
-                            },
-                            child: Text(
-                              'Save',
-                              style:
-                              TextStyle(color: Color(ColorValues.WHITE), fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ]),
-                ),
+                // Container(
+                //   margin: EdgeInsets.all(10.0),
+                //   child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: <Widget>[
+                //         Container(
+                //             margin: EdgeInsets.only(top:10.0),
+                //             child: GestureDetector(
+                //               onTap: (){
+                //                 Navigator.of(context).pop();
+                //               },
+                //               child: Text(
+                //                 "Cancel",
+                //                 textAlign: TextAlign.end,
+                //                 style: TextStyle(
+                //                     fontFamily: "Regular",
+                //                     fontSize: 16,
+                //                     color: Color(ColorValues.BLACK_COL)),
+                //               ),
+                //             )),
+                //
+                //         Container(
+                //           margin: EdgeInsets.only(left: 20, right: 5, top: 30, bottom: 20),
+                //           height: 40,
+                //           width: MediaQuery.of(context).size.width / 3,
+                //           decoration: localFileCounter>0?BoxDecoration(
+                //             color: const Color(ColorValues.THEME_TEXT_COLOR),
+                //             borderRadius: BorderRadius.circular(5),
+                //           ):BoxDecoration(
+                //             color: const Color(ColorValues.GRAY),
+                //             borderRadius: BorderRadius.circular(5),
+                //           ),
+                //           child: TextButton(
+                //             onPressed: () {
+                //               // Validate Data
+                //               if(localFileCounter>0){
+                //                 getPreSignedUrl();
+                //               }else{
+                //                 MyUtils.showCustomToast("Please attach document", true, context);
+                //               }
+                //             },
+                //             child: Text(
+                //               'Save',
+                //               style:
+                //               TextStyle(color: Color(ColorValues.WHITE), fontSize: 16),
+                //             ),
+                //           ),
+                //         ),
+                //       ]),
+                // ),
 
               ],
             ),
           ),
 
         ),
-    ));
+      bottomNavigationBar:
+      Container(
+        margin: EdgeInsets.all(10.0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(top:10.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Cancel",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          fontFamily: "Regular",
+                          fontSize: 16,
+                          color: Color(ColorValues.BLACK_COL)),
+                    ),
+                  )),
+
+              Container(
+                margin: EdgeInsets.only(left: 20, right: 5, top: 30, bottom: 20),
+                height: 40,
+                width: MediaQuery.of(context).size.width / 3,
+                decoration: localFileCounter>0?BoxDecoration(
+                  color: const Color(ColorValues.THEME_TEXT_COLOR),
+                  borderRadius: BorderRadius.circular(5),
+                ):BoxDecoration(
+                  color: const Color(ColorValues.GRAY),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    // Validate Data
+                    if(localFileCounter>0){
+                      getPreSignedUrl();
+                    }else{
+                      MyUtils.showCustomToast("Please attach document", true, context);
+                    }
+                  },
+                  child: Text(
+                    'Save',
+                    style:
+                    TextStyle(color: Color(ColorValues.WHITE), fontSize: 16),
+                  ),
+                ),
+              ),
+            ]),
+      ),
+    )
+    );
+
   }
 }
