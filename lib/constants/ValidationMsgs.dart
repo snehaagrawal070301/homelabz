@@ -19,7 +19,7 @@ class ValidationMsgs{
   static final String MOBILE_VALIDATION = "Please Enter Mobile Number";
   static final String EDIT_PROFILE_VALIDATION = "Please Update Something";
   static final String PHLEBOTOMIST_MSG = "Our team working on assigning a phlebotomist quickly.";
-
+  static final String PAYMENT_MSG = "Our team working on assigning a phlebotomist quickly. Please complete booking by making payment";
 
 
   ///////////////// SUCCESS messages////////////////////////////

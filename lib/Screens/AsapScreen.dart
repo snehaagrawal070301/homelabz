@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:homelabz/Screens/BookingUpdate.dart';
 import 'package:homelabz/Screens/ChooseDateScreen.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/BookingScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
 import 'package:homelabz/components/ColorValues.dart';
+import 'package:homelabz/components/MyUtils.dart';
 
 class AsapScreen extends StatefulWidget{
+  final bool isEditBooking;
+  final int bookingId;
+
+  const AsapScreen(this.isEditBooking, this.bookingId);
+
   @override
   State<StatefulWidget> createState() {
     return AsapScreenState();
@@ -57,7 +64,7 @@ class AsapScreenState extends State<AsapScreen>{
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChooseDateScreen()));
+                                          ChooseDateScreen(widget.isEditBooking, widget.bookingId)));
                             },
                             child: Container(
                               height: 36,
@@ -128,15 +135,14 @@ class AsapScreenState extends State<AsapScreen>{
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 17),
-                                child: Expanded(
-                                  child: Text("Book first available slot",
+                                child: Text("Book first available slot",
                                       // "of our \nphlebotomists",
                                     // "Lorem Ipsum is simply",
                                     // overflow: TextOverflow.clip,
                                     // textDirection: TextDirection.rtl,
                                     // textAlign: TextAlign.justify,
                                     style: TextStyle(color: Color(ColorValues.WHITE_COLOR),fontFamily: "Poppins",fontSize: 14),),
-                                ))
+                                )
                             ],
                           ),
                       ),
@@ -156,11 +162,19 @@ class AsapScreenState extends State<AsapScreen>{
                 left: 37,
                   child:GestureDetector(
                     onTap: (){
-                       Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        BookingScreen(null,null,null)));
+                      if(widget.isEditBooking){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BookingUpdate(widget.bookingId,null, null, null)));
+                      }else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BookingScreen(null, null, null)));
+                      }
                     },
                       child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),

@@ -42,11 +42,13 @@ class MyUtils{
   }
 
   static String changeTimeFormat(String time){
-    // String to date
-    DateTime tempDate = new DateFormat("HH:mm:ss").parse(time);
-    final DateFormat formatter = DateFormat('hh:mm a');
-    final String formatted = formatter.format(tempDate);
-    return formatted;
+    if(time!=null && time.length>0) {
+      // String to date
+      DateTime tempDate = new DateFormat("HH:mm:ss").parse(time);
+      final DateFormat formatter = DateFormat('hh:mm a');
+      final String formatted = formatter.format(tempDate);
+      return formatted;
+    }
   }
 
   static Future<SecurityContext> get globalContext async {

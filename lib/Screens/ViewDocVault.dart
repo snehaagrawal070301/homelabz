@@ -597,14 +597,31 @@ class _ViewDocVaultState extends State<ViewDocVault> {
                                           }
                                         },
                                         child: Container(
+                                          height: 180,
+                                          width: 120,
                                           // margin: EdgeInsets.only(top: 15),
+                                          // decoration: BoxDecoration(
+                                          //     color: Color(ColorValues
+                                          //         .GRAY_HEADER_PRESSO_VIEW),
+                                          //     border: Border.all(
+                                          //         color:
+                                          //         Color(ColorValues.BLACK_COL)),
+                                          //     borderRadius: BorderRadius.circular(5)),
                                           decoration: BoxDecoration(
-                                              color: Color(ColorValues
-                                                  .GRAY_HEADER_PRESSO_VIEW),
+                                              color: Color(ColorValues.WHITE),
                                               border: Border.all(
-                                                  color:
-                                                  Color(ColorValues.BLACK_COL)),
-                                              borderRadius: BorderRadius.circular(5)),
+                                                  color: Color(
+                                                      ColorValues.BLACK_COL)),
+                                              borderRadius:
+                                              BorderRadius.circular(5)),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 5, top: 10, bottom: 30),
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/vault_folder_logo.png"),
+                                              // alignment: Alignment.centerLeft,
+                                            ),
+                                          ),
                                           // child: GestureDetector(
                                           //   onTap: () async {},
                                           //   child: Padding(
@@ -623,7 +640,7 @@ class _ViewDocVaultState extends State<ViewDocVault> {
                                   Positioned(
                                     // right: 0,
                                       right: 10,
-                                      bottom:10,
+                                      bottom:30,
                                       child: GestureDetector(
                                           onTap: () {
                                             // if(vaultFolderDetailsList[pos].isLocal){

@@ -28,18 +28,12 @@ class ApiConstants{
   static final String GET_NOTIFICATION_LIST = BaseURL+"notification/findAll?userId=";
   static final String DOWNLOAD_ALL_DOCS = BaseURL+"document/findAll?bookingId=";
   static final String GET_ALL_FOLDERS = BaseURL+"vault/findAll?userId=";
-  static final String DELETE_VAULT_FOLDER = BaseURL+"vault/delete";// id
-  static final String CREATE_VAULT_FOLDER = BaseURL+"vault/create";//
-//{"documentList":[{"category":"VAULT","name":"app-icon 1024_1638253522175.png",
-// "path":"713/VAULT/app-icon 1024_1638253522175.png",
-// "user":{"id":713}}],"id":null,"name":"Labs","noOfFiles":1,"userId":713}
-
-  static final String UPDATE_VAULT_FOLDERS = BaseURL+"vault/update";//
-//{"documentList":[{"category":"VAULT","name":"app-icon 1024_1638253522175.png",
-// "path":"713/VAULT/app-icon 1024_1638253522175.png",
-// "user":{"id":713}}],"id":65,"name":"Labs","noOfFiles":1,"userId":713}
-
+  static final String DELETE_VAULT_FOLDER = BaseURL+"vault/delete";
+  static final String CREATE_VAULT_FOLDER = BaseURL+"vault/create";
+  static final String UPDATE_VAULT_FOLDERS = BaseURL+"vault/update";
   static final String FIND_BY_VAULT_ID = BaseURL+"vault/findAllByVaultId?vaultId=";
   static final String DELETE_FILE = BaseURL+"vault/deleteFile";
+  static final String DELETE_SERVER_FILE = BaseURL+"document/delete";
+  static final String BOOKING_UPDATE_API = BaseURL+"booking/updateBookingByPatient";
 
 }

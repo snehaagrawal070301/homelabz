@@ -647,15 +647,20 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                                   // height: 120,
                                                   // width: 120,
                                                   decoration: BoxDecoration(
-                                                      color: Color(ColorValues
-                                                          .GRAY_HEADER_PRESSO_VIEW),
+                                                      color: Color(ColorValues.WHITE),
                                                       border: Border.all(
                                                           color: Color(
-                                                              ColorValues
-                                                                  .BLACK_COL)),
+                                                              ColorValues.BLACK_COL)),
                                                       borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
+                                                      BorderRadius.circular(5)),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: 5, top: 10, bottom: 35),
+                                                    child: Image(
+                                                      image: AssetImage(
+                                                          "assets/images/vault_folder_logo.png"),
+                                                      // alignment: Alignment.centerLeft,
+                                                    ),
+                                                  ),
                                                   // child: GestureDetector(
                                                   //   onTap: () async {},
                                                   //   child: Padding(
@@ -671,18 +676,21 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                           ),
                                           Positioned(
                                               right: 10,
-                                              bottom: 10,
+                                              bottom: 2,
                                               child: GestureDetector(
                                                   onTap: () {
                                                     showAlertDialog(
                                                         context, pos);
                                                   },
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                        "assets/images/delete_btn.png"),
-                                                    height: 18,
-                                                    width: 18,
-                                                    alignment: Alignment.center,
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(top: 5, bottom: 5),
+                                                    child: Image(
+                                                      image: AssetImage(
+                                                          "assets/images/delete_btn.png"),
+                                                      height: 18,
+                                                      width: 18,
+                                                      alignment: Alignment.center,
+                                                    ),
                                                   )))
                                         ],
                                       );

@@ -1,8 +1,8 @@
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:homelabz/Models/TimeSlot.dart';
+import 'package:homelabz/Screens/BookingUpdate.dart';
 import 'package:homelabz/Screens/BookingsListScreen.dart';
 import 'package:homelabz/Screens/AsapScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
@@ -13,7 +13,19 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'BookingScreen.dart';
 
+class CalData {
+  String month, year, weekDay;
+  DateTime day;
+
+  CalData(this.month, this.year, this.weekDay, this.day);
+}
+
 class ChooseDateScreen extends StatefulWidget {
+  final bool isEditBooking;
+  final int bookingId;
+
+  const ChooseDateScreen(this.isEditBooking, this.bookingId);
+
   @override
   State<StatefulWidget> createState() {
     return ChooseDateScreenState();
@@ -33,6 +45,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
   DateTime initialDay;
   DateTime endingDay;
   CalendarFormat _calendarFormat = CalendarFormat.week;
+  List<CalData> calDataList = [];
 
   DateTime findFirstDateOfTheWeek(DateTime dateTime) {
     initialDay = dateTime.subtract(Duration(days: dateTime.weekday - 1));
@@ -51,8 +64,9 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     super.initState();
     _controller = CalendarController();
     fillDataInList();
-    print(findFirstDateOfTheWeek(today));
-    print(findLastDateOfTheWeek(today));
+    // prepareCalData();
+    // print(findFirstDateOfTheWeek(today));
+    // print(findLastDateOfTheWeek(today));
   }
 
   void fillDataInList() {
@@ -71,6 +85,19 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     slots.add(TimeSlot("18:00", "19:00"));
 
     print(slots.length);
+  }
+
+  void prepareCalData() {
+    DateTime today = DateTime.now();
+    print(today.month.toString());
+    print(today.year.toString());
+    print(today.weekday.toString());
+    print(today);
+    for(int i=0; i<=6;i++) {
+      DateTime today = DateTime.now().add(Duration(days:i));
+      calDataList.add(CalData(today.month.toString(), today.year.toString(), today.weekday.toString(), today));
+      print(calDataList.length);
+    }
   }
 
   @override
@@ -140,7 +167,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AsapScreen()));
+                                  builder: (context) => AsapScreen(widget.isEditBooking, widget.bookingId)));
                         },
                         child: Container(
                           height: 36,
@@ -281,6 +308,7 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
                         // },
                       ),
                     ),
+
                     Container(
                         margin: EdgeInsets.only(top: 25),
                         // height: MediaQuery.of(context).size.height * 0.33,
@@ -533,10 +561,19 @@ class ChooseDateScreenState extends State<ChooseDateScreen> {
     } else {
       String startTime = slots[index].startTime + ":00";
       String endTime = slots[index].endTime + ":00";
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BookingScreen(convertedDateTime, startTime,endTime)));
+      if (widget.isEditBooking) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BookingUpdate(widget.bookingId,convertedDateTime, startTime, endTime)));
+      }else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    BookingScreen(convertedDateTime, startTime, endTime)));
+      }
     }
   }
 

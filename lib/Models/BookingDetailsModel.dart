@@ -13,6 +13,7 @@ class BookingDetailsModel {
   String address;
   String bookingStatus;
   double amount;
+  String notes;
   String paymentStatus;
 
   BookingDetailsModel(
@@ -30,6 +31,7 @@ class BookingDetailsModel {
         this.address,
         this.bookingStatus,
         this.amount,
+        this.notes,
         this.paymentStatus});
 
   BookingDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class BookingDetailsModel {
     address = json['address'];
     bookingStatus = json['bookingStatus'];
     amount = json['amount'];
+    notes = json['notes'];
     paymentStatus = json['paymentStatus'];
   }
 
@@ -82,6 +85,7 @@ class BookingDetailsModel {
     data['address'] = this.address;
     data['bookingStatus'] = this.bookingStatus;
     data['amount'] = this.amount;
+    data['notes'] = this.notes;
     data['paymentStatus'] = this.paymentStatus;
     return data;
   }

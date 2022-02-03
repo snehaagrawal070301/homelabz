@@ -7,7 +7,6 @@ import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
-import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -159,29 +158,52 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             elevation: 8,
                             child: Container(
                               margin:
-                              EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
+                              EdgeInsets.fromLTRB(5, 2, 5, 20),
                               child: new Column(
                                 children: [
                                   new Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                    CrossAxisAlignment.center,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.center,
                                     children: <Widget>[
+                                      // new Expanded(
+                                      //   child: new Container(
+                                      //       margin:
+                                      //       const EdgeInsets.fromLTRB(
+                                      //           5.0, 5.0, 5.0, 0.0),
+                                      //       // color: Colors.transparent,
+                                      //       child: ClipRRect(
+                                      //         borderRadius:
+                                      //         BorderRadius.circular(
+                                      //             0.0),
+                                      //         child: Image.asset(
+                                      //           'assets/images/ic_launcher.png',
+                                      //           height: 40.0,
+                                      //           width: 40.0,
+                                      //         ),
+                                      //       )),
+                                      //   flex: 0,
+                                      // ),
                                       new Expanded(
                                         child: new Container(
                                             margin:
                                             const EdgeInsets.fromLTRB(
                                                 5.0, 5.0, 5.0, 0.0),
                                             // color: Colors.transparent,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  0.0),
-                                              child: Image.asset(
-                                                'assets/images/ic_launcher.png',
-                                                height: 40.0,
-                                                width: 40.0,
+                                            child: CircleAvatar(
+                                              radius: 22,
+                                              backgroundColor: Color(ColorValues.THEME_TEXT_COLOR),
+                                              child: ClipOval(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(5.0),
+                                                  child: Image.asset(
+                                                    'assets/images/logo.png',
+                                                    height: 40.0,
+                                                    width: 40.0,
+                                                    color: Color(ColorValues.WHITE),
+                                                  ),
+                                                ),
                                               ),
                                             )),
                                         flex: 0,

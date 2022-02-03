@@ -477,10 +477,10 @@ class BookingScreenState extends State<BookingScreen> {
         fileExt;
 
     UploadData model = new UploadData(imageFile, fileExt, imageName);
-    imageList.add(model);
+     imageList.add(model);
 
     setState(() {
-      // imageFile = imageFile;
+      imageList = imageList.reversed.toList();
     });
   }
 
@@ -678,176 +678,87 @@ class BookingScreenState extends State<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(ColorValues.WHITE_COLOR),
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
         backgroundColor: Color(ColorValues.WHITE_COLOR),
-        leading: IconButton(
-          icon: ImageIcon(
-            AssetImage('assets/images/back_arrow.png'),
-            color: Color(ColorValues.THEME_COLOR),
-            size: 20,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          "Appointment",
-          style: TextStyle(
-              fontFamily: "Regular",
-              fontSize: 18,
-              color: Color(ColorValues.THEME_COLOR)),
-        ),
-      ),
-      body: Container(
-        color: Color(ColorValues.WHITE_COLOR),
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            color: Color(ColorValues.THEME_COLOR),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 32),
-                    child: Text(
-                      "Patient Details",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          fontFamily: "Regular",
-                          color: Color(ColorValues.WHITE_COLOR)),
-                    )),
-                Container(
-                    margin: EdgeInsets.only(top: 15),
-                    child: Image(
-                      height: 60,
-                      width: 100,
-                      image: AssetImage("assets/images/appointmentUndraw.png"),
-                    )),
-              ],
+        appBar: AppBar(
+          backgroundColor: Color(ColorValues.WHITE_COLOR),
+          leading: IconButton(
+            icon: ImageIcon(
+              AssetImage('assets/images/back_arrow.png'),
+              color: Color(ColorValues.THEME_COLOR),
+              size: 20,
             ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          Positioned(
-            left: 15,
-            right: 15,
-            top: 98,
-            bottom: 10,
-            child: Container(
+          title: Text(
+            "Appointment",
+            style: TextStyle(
+                fontFamily: "Regular",
+                fontSize: 18,
+                color: Color(ColorValues.THEME_COLOR)),
+          ),
+        ),
+        body: Container(
+          color: Color(ColorValues.WHITE_COLOR),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(children: [
+            Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Color(ColorValues.WHITE_COLOR),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 7.0,
-                      spreadRadius: 0.0,
-                    )
-                  ]),
-              child: ListView(
-//                      mainAxisAlignment: MainAxisAlignment.start,
-//                      crossAxisAlignment: CrossAxisAlignment.start,
+              height: 150,
+              color: Color(ColorValues.THEME_COLOR),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 30, right: 20, left: 20),
-                    padding: EdgeInsets.only(left: 15),
-                    height: 38,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Color(ColorValues.LIGHT_GRAY),
-                      border: Border.all(
-                          color: Color(ColorValues.BLACK_COLOR), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _labs != null
-                        ? DropdownButtonHideUnderline(
-                            child: DropdownButton<LabResponse>(
-                              value: labName,
-                              iconSize: 24,
-                              hint: Text(" Preferred Lab"),
-                              dropdownColor: Color(ColorValues.WHITE_COLOR),
-                              iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                              focusColor: Color(ColorValues.WHITE_COLOR),
-                              elevation: 16,
-                              style: TextStyle(
-                                  color: Color(ColorValues.BLACK_COL),
-                                  fontSize: 13,
-                                  fontFamily: "Regular"),
-                              onChanged: (LabResponse newValue) {
-                                setState(() {
-                                  selectedLabId = newValue.id;
-                                  print(selectedLabId);
-                                  labName = newValue;
-                                });
-                              },
-                              items: _labs.map<DropdownMenuItem<LabResponse>>(
-                                  (LabResponse value) {
-                                return DropdownMenuItem<LabResponse>(
-                                  value: value,
-                                  child: Text(value.user.name),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                        : Container(),
-                  ),
+                      margin: EdgeInsets.only(top: 32),
+                      child: Text(
+                        "Patient Details",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: "Regular",
+                            color: Color(ColorValues.WHITE_COLOR)),
+                      )),
                   Container(
-                    margin: EdgeInsets.only(top: 30, right: 20, left: 20),
-                    padding: EdgeInsets.only(left: 15),
-                    height: 38,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Color(ColorValues.LIGHT_GRAY),
-                      border: Border.all(
-                          color: Color(ColorValues.BLACK_COLOR), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _doctor != null
-                        ? DropdownButtonHideUnderline(
-                            child: DropdownButton<DoctorResponse>(
-                              value: doctorName,
-                              iconSize: 24,
-                              hint: Text("Doctor"),
-                              dropdownColor: Color(ColorValues.WHITE_COLOR),
-                              iconEnabledColor: Color(ColorValues.BLACK_COLOR),
-                              focusColor: Color(ColorValues.WHITE_COLOR),
-                              elevation: 16,
-                              style: TextStyle(
-                                  color: Color(ColorValues.BLACK_COL),
-                                  fontSize: 13,
-                                  fontFamily: "Regular"),
-                              onChanged: (DoctorResponse newValue) {
-                                setState(() {
-                                  selectedDoctorId = newValue.id;
-                                  print(selectedDoctorId);
-                                  doctorName = newValue;
-                                });
-                              },
-                              items: _doctor
-                                  .map<DropdownMenuItem<DoctorResponse>>(
-                                      (DoctorResponse value) {
-                                return DropdownMenuItem<DoctorResponse>(
-                                  value: value,
-                                  child: Text(value.name),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                        : Container(),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      callPlacesApi();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 24, right: 20, left: 20),
-                      padding: EdgeInsets.only(left: 5),
+                      margin: EdgeInsets.only(top: 15),
+                      child: Image(
+                        height: 60,
+                        width: 100,
+                        image: AssetImage("assets/images/appointmentUndraw.png"),
+                      )),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 15,
+              right: 15,
+              top: 98,
+              bottom: 10,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Color(ColorValues.WHITE_COLOR),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 7.0,
+                        spreadRadius: 0.0,
+                      )
+                    ]),
+                child: ListView(
+//                      mainAxisAlignment: MainAxisAlignment.start,
+//                      crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 30, right: 20, left: 20),
+                      padding: EdgeInsets.only(left: 15),
                       height: 38,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -856,549 +767,641 @@ class BookingScreenState extends State<BookingScreen> {
                             color: Color(ColorValues.BLACK_COLOR), width: 1),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: new Padding(
-                        padding: EdgeInsets.fromLTRB(12.0, 0.0, 0.0, 0.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: searchAddress == ""
-                              ? Text(
-                                  "Select Address",
-                                  style: TextStyle(
-                                    fontFamily: 'customLight',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.0,
-                                    color: Color(ColorValues.HINT_COL),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              : Text(
-                                  searchAddress,
-                                  style: TextStyle(
-                                      color: Color(ColorValues.BLACK_COL),
-                                      fontSize: 13.0,
-                                      fontFamily: "Regular"),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      selectDate(context);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(20, 24, 20, 10),
-                      // margin: EdgeInsets.only(top: 24, right: 20, left: 20),
-                      height: 38,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Color(ColorValues.LIGHT_GRAY),
-                        border: Border.all(
-                            color: Color(ColorValues.BLACK_COLOR), width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (convertedDateTime == null)
-                              Text("Date of Birth",
-                                  style: TextStyle(
-                                      color: Color(ColorValues.BLACK_COL).withOpacity(0.6),
-                                      fontSize: 13.0,
-                                      fontFamily: "Regular"))
-                            else
-                              Text(convertedDateTime,
-                                  style: TextStyle(
-                                      color: Color(ColorValues.BLACK_COL),
-                                      fontSize: 13.0,
-                                      fontFamily: "Regular")),
-                            GestureDetector(
-                              onTap: () {
-                                if (convertedDateTime != null) {
-                                  selectedDate = new DateFormat("yyyy-MM-dd")
-                                      .parse(convertedDateTime);
-                                  selectDate(context);
-                                } else
-                                  selectDate(context);
-                              },
-                              child: ImageIcon(
-                                AssetImage('assets/images/calendarImage.png'),
-                                color: Color(ColorValues.BLACK_COL),
-                                size: 20,
+                      child: _labs != null
+                          ? DropdownButtonHideUnderline(
+                              child: DropdownButton<LabResponse>(
+                                value: labName,
+                                iconSize: 24,
+                                hint: Text(" Preferred Lab"),
+                                dropdownColor: Color(ColorValues.WHITE_COLOR),
+                                iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                                focusColor: Color(ColorValues.WHITE_COLOR),
+                                elevation: 16,
+                                style: TextStyle(
+                                    color: Color(ColorValues.BLACK_COL),
+                                    fontSize: 13,
+                                    fontFamily: "Regular"),
+                                onChanged: (LabResponse newValue) {
+                                  setState(() {
+                                    selectedLabId = newValue.id;
+                                    print(selectedLabId);
+                                    labName = newValue;
+                                  });
+                                },
+                                items: _labs.map<DropdownMenuItem<LabResponse>>(
+                                    (LabResponse value) {
+                                  return DropdownMenuItem<LabResponse>(
+                                    value: value,
+                                    child: Text(value.user.name),
+                                  );
+                                }).toList(),
                               ),
-                            ),
-                          ],
+                            )
+                          : Container(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 30, right: 20, left: 20),
+                      padding: EdgeInsets.only(left: 15),
+                      height: 38,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _doctor != null
+                          ? DropdownButtonHideUnderline(
+                              child: DropdownButton<DoctorResponse>(
+                                value: doctorName,
+                                iconSize: 24,
+                                hint: Text("Doctor"),
+                                dropdownColor: Color(ColorValues.WHITE_COLOR),
+                                iconEnabledColor: Color(ColorValues.BLACK_COLOR),
+                                focusColor: Color(ColorValues.WHITE_COLOR),
+                                elevation: 16,
+                                style: TextStyle(
+                                    color: Color(ColorValues.BLACK_COL),
+                                    fontSize: 13,
+                                    fontFamily: "Regular"),
+                                onChanged: (DoctorResponse newValue) {
+                                  setState(() {
+                                    selectedDoctorId = newValue.id;
+                                    print(selectedDoctorId);
+                                    doctorName = newValue;
+                                  });
+                                },
+                                items: _doctor
+                                    .map<DropdownMenuItem<DoctorResponse>>(
+                                        (DoctorResponse value) {
+                                  return DropdownMenuItem<DoctorResponse>(
+                                    value: value,
+                                    child: Text(value.name),
+                                  );
+                                }).toList(),
+                              ),
+                            )
+                          : Container(),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        callPlacesApi();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(top: 24, right: 20, left: 20),
+                        padding: EdgeInsets.only(left: 5),
+                        height: 38,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Color(ColorValues.LIGHT_GRAY),
+                          border: Border.all(
+                              color: Color(ColorValues.BLACK_COLOR), width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: new Padding(
+                          padding: EdgeInsets.fromLTRB(12.0, 0.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: searchAddress == ""
+                                ? Text(
+                                    "Select Address",
+                                    style: TextStyle(
+                                      fontFamily: 'customLight',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13.0,
+                                      color: Color(ColorValues.HINT_COL),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : Text(
+                                    searchAddress,
+                                    style: TextStyle(
+                                        color: Color(ColorValues.BLACK_COL),
+                                        fontSize: 13.0,
+                                        fontFamily: "Regular"),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 14, left: 20, right: 20),
-                    child: Text(
-                      "Gender",
-                      style: TextStyle(
-                          fontSize: Values.VALUE_SIZE,
-                          fontFamily: "Regular",
-                          fontWeight: FontWeight.bold,
-                          color: Color(ColorValues.THEME_TEXT_COLOR)),
+                    GestureDetector(
+                      onTap: () {
+                        selectDate(context);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(20, 24, 20, 10),
+                        // margin: EdgeInsets.only(top: 24, right: 20, left: 20),
+                        height: 38,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Color(ColorValues.LIGHT_GRAY),
+                          border: Border.all(
+                              color: Color(ColorValues.BLACK_COLOR), width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (convertedDateTime == null)
+                                Text("Date of Birth",
+                                    style: TextStyle(
+                                        color: Color(ColorValues.BLACK_COL).withOpacity(0.6),
+                                        fontSize: 13.0,
+                                        fontFamily: "Regular"))
+                              else
+                                Text(convertedDateTime,
+                                    style: TextStyle(
+                                        color: Color(ColorValues.BLACK_COL),
+                                        fontSize: 13.0,
+                                        fontFamily: "Regular")),
+                              GestureDetector(
+                                onTap: () {
+                                  if (convertedDateTime != null) {
+                                    selectedDate = new DateFormat("yyyy-MM-dd")
+                                        .parse(convertedDateTime);
+                                    selectDate(context);
+                                  } else
+                                    selectDate(context);
+                                },
+                                child: ImageIcon(
+                                  AssetImage('assets/images/calendarImage.png'),
+                                  color: Color(ColorValues.BLACK_COL),
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 36,
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(
-                        top: 5, left: 20, right: 20, bottom: 10),
-                    child: Row(
-                      children: [
-                        // Expanded(
-                        //     flex: 1,
-                        //     child:
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    gender = "MALE";
-                                  });
-                                },
-                                child: gender == "MALE"
-                                    ? Container(
-                                  width: MediaQuery.of(context).size.width/3,
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Male",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 13,
-                                              color: Color(
-                                                  ColorValues.WHITE_COLOR),
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                      )
-                                    : Container(
-                                  width: MediaQuery.of(context).size.width/3,
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              topLeft: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Male",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 13,
-                                              color: Color(
-                                                  ColorValues.BLACK_COL),),
-                                          textAlign: TextAlign.center,
-                                        )),
-                                      )),
-                        // ),
-                        // Expanded(
-                        //     flex: 1,
-                        //     child:
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    gender = "FEMALE";
-                                  });
-                                },
-                                child: gender == "FEMALE"
-                                    ? Container(
+                    Container(
+                      margin: EdgeInsets.only(top: 14, left: 20, right: 20),
+                      child: Text(
+                        "Gender",
+                        style: TextStyle(
+                            fontSize: Values.VALUE_SIZE,
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.bold,
+                            color: Color(ColorValues.THEME_TEXT_COLOR)),
+                      ),
+                    ),
+                    Container(
+                      height: 36,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(
+                          top: 5, left: 20, right: 20, bottom: 10),
+                      child: Row(
+                        children: [
+                          // Expanded(
+                          //     flex: 1,
+                          //     child:
+                              GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      gender = "MALE";
+                                    });
+                                  },
+                                  child: gender == "MALE"
+                                      ? Container(
                                     width: MediaQuery.of(context).size.width/3,
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.THEME_COLOR),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.THEME_COLOR),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                                topLeft: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            "Male",
+                                            style: TextStyle(
+                                                fontFamily: "Regular",
+                                                fontSize: 13,
+                                                color: Color(
+                                                    ColorValues.WHITE_COLOR),
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          )),
+                                        )
+                                      : Container(
+                                    width: MediaQuery.of(context).size.width/3,
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.LIGHT_GRAY),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                                topLeft: Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Color(
+                                                    ColorValues.BLACK_COLOR),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            "Male",
+                                            style: TextStyle(
+                                                fontFamily: "Regular",
+                                                fontSize: 13,
+                                                color: Color(
+                                                    ColorValues.BLACK_COL),),
+                                            textAlign: TextAlign.center,
+                                          )),
+                                        )),
+                          // ),
+                          // Expanded(
+                          //     flex: 1,
+                          //     child:
+                              GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      gender = "FEMALE";
+                                    });
+                                  },
+                                  child: gender == "FEMALE"
+                                      ? Container(
+                                      width: MediaQuery.of(context).size.width/3,
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.THEME_COLOR),
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(10),
+                                                topRight: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Female",
+                                              style: TextStyle(
+                                                  fontFamily: "Regular",
+                                                  fontSize: 13,
+                                                  color: Color(ColorValues.WHITE),
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ))
+                                      : Container(
+                                    width: MediaQuery.of(context).size.width/3,
+                                          decoration: BoxDecoration(
+                                            color: Color(ColorValues.LIGHT_GRAY),
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(10),
+                                                topRight: Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Color(
+                                                    ColorValues.BLACK_COLOR),
+                                                width: 1),
+                                          ),
+                                          child: Center(
+                                              child: Text(
                                             "Female",
                                             style: TextStyle(
                                                 fontFamily: "Regular",
                                                 fontSize: 13,
-                                                color: Color(ColorValues.WHITE),
-                                                fontWeight: FontWeight.bold),
+                                                color: Color(
+                                                    ColorValues.BLACK_COL),),
                                             textAlign: TextAlign.center,
-                                          ),
-                                        ))
-                                    : Container(
-                                  width: MediaQuery.of(context).size.width/3,
-                                        decoration: BoxDecoration(
-                                          color: Color(ColorValues.LIGHT_GRAY),
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              topRight: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Color(
-                                                  ColorValues.BLACK_COLOR),
-                                              width: 1),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "Female",
-                                          style: TextStyle(
-                                              fontFamily: "Regular",
-                                              fontSize: 13,
-                                              color: Color(
-                                                  ColorValues.BLACK_COL),),
-                                          textAlign: TextAlign.center,
+                                          )),
                                         )),
-                                      )),
-                        // ),
-                      ],
+                          // ),
+                        ],
+                      ),
                     ),
-                  ),
 /////////////////////////////////////////////////////////////
-                  //OLD UI CODE
-                  // Container(
-                  //   margin: EdgeInsets.only(
-                  //       top: 20, right: 20, left: 20, bottom: 10),
-                  //   padding: EdgeInsets.only(left: 20),
-                  //   height: 75,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   decoration: BoxDecoration(
-                  //     color: Color(ColorValues.LIGHT_GRAY),
-                  //     border: Border.all(
-                  //         color: Color(ColorValues.BLACK_COLOR), width: 1),
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  //   child: Column(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: [
-                  //         Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  //           children: [
-                  //             imageList.length > 0
-                  //                 ? Container(
-                  //                     alignment: Alignment.centerRight,
-                  //                     height: 35,
-                  //                     width:
-                  //                         MediaQuery.of(context).size.width / 3,
-                  //                     child: ListView.builder(
-                  //                         scrollDirection: Axis.horizontal,
-                  //                         itemCount: imageList.length,
-                  //                         itemBuilder:
-                  //                             (BuildContext context, int pos) {
-                  //                           return GestureDetector(
-                  //                               onTap: () {
-                  //                                 // showImage(context);
-                  //                                 // download and show
-                  //                               },
-                  //                               child: Container(
-                  //                                   height: 50,
-                  //                                   child: Stack(
-                  //                                     children: [
-                  //                                       Container(
-                  //                                         margin: EdgeInsets
-                  //                                             .fromLTRB(
-                  //                                                 5, 7, 5, 0),
-                  //                                         child: Image(
-                  //                                           image: AssetImage(
-                  //                                               "assets/images/prescription_logo.jpg"),
-                  //                                           height: 30,
-                  //                                           width: 30,
-                  //                                           alignment: Alignment
-                  //                                               .centerLeft,
-                  //                                         ),
-                  //                                       ),
-                  //                                       Positioned(
-                  //                                           right: 0,
-                  //                                           child:
-                  //                                               GestureDetector(
-                  //                                             onTap: () {
-                  //                                               showAlertDialog(
-                  //                                                   context,
-                  //                                                   pos);
-                  //                                             },
-                  //                                             child: Image(
-                  //                                               image: AssetImage(
-                  //                                                   "assets/images/close_red.png"),
-                  //                                               height: 15,
-                  //                                               width: 15,
-                  //                                               alignment:
-                  //                                                   Alignment
-                  //                                                       .center,
-                  //                                             ),
-                  //                                           ))
-                  //                                     ],
-                  //                                   )));
-                  //                         }),
-                  //                   )
-                  //                 : new Container(
-                  //                     height: 35,
-                  //                     width:
-                  //                         MediaQuery.of(context).size.width / 3,
-                  //                   ),
-                  //             GestureDetector(
-                  //               onTap: () {
-                  //                 _showPicker(context);
-                  //               },
-                  //               child: Container(
-                  //                 margin: EdgeInsets.only(
-                  //                     top: 8, left: 5, right: 5),
-                  //                 child: Image(
-                  //                   image: AssetImage(
-                  //                       "assets/images/uploadLogo.png"),
-                  //                   height: 30,
-                  //                   width: 30,
-                  //                   // alignment: Alignment.center,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Container(
-                  //                 // margin: EdgeInsets.all(5),
-                  //                 height: 35,
-                  //                 width: MediaQuery.of(context).size.width / 3,
-                  //               ),
-                  //             )
-                  //           ],
-                  //         ),
-                  //         Container(
-                  //           child: Text(
-                  //             "Upload your prescription",
-                  //             style: TextStyle(
-                  //                 fontFamily: "Regular",
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontSize: 12,
-                  //                 color: Color(ColorValues.BLACK_TEXT_COL)),
-                  //             textAlign: TextAlign.center,
-                  //           ),
-                  //         ),
-                  //       ]),
-                  // ),
+                    //OLD UI CODE
+                    // Container(
+                    //   margin: EdgeInsets.only(
+                    //       top: 20, right: 20, left: 20, bottom: 10),
+                    //   padding: EdgeInsets.only(left: 20),
+                    //   height: 75,
+                    //   width: MediaQuery.of(context).size.width,
+                    //   decoration: BoxDecoration(
+                    //     color: Color(ColorValues.LIGHT_GRAY),
+                    //     border: Border.all(
+                    //         color: Color(ColorValues.BLACK_COLOR), width: 1),
+                    //     borderRadius: BorderRadius.circular(10),
+                    //   ),
+                    //   child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //           children: [
+                    //             imageList.length > 0
+                    //                 ? Container(
+                    //                     alignment: Alignment.centerRight,
+                    //                     height: 35,
+                    //                     width:
+                    //                         MediaQuery.of(context).size.width / 3,
+                    //                     child: ListView.builder(
+                    //                         scrollDirection: Axis.horizontal,
+                    //                         itemCount: imageList.length,
+                    //                         itemBuilder:
+                    //                             (BuildContext context, int pos) {
+                    //                           return GestureDetector(
+                    //                               onTap: () {
+                    //                                 // showImage(context);
+                    //                                 // download and show
+                    //                               },
+                    //                               child: Container(
+                    //                                   height: 50,
+                    //                                   child: Stack(
+                    //                                     children: [
+                    //                                       Container(
+                    //                                         margin: EdgeInsets
+                    //                                             .fromLTRB(
+                    //                                                 5, 7, 5, 0),
+                    //                                         child: Image(
+                    //                                           image: AssetImage(
+                    //                                               "assets/images/prescription_logo.jpg"),
+                    //                                           height: 30,
+                    //                                           width: 30,
+                    //                                           alignment: Alignment
+                    //                                               .centerLeft,
+                    //                                         ),
+                    //                                       ),
+                    //                                       Positioned(
+                    //                                           right: 0,
+                    //                                           child:
+                    //                                               GestureDetector(
+                    //                                             onTap: () {
+                    //                                               showAlertDialog(
+                    //                                                   context,
+                    //                                                   pos);
+                    //                                             },
+                    //                                             child: Image(
+                    //                                               image: AssetImage(
+                    //                                                   "assets/images/close_red.png"),
+                    //                                               height: 15,
+                    //                                               width: 15,
+                    //                                               alignment:
+                    //                                                   Alignment
+                    //                                                       .center,
+                    //                                             ),
+                    //                                           ))
+                    //                                     ],
+                    //                                   )));
+                    //                         }),
+                    //                   )
+                    //                 : new Container(
+                    //                     height: 35,
+                    //                     width:
+                    //                         MediaQuery.of(context).size.width / 3,
+                    //                   ),
+                    //             GestureDetector(
+                    //               onTap: () {
+                    //                 _showPicker(context);
+                    //               },
+                    //               child: Container(
+                    //                 margin: EdgeInsets.only(
+                    //                     top: 8, left: 5, right: 5),
+                    //                 child: Image(
+                    //                   image: AssetImage(
+                    //                       "assets/images/uploadLogo.png"),
+                    //                   height: 30,
+                    //                   width: 30,
+                    //                   // alignment: Alignment.center,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Expanded(
+                    //               flex: 1,
+                    //               child: Container(
+                    //                 // margin: EdgeInsets.all(5),
+                    //                 height: 35,
+                    //                 width: MediaQuery.of(context).size.width / 3,
+                    //               ),
+                    //             )
+                    //           ],
+                    //         ),
+                    //         Container(
+                    //           child: Text(
+                    //             "Upload your prescription",
+                    //             style: TextStyle(
+                    //                 fontFamily: "Regular",
+                    //                 fontWeight: FontWeight.bold,
+                    //                 fontSize: 12,
+                    //                 color: Color(ColorValues.BLACK_TEXT_COL)),
+                    //             textAlign: TextAlign.center,
+                    //           ),
+                    //         ),
+                    //       ]),
+                    // ),
 
 //////////////////////////// new code  ///////////////////////////////////////////////
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 0),
-                        child: Text(
-                          "Test Sample",
-                          style: TextStyle(
-                            fontSize: Values.VALUE_SIZE,
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.bold,
-                            color: Color(ColorValues.THEME_TEXT_COLOR),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 0),
+                          child: Text(
+                            "Test Sample",
+                            style: TextStyle(
+                              fontSize: Values.VALUE_SIZE,
+                              fontFamily: "Regular",
+                              fontWeight: FontWeight.bold,
+                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                      ],
+                    ),
 
-                  Container(
-                      margin: EdgeInsets.only(
-                          top: 10, right: 20, left: 20, bottom: 20),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Color(ColorValues.WHITE),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5.0,
-                              spreadRadius: 0.5,
-                            )
-                          ]),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(top:10.0, bottom: 10),
-                                child: imageList.length==1?
-                                   Container(
-                                  margin: EdgeInsets.fromLTRB(15,5,15,5),
-                                  child: Center(
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        //image upload
-                                        print(
-                                            "==========only upload======");
-                                        _showPicker(context);
-                                      },
-                                      child: Image(
-                                        image: AssetImage(
-                                            "assets/images/uploadLogo.png"),
-                                        height: 50,
-                                        width: 50,
-                                        // alignment: Alignment.centerLeft,
+                    Container(
+                        margin: EdgeInsets.only(
+                            top: 10, right: 20, left: 20, bottom: 20),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Color(ColorValues.WHITE),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 5.0,
+                                spreadRadius: 0.5,
+                              )
+                            ]),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.only(top:10.0, bottom: 10),
+                                  child: imageList.length==1?
+                                     Container(
+                                    margin: EdgeInsets.fromLTRB(15,5,15,5),
+                                    child: Center(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          //image upload
+                                          print(
+                                              "==========only upload======");
+                                          _showPicker(context);
+                                        },
+                                        child: Image(
+                                          image: AssetImage(
+                                              "assets/images/uploadLogo.png"),
+                                          height: 50,
+                                          width: 50,
+                                          // alignment: Alignment.centerLeft,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                                :GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      // crossAxisSpacing: 5.0,
-                                      // mainAxisSpacing: 5.0,
-                                      childAspectRatio: (MediaQuery.of(context)
-                                              .size
-                                              .width) /
-                                          (MediaQuery.of(context).size.height /
-                                              3),
-                                    ),
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: imageList.length,
-                                    itemBuilder: (BuildContext ctx, pos) {
-                                      return Container(
-                                          child: Stack(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                top: 10, left: 10),
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                if (pos == 0)
-                                                  _showPicker(context);
-                                                else
-                                                  showImage(context, pos);
-                                              },
-                                              child: Image(
-                                                image: pos == 0
-                                                    ? AssetImage(
-                                                        "assets/images/uploadLogo.png")
-                                                    : AssetImage(
-                                                        "assets/images/prescription_logo.jpg"),
-                                                height: 50,
-                                                width: 50,
-                                                // alignment: Alignment.centerLeft,
+                                  )
+                                  :GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        // crossAxisSpacing: 5.0,
+                                        // mainAxisSpacing: 5.0,
+                                        childAspectRatio: (MediaQuery.of(context)
+                                                .size
+                                                .width) /
+                                            (MediaQuery.of(context).size.height /
+                                                2),
+                                      ),
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: imageList.length,
+                                      itemBuilder: (BuildContext ctx, pos) {
+                                        return Container(
+                                            child: Stack(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: 10, left: 10),
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  if (imageList[pos].imageName == "addIcon")
+                                                    _showPicker(context);
+                                                  else
+                                                    showImage(context, pos);
+                                                },
+                                                child: Image(
+                                                  image: imageList[pos].imageName == "addIcon"
+                                                      ? AssetImage(
+                                                          "assets/images/uploadLogo.png")
+                                                      : AssetImage(
+                                                          "assets/images/prescription_logo.jpg"),
+                                                  height: 50,
+                                                  width: 50,
+                                                  // alignment: Alignment.centerLeft,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                              // right: 0,
-                                              left: 48,
-                                              top:2,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showAlertDialog(context, pos);
-                                                },
-                                                child: pos != 0
-                                                    ? Image(
-                                                        image: AssetImage(
-                                                            "assets/images/close_red.png"),
-                                                        height: 18,
-                                                        width: 18,
-                                                        alignment:
-                                                            Alignment.center,
-                                                      )
-                                                    : Container(),
-                                              ))
-                                        ],
-                                      ));
-                                    })),
-                          ])),
+                                            Positioned(
+                                                // right: 0,
+                                                left: 48,
+                                                top:2,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    showAlertDialog(context, pos);
+                                                  },
+                                                  child: imageList[pos].imageName != "addIcon"
+                                                      ? Image(
+                                                          image: AssetImage(
+                                                              "assets/images/close_red.png"),
+                                                          height: 18,
+                                                          width: 18,
+                                                          alignment:
+                                                              Alignment.center,
+                                                        )
+                                                      : Container(),
+                                                ))
+                                          ],
+                                        ));
+                                      })),
+                            ])),
 ////////////////////////////////////////////////////////////
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0),
-                        child: Text(
-                          "Remarks",
-                          style: TextStyle(
-                            fontSize: Values.VALUE_SIZE,
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.bold,
-                            color: Color(ColorValues.THEME_TEXT_COLOR),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0),
+                          child: Text(
+                            "Remarks",
+                            style: TextStyle(
+                              fontSize: Values.VALUE_SIZE,
+                              fontFamily: "Regular",
+                              fontWeight: FontWeight.bold,
+                              color: Color(ColorValues.THEME_TEXT_COLOR),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                      ],
+                    ),
 
-                  Container(
-                    margin: EdgeInsets.only(top: 5, right: 20, left: 20),
-                    // padding: EdgeInsets.only(left: 5),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Color(ColorValues.LIGHT_GRAY),
-                      border: Border.all(
-                          color: Color(ColorValues.BLACK_COLOR), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: TextFormField(
-                        controller: remarks,
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                            border:
-                                OutlineInputBorder(borderSide: BorderSide.none),
-                            hintText: "Remarks!",
-                            hintStyle: TextStyle(
-                                color: Color(ColorValues.BLACK_TEXT_COL).withOpacity(0.6),
-                                fontSize: 12.5,
-                                fontFamily: "Regular")),
-                      ),
-                    ),
-                    // TextField(
-                    //   controller: remarks,
-                    //   decoration: InputDecoration(hintText: "Remarks..!!"),
-                    //      style:  TextStyle(fontSize: 12.0,
-                    //       fontFamily: "Regular",),
-                    //   maxLines: 3,
-                    // ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      validateData();
-                    },
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                      height: 38,
+                    Container(
+                      margin: EdgeInsets.only(top: 5, right: 20, left: 20),
+                      // padding: EdgeInsets.only(left: 5),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Color(ColorValues.THEME_COLOR),
-                        borderRadius: BorderRadius.circular(18),
+                        color: Color(ColorValues.LIGHT_GRAY),
+                        border: Border.all(
+                            color: Color(ColorValues.BLACK_COLOR), width: 1),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(
-                        child: Text(
-                          "Continue",
-                          style: TextStyle(
-                              fontFamily: "Regular",
-                              fontSize: 15,
-                              color: Color(ColorValues.WHITE_COLOR)),
-                          textAlign: TextAlign.center,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: TextFormField(
+                          controller: remarks,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                              border:
+                                  OutlineInputBorder(borderSide: BorderSide.none),
+                              hintText: "Remarks!",
+                              hintStyle: TextStyle(
+                                  color: Color(ColorValues.BLACK_TEXT_COL).withOpacity(0.6),
+                                  fontSize: 12.5,
+                                  fontFamily: "Regular")),
+                        ),
+                      ),
+                      // TextField(
+                      //   controller: remarks,
+                      //   decoration: InputDecoration(hintText: "Remarks..!!"),
+                      //      style:  TextStyle(fontSize: 12.0,
+                      //       fontFamily: "Regular",),
+                      //   maxLines: 3,
+                      // ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        validateData();
+                      },
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                        height: 38,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Color(ColorValues.THEME_COLOR),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Continue",
+                            style: TextStyle(
+                                fontFamily: "Regular",
+                                fontSize: 15,
+                                color: Color(ColorValues.WHITE_COLOR)),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
+          ]),
+        ),
+        bottomNavigationBar: BottomNavBar("bookingScreen"),
       ),
-      bottomNavigationBar: BottomNavBar("bookingScreen"),
     );
   }
 }

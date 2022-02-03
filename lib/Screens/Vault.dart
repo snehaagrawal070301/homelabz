@@ -369,7 +369,7 @@ class _VaultState extends State<Vault> {
               // ),
 
               Container(
-                margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
                 child: folderList != null && folderList.length > 0
                     ? GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -405,11 +405,10 @@ class _VaultState extends State<Vault> {
                                       },
                                       child: Container(
                                         // margin: EdgeInsets.only(top: 15),
-                                        height: 170,
+                                        height: 180,
                                         width: 120,
                                         decoration: BoxDecoration(
-                                            color: Color(ColorValues
-                                                .GRAY_HEADER_PRESSO_VIEW),
+                                            color: Color(ColorValues.WHITE),
                                             border: Border.all(
                                                 color: Color(
                                                     ColorValues.BLACK_COL)),
@@ -417,14 +416,14 @@ class _VaultState extends State<Vault> {
                                                 BorderRadius.circular(5)),
                                         // child: GestureDetector(
                                         //   onTap: () async {},
-                                        //   child: Padding(
-                                        //     padding: EdgeInsets.only(left: 6),
-                                        //     child: Image(
-                                        //       image: AssetImage(
-                                        //           "assets/images/ic_sample.png"),
-                                        //       // alignment: Alignment.centerLeft,
-                                        //     ),
-                                        //   ),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 5, top: 10),
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/vault_folder_logo.png"),
+                                              // alignment: Alignment.centerLeft,
+                                            ),
+                                          ),
                                         // ),
                                       ),
                                     ),
@@ -457,27 +456,27 @@ class _VaultState extends State<Vault> {
                                           ),
                                         )),
 ///////////////////// Edit and delete //////////////////////////////////////
-                                    Positioned(
-                                        bottom: 15,
-                                        right: 10,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            showConfirmationDialog(
-                                                context, folderList[pos].id);
-                                          },
-                                          child: Image(
-                                            image: AssetImage(
-                                                "assets/images/delete_btn.png"),
-                                            height: 20,
-                                            width: 20,
-                                            alignment: Alignment.topRight,
-                                          ),
-                                        ))
+//                                     Positioned(
+//                                         bottom: 15,
+//                                         right: 10,
+//                                         child: GestureDetector(
+//                                           onTap: () {
+//                                             showConfirmationDialog(
+//                                                 context, folderList[pos].id);
+//                                           },
+//                                           child: Image(
+//                                             image: AssetImage(
+//                                                 "assets/images/delete_btn.png"),
+//                                             height: 20,
+//                                             width: 20,
+//                                             alignment: Alignment.topRight,
+//                                           ),
+//                                         ))
                                   ],
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(top: 5),
+                                margin: EdgeInsets.only(bottom: 25),
                                 child: Text(
                                   folderList[pos].name,
                                   //"",
@@ -489,20 +488,21 @@ class _VaultState extends State<Vault> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Text(
-                                  folderList[pos].updatedDate != null
-                                      ? MyUtils.changeDateFormat(folderList[pos].updatedDate)
-                                      : MyUtils.changeDateFormat(folderList[pos].createdDate),
-                                  // "Date",
-                                  style: TextStyle(
-                                    fontSize: Values.VALUE_SIZE,
-                                    fontFamily: "Regular",
-                                    color: Color(ColorValues.BLACK_TEXT_COL),
-                                  ),
-                                ),
-                              ),
+                              // created / updated date
+                              // Container(
+                              //   margin: EdgeInsets.only(top: 5),
+                              //   child: Text(
+                              //     folderList[pos].updatedDate != null
+                              //         ? MyUtils.changeDateFormat(folderList[pos].updatedDate)
+                              //         : MyUtils.changeDateFormat(folderList[pos].createdDate),
+                              //     // "Date",
+                              //     style: TextStyle(
+                              //       fontSize: Values.VALUE_SIZE,
+                              //       fontFamily: "Regular",
+                              //       color: Color(ColorValues.BLACK_TEXT_COL),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ));
                         })

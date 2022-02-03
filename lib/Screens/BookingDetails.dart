@@ -29,6 +29,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   SharedPreferences preferences;
   BookingDetailsModel _model;
   List<PrescriptionModel> prescriptionList = [];
+  TextEditingController remarks;
 
   @override
   void initState() {
@@ -69,6 +70,11 @@ class _BookingDetailsState extends State<BookingDetails> {
         _model = BookingDetailsModel.fromJson(json.decode(body));
         setState(() {
           if(_model.bookingStatus!=null){
+            if(_model.notes!=null && _model.notes.length>0) {
+              remarks = new TextEditingController(text: _model.notes);
+            }else{
+              remarks = new TextEditingController(text: "No Remarks Available!");
+            }
           }
         });
         getDocUrl();
@@ -720,8 +726,22 @@ class _BookingDetailsState extends State<BookingDetails> {
               // ),
               ///////////////
               Container(
+                margin: EdgeInsets.only(top: 25),
+                child: Text(
+                  'Prescription',
+                  style: TextStyle(
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
+                    fontWeight: FontWeight.bold,
+                    color: Color(
+                        ColorValues.THEME_TEXT_COLOR),
+                  ),
+                ),
+              ),
+
+              Container(
                   margin: EdgeInsets.only(
-                      top: 30, right: 20, left: 20, bottom: 20),
+                      top: 10, right: 5, left: 5, bottom: 20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       color: Color(ColorValues.WHITE),
@@ -792,6 +812,63 @@ class _BookingDetailsState extends State<BookingDetails> {
                           ),
                         ),
                       ])),
+
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Text(
+                  'Remarks',
+                  style: TextStyle(
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
+                    fontWeight: FontWeight.bold,
+                    color: Color(
+                        ColorValues.THEME_TEXT_COLOR),
+                  ),
+                ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 10, right: 5, left: 5, bottom: 15),
+                // padding: EdgeInsets.only(left: 5),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Color(ColorValues.LIGHT_GRAY),
+                  border: Border.all(
+                      color: Color(ColorValues.BLACK_COLOR), width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: TextFormField(
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Regular",
+                      color: Color(ColorValues.BLACK_TEXT_COL),
+                    ),
+                    controller: remarks,
+                    maxLines: 2,
+                    enabled: false,
+                    autofocus: false,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                        border:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                        // hintText: "No Remarks Available!",
+                        hintStyle: TextStyle(
+                            // color: Color(ColorValues.BLACK_TEXT_COL).withOpacity(0.6),
+                            color: Color(ColorValues.BLACK_TEXT_COL),
+                            fontSize: 12.5,
+                            fontFamily: "Regular")),
+                  ),
+                ),
+                // TextField(
+                //   controller: remarks,
+                //   decoration: InputDecoration(hintText: "Remarks..!!"),
+                //      style:  TextStyle(fontSize: 12.0,
+                //       fontFamily: "Regular",),
+                //   maxLines: 3,
+                // ),
+              ),
 ///////////////////////////////////////////////////////////////////
               Container(
                 margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
