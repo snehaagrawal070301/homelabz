@@ -609,13 +609,15 @@ class _HistoryState extends State<History> {
                               // NEW DESIGN
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
                                         child: Text(
                                           _list[pos].id.toString() == null
                                               ? ""
@@ -630,7 +632,8 @@ class _HistoryState extends State<History> {
                                         ),
                                       ),
                                       Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
                                         child: Text(
                                           _list[pos].bookingStatus == null
                                               ? ""
@@ -646,65 +649,71 @@ class _HistoryState extends State<History> {
                                       )
                                     ],
                                   ),
-                                  Center(
-                                    child: Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          // "Union Laboratory",
-                                          _list[pos].lab.user.name,
-                                          style: TextStyle(
-                                              color: Color(ColorValues
-                                                  .THEME_COLOR),
-                                              fontFamily: "Regular",
-                                              fontSize: 17),
-                                        )),
-                                  ),
                                   Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(15,5,5,5),
-                                            child: Image(
-                                              image: AssetImage(
-                                                  "assets/images/location.png"),
-                                              width: 13,
-                                              height: 13,
-                                              color: Color(ColorValues
-                                                  .BLACK_COL),
-                                              alignment: Alignment.center,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(0,0,10,0),
-                                              child: Text(
-                                                _list[pos].lab.user.address,
-                                                style: TextStyle(
-                                                    color: Color(ColorValues
-                                                        .BLACK_COL),
-                                                    fontFamily: "Regular",
-                                                    fontSize: 14),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                      margin: EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        // "Union Laboratory",
+                                        _list[pos].lab.user.name,
+                                        style: TextStyle(
+                                            color: Color(
+                                                ColorValues.THEME_COLOR),
+                                            fontFamily: "Regular",
+                                            fontSize: 17),
                                       )),
-
-                                  _list[pos].date == null?
-                                  Container(
-                                      margin: EdgeInsets.fromLTRB(20,15,10,10),
-                                      decoration: BoxDecoration(
-                                          color: Color(ColorValues.GRAY_BG),
-                                          borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.fromLTRB(
+                                            15, 5, 5, 5),
+                                        child: Image(
+                                          image: AssetImage(
+                                              "assets/images/location.png"),
+                                          width: 13,
+                                          height: 13,
+                                          color: Color(ColorValues.BLACK_COL),
+                                          alignment: Alignment.center,
+                                        ),
                                       ),
-                                      child:Container(
-                                          margin: EdgeInsets.fromLTRB(20,15,10,15),
-                                          child: Text(ValidationMsgs.PHLEBOTOMIST_MSG,
-                                              style:TextStyle(
-                                                color: Color(ColorValues.BLACK_COL),
-                                                fontSize: 14,))))
-                                      :Container(
+                                      Flexible(
+                                        child: Container(
+                                          child: Text(
+                                            _list[pos].lab.user.address,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Color(
+                                                    ColorValues.BLACK_COL),
+                                                fontFamily: "Regular",
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  _list[pos].date == null
+                                      ? Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          20, 15, 10, 20),
+                                      decoration: BoxDecoration(
+                                          color:
+                                          Color(ColorValues.GRAY_BG),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                      child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              20, 15, 10, 15),
+                                          child: Text(
+                                              ValidationMsgs
+                                                  .PHLEBOTOMIST_MSG,
+                                              style: TextStyle(
+                                                color: Color(ColorValues
+                                                    .BLACK_COL),
+                                                fontSize: 14,
+                                              ))))
+                                      : Container(
                                     margin: EdgeInsets.only(
                                         top: 20, left: 30, bottom: 20),
                                     child: Row(
@@ -721,8 +730,8 @@ class _HistoryState extends State<History> {
                                             EdgeInsets.all(5),
                                             // height: 70,
                                             width: 35,
-                                            color: Color(
-                                                ColorValues.DATE_BG),
+                                            color: Color(ColorValues
+                                                .DATE_BG),
                                             child: Text(
                                               "A\nS\nA\nP",
                                               style: TextStyle(
@@ -742,8 +751,8 @@ class _HistoryState extends State<History> {
                                               5, 10, 5, 10),
                                           width: 45,
                                           // height: 85,
-                                          color: Color(
-                                              ColorValues.DATE_BG),
+                                          color: Color(ColorValues
+                                              .DATE_BG),
                                           child: Center(
                                             child: Column(
                                               mainAxisAlignment:
@@ -754,19 +763,23 @@ class _HistoryState extends State<History> {
                                                   .center,
                                               children: [
                                                 Text(
-                                                  MyUtils.getDayOfWeek("${_list[pos].date}"),
+                                                  MyUtils.getDayOfWeek(
+                                                      "${_list[pos].date}"),
                                                   // "TUE",
                                                   style: TextStyle(
                                                       color: Color(
                                                           ColorValues
                                                               .LIGHT_TEXT_COLOR),
-                                                      fontSize: 11),
+                                                      fontSize:
+                                                      11),
                                                 ),
                                                 Text(
-                                                  MyUtils.getDateOfMonth("${_list[pos].date}"),
+                                                  MyUtils.getDateOfMonth(
+                                                      "${_list[pos].date}"),
                                                   // "25",
                                                   style: TextStyle(
-                                                      fontSize: 21,
+                                                      fontSize:
+                                                      21,
                                                       color: Color(
                                                           0xff21CDC0),
                                                       fontWeight:
@@ -774,48 +787,68 @@ class _HistoryState extends State<History> {
                                                           .bold),
                                                 ),
                                                 Text(
-                                                  MyUtils.getMonthName("${_list[pos].date}"),
+                                                  MyUtils.getMonthName(
+                                                      "${_list[pos].date}"),
                                                   // "Feb",
                                                   style: TextStyle(
                                                       color: Color(
                                                           ColorValues
                                                               .LIGHT_TEXT_COLOR),
-                                                      fontSize: 11),
+                                                      fontSize:
+                                                      11),
                                                 ),
                                               ],
                                             ),
                                           ),
                                         ),
 
-
                                         Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 0, horizontal: 7),
+                                            margin:
+                                            EdgeInsets.symmetric(
+                                                vertical: 0,
+                                                horizontal: 7),
                                             height: 67,
                                             child: VerticalDivider(
-                                                color:
-                                                Color(ColorValues.GREY))),
+                                                color: Color(
+                                                    ColorValues.GREY))),
 
                                         _list[pos].phlebotomist == null
                                             ? Expanded(
                                           child: Container(
-                                              margin: EdgeInsets.fromLTRB(2,5,15,10),
+                                              margin: EdgeInsets.fromLTRB(
+                                                  2, 5, 15, 10),
                                               decoration: BoxDecoration(
-                                                  color: Color(ColorValues.GRAY_BG),
-                                                  borderRadius: BorderRadius.all(Radius.circular(10.0))
-                                              ),
-                                              child:Container(
-                                                  margin: EdgeInsets.fromLTRB(15,15,10,20),
-                                                  child: Text(ValidationMsgs.PHLEBOTOMIST_MSG,
-                                                      style:TextStyle(
-                                                        color: Color(ColorValues.BLACK_COL),
-                                                        fontSize: 14,)))),
+                                                  color: Color(
+                                                      ColorValues
+                                                          .GRAY_BG),
+                                                  borderRadius:
+                                                  BorderRadius.all(Radius.circular(
+                                                      10.0))),
+                                              child: Container(
+                                                  margin:
+                                                  EdgeInsets.fromLTRB(
+                                                      15,
+                                                      15,
+                                                      10,
+                                                      20),
+                                                  child: Text(
+                                                      ValidationMsgs
+                                                          .PHLEBOTOMIST_MSG,
+                                                      style: TextStyle(
+                                                        color: Color(
+                                                            ColorValues
+                                                                .BLACK_COL),
+                                                        fontSize:
+                                                        14,
+                                                      )))),
                                         )
                                             : Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment
+                                                .start,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment
+                                                .start,
                                             children: [
                                               Text(
                                                 _list[pos].phlebotomist ==
@@ -831,48 +864,58 @@ class _HistoryState extends State<History> {
                                                     .name,
                                                 // "Phelbotomist Name",
                                                 style: TextStyle(
-                                                    color: Color(ColorValues
-                                                        .BLACK_TEXT_COL),
-                                                    fontFamily: "Regular",
+                                                    color: Color(
+                                                        ColorValues
+                                                            .BLACK_TEXT_COL),
+                                                    fontFamily:
+                                                    "Regular",
                                                     fontSize: 13),
                                               ),
                                               Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 5, bottom: 10),
+                                                margin: EdgeInsets
+                                                    .only(
+                                                    top: 5,
+                                                    bottom:
+                                                    10),
                                                 child: Row(
                                                   children: [
                                                     Image(
                                                         image: AssetImage(
                                                             "assets/images/clock.png"),
-                                                        height: 17,
-                                                        width: 17),
+                                                        height:
+                                                        17,
+                                                        width:
+                                                        17),
                                                     SizedBox(
                                                       width: 7,
                                                     ),
                                                     Text(
-                                                        MyUtils.changeTimeFormat("${_list[pos].timeFrom}")+" - "+
-                                                            MyUtils.changeTimeFormat("${_list[pos].timeTo}"),
+                                                        MyUtils.changeTimeFormat(
+                                                            "${_list[pos].timeFrom}") +
+                                                            " - " +
+                                                            MyUtils.changeTimeFormat(
+                                                                "${_list[pos].timeTo}"),
                                                         // "04:00PM",
-                                                        style: TextStyle(
+                                                        style:
+                                                        TextStyle(
                                                           fontFamily:
                                                           "Regular",
-                                                          fontSize: 12,
+                                                          fontSize:
+                                                          12,
                                                           color: Color(
                                                               0xff3D4461),
                                                         )),
                                                   ],
                                                 ),
                                               ),
-
                                             ]),
-
                                       ],
                                     ),
                                   ),
-
                                   Center(
                                     child: Container(
-                                      margin: EdgeInsets.fromLTRB(0,0,0,20),
+                                      margin:
+                                      EdgeInsets.fromLTRB(0, 0, 0, 20),
                                       child: Image(
                                         image: AssetImage(
                                             "assets/images/dashedLine.png"),
@@ -882,14 +925,19 @@ class _HistoryState extends State<History> {
                                     ),
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                        margin: EdgeInsets.fromLTRB(
+                                            10, 0, 10, 20),
                                         child: Text(
                                           _list[pos].amount == null
                                               ? ""
-                                              : "\$ "+_list[pos].amount.toString(),
+                                              : "\$ " +
+                                              _list[pos]
+                                                  .amount
+                                                  .toString(),
                                           // "Confirmed",
                                           style: TextStyle(
                                               fontSize: 13,
@@ -901,37 +949,56 @@ class _HistoryState extends State<History> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                        child: _list[pos].paymentStatus == null?"":
-                                        _list[pos].paymentStatus== "Paid"?Text(
-                                          _list[pos].paymentStatus == null
+                                        margin: EdgeInsets.fromLTRB(
+                                            10, 0, 10, 20),
+                                        child: _list[pos].paymentStatus ==
+                                            null
+                                            ? ""
+                                            : _list[pos].paymentStatus ==
+                                            "Paid"
+                                            ? Text(
+                                          _list[pos].paymentStatus ==
+                                              null
                                               ? ""
-                                              : _list[pos].paymentStatus,
+                                              : _list[pos]
+                                              .paymentStatus,
                                           // "Confirmed",
                                           style: TextStyle(
                                               fontSize: 13,
-                                              color: Color(
-                                                  ColorValues.THEME_TEXT_COLOR),
-                                              fontFamily: "Regular"),
-                                          textAlign: TextAlign.center,
-                                        ):
-                                        Container(
+                                              color: Color(ColorValues
+                                                  .THEME_TEXT_COLOR),
+                                              fontFamily:
+                                              "Regular"),
+                                          textAlign:
+                                          TextAlign.center,
+                                        )
+                                            : Container(
                                           decoration: BoxDecoration(
-                                              color: Color(
-                                                  ColorValues.THEME_TEXT_COLOR),
+                                              color: Color(ColorValues
+                                                  .THEME_TEXT_COLOR),
                                               borderRadius:
-                                              BorderRadius.circular(10)),
+                                              BorderRadius
+                                                  .circular(
+                                                  10)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-                                            child: Text("Pay Now",
+                                            padding:
+                                            const EdgeInsets
+                                                .symmetric(
+                                                horizontal: 15,
+                                                vertical: 7),
+                                            child: Text(
+                                              "Pay Now",
                                               // "Confirmed",
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   color: Color(
-                                                      ColorValues.WHITE),
+                                                      ColorValues
+                                                          .WHITE),
                                                   // Color(ColorValues.),
-                                                  fontFamily: "Regular"),
-                                              textAlign: TextAlign.center,
+                                                  fontFamily:
+                                                  "Regular"),
+                                              textAlign:
+                                              TextAlign.center,
                                             ),
                                           ),
                                         ),
