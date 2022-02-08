@@ -9,10 +9,18 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 class MyUtils{
-  static String changeDateFormat(String date){
+  // static String changeDateFormat(String date){
+  //   // String to date
+  //   DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+  //   final DateFormat formatter = DateFormat('yyyy-MMM-dd');
+  //   final String formatted = formatter.format(tempDate);
+  //   return formatted;
+  // }
+
+  static String changeDateFormat(String date) {
     // String to date
-    DateTime tempDate = new DateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(date);
+    final DateFormat formatter = DateFormat('dd MMM yyyy');
     final String formatted = formatter.format(tempDate);
     return formatted;
   }

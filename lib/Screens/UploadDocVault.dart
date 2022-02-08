@@ -715,7 +715,7 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                     child: Text(
                                       "Upload Here",
                                       style: TextStyle(
-                                          decoration: TextDecoration.underline,
+                                          // decoration: TextDecoration.underline,
                                           fontFamily: "Regular",
                                           fontSize: 16,
                                           color: Color(

@@ -427,6 +427,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       MyUtils.showCustomToast(ValidationMsgs.NAME_VALIDATION, true, context);
       return;
     }
+    if (_email.text.isEmpty) {
+      // showToast("Please enter name");
+      MyUtils.showCustomToast(ValidationMsgs.EMAIL_VALIDATION, true, context);
+      return;
+    }
     FocusScope.of(context).unfocus();
     dialog = new ProgressDialog(context);
     dialog.style(message: 'Please wait...');

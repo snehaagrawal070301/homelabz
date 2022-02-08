@@ -640,7 +640,7 @@ class _ViewDocVaultState extends State<ViewDocVault> {
                                   Positioned(
                                     // right: 0,
                                       right: 10,
-                                      bottom:30,
+                                      bottom:6,
                                       child: GestureDetector(
                                           onTap: () {
                                             // if(vaultFolderDetailsList[pos].isLocal){

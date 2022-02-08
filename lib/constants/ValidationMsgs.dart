@@ -15,6 +15,7 @@ class ValidationMsgs{
 
   static final String TNC = "Please accept terms & conditions first! ";
   static final String NAME_VALIDATION = "Please Enter Your Name";
+  static final String EMAIL_VALIDATION = "Please Enter Your email address";
   static final String CODE_VALIDATION = "Please Enter Code";
   static final String MOBILE_VALIDATION = "Please Enter Mobile Number";
   static final String EDIT_PROFILE_VALIDATION = "Please Update Something";

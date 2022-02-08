@@ -244,13 +244,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   ),
                                                 ),
                                                 new Container(
-                                                  margin: const EdgeInsets
-                                                      .fromLTRB(
-                                                      0.0, 5, 0, 5.0),
+                                                  margin: const EdgeInsets.fromLTRB(0.0, 5, 0, 5.0),
                                                   child: new Text(
-                                                    dataList[pos]
-                                                        .createdDate,
-                                                    // MyUtils.getTimeDifferance(dataList[pos].createdDate),
+                                                    // dataList[pos].createdDate,
+                                                    MyUtils.changeDateFormat(dataList[pos].createdDate),
                                                     // "2 Hours Ago",
                                                     style: new TextStyle(
                                                         fontSize: 9.0,

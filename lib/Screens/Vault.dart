@@ -476,7 +476,7 @@ class _VaultState extends State<Vault> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(bottom: 25),
+                                margin: EdgeInsets.only(bottom: 25, top:5),
                                 child: Text(
                                   folderList[pos].name,
                                   //"",
