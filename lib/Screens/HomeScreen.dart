@@ -719,40 +719,43 @@ class HomeScreenState extends State<HomeScreen> {
                       )),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    height: 35,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Color(ColorValues.BLACK_COLOR)),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 52),
-                          child: Image(
-                            image: AssetImage("assets/images/googleIcon.png"),
-                            height: 14,
-                            width: 14,
-                          ),
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Continue with Google",
-                              style: TextStyle(
-                                color: Color(ColorValues.BLACK_COLOR),
-                                fontFamily: "Regular",
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            )),
-                      ],
-                    ),
-                  ),
+
+                  // its useful do not delete
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                  //   padding: EdgeInsets.symmetric(horizontal: 25),
+                  //   height: 35,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   decoration: BoxDecoration(
+                  //       border:
+                  //           Border.all(color: Color(ColorValues.BLACK_COLOR)),
+                  //       borderRadius: BorderRadius.circular(10.0)),
+                  //   child: Row(
+                  //     children: [
+                  //       Container(
+                  //         padding: EdgeInsets.only(left: 52),
+                  //         child: Image(
+                  //           image: AssetImage("assets/images/googleIcon.png"),
+                  //           height: 14,
+                  //           width: 14,
+                  //         ),
+                  //       ),
+                  //       Container(
+                  //           padding: EdgeInsets.only(left: 10),
+                  //           child: Text(
+                  //             "Continue with Google",
+                  //             style: TextStyle(
+                  //               color: Color(ColorValues.BLACK_COLOR),
+                  //               fontFamily: "Regular",
+                  //               fontSize: 14,
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //             textAlign: TextAlign.center,
+                  //           )),
+                  //     ],
+                  //   ),
+                  // ),
+                  // its useful do not delete
                   GestureDetector(
                       onTap: () {
                         Navigator.pop(context);

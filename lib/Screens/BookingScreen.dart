@@ -480,7 +480,6 @@ class BookingScreenState extends State<BookingScreen> {
      imageList.add(model);
 
     setState(() {
-      imageList = imageList.reversed.toList();
     });
   }
 
