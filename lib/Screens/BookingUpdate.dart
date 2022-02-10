@@ -78,13 +78,13 @@ class BookingUpdateState extends State<BookingUpdate> {
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
     callAllLabsApi();
-    callDoctorApi();
+    // callDoctorApi();
     UploadData obj = new UploadData(
         new File("assets/images/uploadLogo.png"), "png", "addIcon", null, false);
     imageList.add(obj);
 
     setState(() {});
-    callBookingDetailsApi();
+    // callBookingDetailsApi();
   }
 
   callBookingDetailsApi() async {
@@ -269,6 +269,7 @@ class BookingUpdateState extends State<BookingUpdate> {
         //   _doctor.add(model);
         // }
         setState(() {});
+        callBookingDetailsApi();
       }else{
         // var data = json.decode(body);
         // MyUtils.showCustomToast(data['mobileMessage'], true, context);
@@ -305,6 +306,7 @@ class BookingUpdateState extends State<BookingUpdate> {
           LabResponse model = LabResponse.fromJson(obj);
           _labs.add(model);
         }
+        callDoctorApi();
       }else{
         // var data = json.decode(body);
         // MyUtils.showCustomToast(data['mobileMessage'], true, context);
