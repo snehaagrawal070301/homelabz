@@ -95,30 +95,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (response.statusCode == 200) {
         UserDetails model = UserDetails.fromJson(json.decode(body));
+        _name = new TextEditingController(text: model.name);
+        _phone = new TextEditingController(text: model.mobileNumber);
+        if(model.dob!=null)
+        _dob = new TextEditingController(text: model.dob);
+        //_education = new TextEditingController(text: model.education);
+        if(model.address!=null)
+        _address = new TextEditingController(text: model.address);
+        if(model.email!=null)
+        _email = new TextEditingController(text: model.email);
+        if(model.gender!=null)
+        gender = model.gender.toUpperCase();
+
+        if(model.dob!=null && model.dob.length>0){
+          selectedDate = new DateFormat("yyyy-MM-dd").parse(model.dob);
+        }
+
+        preferences.setString("name", model.name);
+        if(model.dob!=null)
+        preferences.setString("dob", model.dob);
+        if(model.address!=null)
+        preferences.setString("address", model.address);
+        if(model.gender!=null)
+        preferences.setString("gender", gender);
+
+        if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
+          oldImagePath = model.imagePath;
+          imageUrl = model.imagePresignedURL;
+          preferences.setString("image", imageUrl);
+        }
+        isLoading = false;
+
         setState(() {
-          _name = new TextEditingController(text: model.name);
-          _phone = new TextEditingController(text: model.mobileNumber);
-          _dob = new TextEditingController(text: model.dob);
-          //_education = new TextEditingController(text: model.education);
-          _address = new TextEditingController(text: model.address);
-          _email = new TextEditingController(text: model.email);
-          gender = model.gender.toUpperCase();
-
-          if(model.dob!=null && model.dob.length>0){
-            selectedDate = new DateFormat("yyyy-MM-dd").parse(model.dob);
-          }
-
-          preferences.setString("name", model.name);
-          preferences.setString("dob", model.dob);
-          preferences.setString("address", model.address);
-          preferences.setString("gender", gender);
-
-          if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
-            oldImagePath = model.imagePath;
-            imageUrl = model.imagePresignedURL;
-            preferences.setString("image", imageUrl);
-          }
-          isLoading = false;
         });
       }else{
         var data = json.decode(body);

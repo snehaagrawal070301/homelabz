@@ -148,6 +148,7 @@ class _HistoryState extends State<History> {
           top: 60,
           right: 0,
           left: 0,
+          bottom: 2,
           child: Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
       height: MediaQuery

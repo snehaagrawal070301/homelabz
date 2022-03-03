@@ -141,8 +141,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
               top: 60,
               right: 0,
               left: 0,
+              bottom: 2,
               child: Container(
-                padding: EdgeInsets.only(left: 15, right: 15, bottom: 30),
+                color: Color(ColorValues.WHITE),
+                padding: EdgeInsets.only(left: 15, right: 15),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: RefreshIndicator(

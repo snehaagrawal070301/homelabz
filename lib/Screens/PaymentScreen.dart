@@ -88,12 +88,14 @@ class PaymentScreenState extends State<PaymentScreen>{
     dialog.style(message: 'Please wait...');
     await dialog.show();
 
-    var response = await StripeService.payWithNewCard(amount: model.amount.toString(), currency: model.currency);
-    if(response.success){
+    if (model.amount != null) {
+      var response = await StripeService.payWithNewCard(
+          amount: model.amount.toString(), currency: model.currency);
+    if (response.success) {
       print(response.message);
       // call submit api here
       submitPaymentStatus("succeeded");
-    }else{
+    } else {
 
     }
     await dialog.hide();
@@ -101,6 +103,7 @@ class PaymentScreenState extends State<PaymentScreen>{
         content: Text(response.message),
         duration: new Duration(
             milliseconds: response.success == true ? 1200 : 3000)));
+  }
   }
 
   Future<void> submitPaymentStatus(String status) async {

@@ -216,7 +216,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              "BOOK APPOINTMENT",
+                              "BOOK AN APPOINTMENT",
                               style: TextStyle(
                                   fontFamily: "Regular",
                                   fontSize: 12,
@@ -249,6 +249,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                     ]),
                 child: Container(
                     padding: EdgeInsets.all(10),
+                    color: Colors.white,
                     child: Text(
                       _list == null ? "" : "Upcoming Appointments",
                       style: TextStyle(
@@ -264,6 +265,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               right: 15,
               bottom: 5,
               child: Container(
+                color: Colors.white,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: FutureBuilder<List<UpcomingBookingList>>(builder:

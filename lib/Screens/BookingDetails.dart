@@ -831,12 +831,22 @@ class _BookingDetailsState extends State<BookingDetails> {
                 margin: EdgeInsets.only(top: 10, right: 5, left: 5, bottom: 15),
                 // padding: EdgeInsets.only(left: 5),
                 width: MediaQuery.of(context).size.width,
+                // decoration: BoxDecoration(
+                //   color: Color(ColorValues.LIGHT_GRAY),
+                //   border: Border.all(
+                //       color: Color(ColorValues.BLACK_COLOR), width: 1),
+                //   borderRadius: BorderRadius.circular(10),
+                // ),
                 decoration: BoxDecoration(
-                  color: Color(ColorValues.LIGHT_GRAY),
-                  border: Border.all(
-                      color: Color(ColorValues.BLACK_COLOR), width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    color: Color(ColorValues.WHITE),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5.0,
+                        spreadRadius: 0.5,
+                      )
+                    ]),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: TextFormField(
