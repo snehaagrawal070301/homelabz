@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:homelabz/Models/FolderDetailsResponse.dart';
@@ -64,6 +66,9 @@ class _ViewDocVaultState extends State<ViewDocVault> {
   int uploadCount = 0;
   List<FolderDetailsResponse> vaultFolderDetailsList;
   int localFileCounter=0;
+  Dio dio = Dio();
+  double progress = 0.0;
+  var path;
 
   @override
   void initState() {
@@ -228,7 +233,7 @@ class _ViewDocVaultState extends State<ViewDocVault> {
     try {
       var url = Uri.parse(uploadUrl);
       // make PUT request
-      Response response = await put(url, body: await imageFile.readAsBytes());
+      var response = await put(url, body: await imageFile.readAsBytes());
       if (response.statusCode == 200) {
         print("=== Success ===");
         uploadCount++;
@@ -240,6 +245,30 @@ class _ViewDocVaultState extends State<ViewDocVault> {
       } else {}
     } catch (e) {
       print("Error+++++" + e.toString());
+    }
+  }
+
+  void showPdfImage(pos){
+    // PDFViewScreen
+    String fileExt = vaultFolderDetailsList[pos].name.split('.').last;
+    print(fileExt);
+    if(fileExt.compareTo("pdf")==0){
+      // // File file  = File('/data/user/0/com.patient.homelabz/cache/file_picker/file-example_PDF_500_kB.pdf_1648123680886.pdf');
+      // File file  = File('com.mr.flutter.plugin.filepicker.FileInfo@6f53233');
+      // convertFileToDoc(file);
+      // if(doc!=null) {
+      //   showPDF(doc);
+      // }else{
+      //   MyUtils.showCustomToast("no PDF avail", false, context);
+      // }
+      //uncomment for pdf
+      // Navigator.push(
+      //       //     context,
+      //       //     MaterialPageRoute(
+      //       //         builder: (context) =>
+      //       //             PDFViewScreen(imageList[pos].imageFile,"")));
+    }else{
+      showImage(context, pos, "");
     }
   }
 
@@ -435,9 +464,81 @@ class _ViewDocVaultState extends State<ViewDocVault> {
         String keyPath = data["keyPath"];
         String imageUrl = data["presignedURL"];
 
-        showImage(context, -1, imageUrl);
+        String fileExt = keyPath.split('.').last;
+
+        String fileName = (keyPath.split('/').last);
+        print(fileName);
+
+        // showImage(context, -1, imageUrl);
+
+        if(fileExt.compareTo("pdf")==0){
+          print("file extension ====== "+fileExt);
+          // openPDF(imageUrl);
+          // showPDF();
+          // startDownloading(fileName, imageUrl);
+
+          // var tempDir = await getTemporaryDirectory();
+          // String fullPath = tempDir.path + fileName;
+          // print('full path ${fullPath}')
+
+          dirPath();
+          downloadInFolder(fileName, imageUrl);
+
+        }else {
+          showImage(context,-1, imageUrl);
+        }
       }
     } catch (ex) {}
+  }
+
+  void dirPath() async {
+    path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    print(path);
+  }
+
+  Future<void> downloadInFolder(String fileName, String imageUrl) async {
+    try {
+      dialog = new ProgressDialog(context);
+      dialog.style(message: 'Please wait...');
+      await dialog.show();
+
+      var response = await dio.get(imageUrl,
+        onReceiveProgress: showDownloadProgress,
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+      print(response.headers);
+      File file = File(path+"/"+fileName);
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showDownloadProgress(received, total) {
+    int counter = 0;
+    if (total != -1) {
+      print((received / total * 100).toStringAsFixed(0) + "%");
+    }
+    String count = (received / total * 100).toStringAsFixed(0);
+    if(counter==0) {
+      counter+=1;
+      if (count.compareTo("100") == 0) {
+        if(dialog!=null){
+          dialog.hide();
+        }
+        MyUtils.showCustomToast(
+            "File Downloaded. Please check downloads folder", false, context);
+      }
+    }
   }
 
   void callUpdateVaultApi() async {
@@ -591,7 +692,8 @@ class _ViewDocVaultState extends State<ViewDocVault> {
                                         onTap: () async {
                                           //DownloadImage n show
                                           if(vaultFolderDetailsList[pos].isLocal){
-                                             showImage(context, pos,"");
+                                             // showImage(context, pos,"");
+                                             showPdfImage(pos);
                                           }else{
                                             downloadImage(vaultFolderDetailsList[pos].path);
                                           }
@@ -639,8 +741,8 @@ class _ViewDocVaultState extends State<ViewDocVault> {
 
                                   Positioned(
                                     // right: 0,
-                                      right: 10,
-                                      bottom:6,
+                                      right: 12,
+                                      bottom:27,
                                       child: GestureDetector(
                                           onTap: () {
                                             // if(vaultFolderDetailsList[pos].isLocal){

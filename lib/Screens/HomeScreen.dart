@@ -97,8 +97,11 @@ class HomeScreenState extends State<HomeScreen> {
         UserDetails model = UserDetails.fromJson(json.decode(body));
 
         if (model.imagePresignedURL != null && model.imagePresignedURL.length > 0) {
-          imageName = model.imagePresignedURL;
-          preferences.setString("image", imageName);
+          String val = preferences.getString(Constants.LOGIN_STATUS);
+          if (val != null && val.compareTo("true") == 0) {
+            imageName = model.imagePresignedURL;
+            preferences.setString("image", imageName,);
+          }
         }
         setState(() {
         });
@@ -210,7 +213,7 @@ class HomeScreenState extends State<HomeScreen> {
     checkTokenValidity();
   }
 
-  Future onSelectNotification(String payload) {
+  Future onSelectNotification(String paylnvmvmcvgoad) {
     /*Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return NewScreen(
         payload: payload,

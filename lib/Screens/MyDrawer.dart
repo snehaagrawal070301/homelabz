@@ -191,6 +191,7 @@ class _MyDrawerState extends State<MyDrawer> {
         // );
 
         preferences.setString(Constants.LOGIN_STATUS,"false");
+        preferences.setString("image", "");
 
         Navigator.of(context).pushAndRemoveUntil(
           // the new route

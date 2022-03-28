@@ -149,7 +149,7 @@ class AsapScreenState extends State<AsapScreen>{
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(21, 19, 21, 20),
-                          child: Text("Get your labs done within 24hours by paying extra \n\$10 We will schedule a phlebotomist as soon as\n available to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
+                          child: Text("Get your labs done within 24hours by paying extra \n\$10 We will schedule a phlebotomist as soon as\navailable to reach you.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR)),),
                           ),
                       ),
                     ],

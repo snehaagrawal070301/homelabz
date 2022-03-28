@@ -130,6 +130,7 @@ class BookingUpdateState extends State<BookingUpdate> {
               }
             }
           }
+          if(_model.address!=null && _model.address.length>0)
           searchAddress = _model.address;
           convertedDateTime = _model.dob;
           gender = _model.gender.toUpperCase();
@@ -327,7 +328,7 @@ class BookingUpdateState extends State<BookingUpdate> {
             } else {
               // showToast(ConstantMsg.PRESCRIPTION_VALIDATION);
               String remarkVal = remarks.text;
-              if (remarkVal != null && remarkVal.length > 0) {
+              if ((prescriptionList!=null && prescriptionList.length>0)||(remarkVal != null && remarkVal.length > 0)) {
                 // call Update booking Api here
 
                 if (widget.date == null) {

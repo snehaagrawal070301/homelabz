@@ -378,6 +378,28 @@ class _UploadDocVaultState extends State<UploadDocVault> {
     }
   }
 
+  void showPdfImage(pos){
+    // PDFViewScreen
+    if(imageList[pos].fileExt.compareTo(".pdf")==0){
+      // // File file  = File('/data/user/0/com.patient.homelabz/cache/file_picker/file-example_PDF_500_kB.pdf_1648123680886.pdf');
+      // File file  = File('com.mr.flutter.plugin.filepicker.FileInfo@6f53233');
+      // convertFileToDoc(file);
+      // if(doc!=null) {
+      //   showPDF(doc);
+      // }else{
+      //   MyUtils.showCustomToast("no PDF avail", false, context);
+      // }
+      //uncomment for pdf
+      // Navigator.push(
+      //       //     context,
+      //       //     MaterialPageRoute(
+      //       //         builder: (context) =>
+      //       //             PDFViewScreen(imageList[pos].imageFile,"")));
+    }else{
+      showImage(context, pos);
+    }
+  }
+
   void showImage(context, pos) {
     showDialog(
         context: context,
@@ -634,7 +656,8 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                             // margin: EdgeInsets.only(top: 10),
                                             child: GestureDetector(
                                                 onTap: () async {
-                                                  showImage(context, pos);
+                                                  // showImage(context, pos);
+                                                  showPdfImage(pos);
                                                 },
                                                 // child: Image.file(
                                                 //   imageList[pos].imageFile,
@@ -676,7 +699,7 @@ class _UploadDocVaultState extends State<UploadDocVault> {
                                           ),
                                           Positioned(
                                               right: 10,
-                                              bottom: 2,
+                                              bottom: 45,
                                               child: GestureDetector(
                                                   onTap: () {
                                                     showAlertDialog(

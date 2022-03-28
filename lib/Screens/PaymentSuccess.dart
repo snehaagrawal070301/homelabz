@@ -72,7 +72,7 @@ class PaymentSuccessState extends State<PaymentSuccess>{
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 30),
-                    child: Text("Your Payment was successfully completed.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR),fontFamily:"Medium"),textAlign: TextAlign.center,),
+                    child: Text("Your Payment is successful.",style: TextStyle(fontSize: 12,color: Color(ColorValues.BLACK_COLOR),fontFamily:"Medium"),textAlign: TextAlign.center,),
                   )
                 ],
               ),

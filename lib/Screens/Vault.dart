@@ -285,7 +285,7 @@ class _VaultState extends State<Vault> {
                       Container(
                         margin: EdgeInsets.only(top: 5, left: 10, right: 10),
                         child: Text(
-                          "Keep your documents at one Place",
+                          "Keep your documents at one place",
                           style: TextStyle(
                             fontSize: Values.VALUE_SIZE,
                             fontFamily: "Regular",

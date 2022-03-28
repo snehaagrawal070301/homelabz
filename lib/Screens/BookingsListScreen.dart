@@ -37,13 +37,20 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
-    callBookingList();
+    callBookingList(false);
   }
 
-  Future<void> callBookingList() async {
-    ProgressDialog dialog = new ProgressDialog(context);
+  Future<void> hideLoaderOnRefresh() async {
+    await callBookingList(true);
+  }
+
+  Future<void> callBookingList(bool isRefresh) async {
+    ProgressDialog dialog;
+    if(!isRefresh){
+    dialog = new ProgressDialog(context);
     dialog.style(message: 'Please wait...');
     await dialog.show();
+    }
 
     try {
       setState(() {
@@ -87,12 +94,16 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
         var data = json.decode(body);
         MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
-      await dialog.hide();
+      if(!isRefresh) {
+        await dialog.hide();
+      }
     } catch (ex) {
       setState(() {
         isData = true;
       });
-      await dialog.hide();
+      if(!isRefresh) {
+        await dialog.hide();
+      }
     }
   }
 
@@ -273,7 +284,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                         AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
                   if (_list != null && _list.length > 0) {
                     return RefreshIndicator(
-                      onRefresh: callBookingList,
+                      onRefresh: hideLoaderOnRefresh,
                       child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           // physics: const ScrollPhysics(),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:homelabz/Models/DoctorModel.dart';
@@ -23,6 +24,8 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+
+import 'PDFViewScreen.dart';
 
 class UploadData {
   File imageFile;
@@ -74,6 +77,7 @@ class BookingScreenState extends State<BookingScreen> {
   bool _multiPick = true;
   String _fileName;
   List<PlatformFile> listOfImages;
+  PDFDocument doc;
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -363,6 +367,48 @@ class BookingScreenState extends State<BookingScreen> {
   //   );
   // }
 
+  Future<void> convertFileToDoc(File file) async {
+    doc = await PDFDocument.fromFile(file);
+  }
+
+  void showPdfImage(pos){
+    // PDFViewScreen
+    if(imageList[pos].fileExt.compareTo(".pdf")==0){
+      // // File file  = File('/data/user/0/com.patient.homelabz/cache/file_picker/file-example_PDF_500_kB.pdf_1648123680886.pdf');
+      // File file  = File('com.mr.flutter.plugin.filepicker.FileInfo@6f53233');
+      // convertFileToDoc(file);
+      // if(doc!=null) {
+      //   showPDF(doc);
+      // }else{
+      //   MyUtils.showCustomToast("no PDF avail", false, context);
+      // }
+      //uncomment for pdf
+      // Navigator.push(
+      //       //     context,
+      //       //     MaterialPageRoute(
+      //       //         builder: (context) =>
+      //       //             PDFViewScreen(imageList[pos].imageFile,"")));
+    }else{
+    showImage(context, pos);
+    }
+  }
+
+  void showPDF(pos) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Scaffold(
+            body: Center(
+              child: pos!=null?
+              PDFViewer(
+                document: pos,
+                zoomSteps: 1,
+
+              ):
+            Container(child:Text("No PDF Available"))),
+          );
+        });
+  }
   void showImage(context, pos) {
     showDialog(
         context: context,
@@ -448,7 +494,7 @@ class BookingScreenState extends State<BookingScreen> {
       listOfImages = (await FilePicker.platform.pickFiles(
               allowMultiple: _multiPick,
               type: FileType.custom,
-              allowedExtensions: ['jpg', 'pdf', 'doc', 'docx', 'png', 'jpeg']))
+              allowedExtensions: ['jpg', 'pdf', 'png', 'jpeg']))
           ?.files;
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
@@ -459,10 +505,14 @@ class BookingScreenState extends State<BookingScreen> {
     setState(() {
       _loadingPath = false;
       for (var obj in listOfImages) {
-        // Size check < 5 MB
+        // Size check > 5 MB (5000000)
         print("size ======= ${obj.size}");
-        File file = File(obj.path);
-        setData(file);
+        if(obj.size<5000000) {
+          File file = File(obj.path);
+          setData(file);
+        }else{
+          MyUtils.showCustomToast("File is too big to upload. try with other file", true, context);
+        }
       }
     });
   }
@@ -1197,7 +1247,7 @@ class BookingScreenState extends State<BookingScreen> {
                         Container(
                           margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 0),
                           child: Text(
-                            "Test Sample",
+                            "Prescription",
                             style: TextStyle(
                               fontSize: Values.VALUE_SIZE,
                               fontFamily: "Regular",
@@ -1278,7 +1328,9 @@ class BookingScreenState extends State<BookingScreen> {
                                                   if (imageList[pos].imageName == "addIcon")
                                                     _showPicker(context);
                                                   else
-                                                    showImage(context, pos);
+                                                    // show pdf or image
+                                                    showPdfImage(pos);
+                                                    // showImage(context, pos);
                                                 },
                                                 child: Image(
                                                   image: imageList[pos].imageName == "addIcon"

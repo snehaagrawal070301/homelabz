@@ -1,16 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:homelabz/Models/BookingDetailsModel.dart';
 import 'package:homelabz/Models/PrescriptionModel.dart';
+import 'package:homelabz/Screens/CallForBooking.dart';
 import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/Values.dart';
 import 'package:homelabz/constants/apiConstants.dart';
-import 'package:http/http.dart';
 import 'package:http/io_client.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +33,10 @@ class _BookingDetailsState extends State<BookingDetails> {
   BookingDetailsModel _model;
   List<PrescriptionModel> prescriptionList = [];
   TextEditingController remarks;
+  Dio dio = Dio();
+  double progress = 0.0;
+  var path;
+  ProgressDialog dialog;
 
   @override
   void initState() {
@@ -124,6 +131,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     }
   }
 
+  void goToContactPage(){
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) => CallForBooking()));
+  }
+
   void callPaymentScreen() {
     Navigator.push(
         context,
@@ -150,6 +164,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 
         // make POST request
         var response = await _ioClient.post(url, headers: headers, body: json.encode(map));
+        print(response);
         // check the status code for the result
         String body = response.body;
         print(body);
@@ -159,10 +174,35 @@ class _BookingDetailsState extends State<BookingDetails> {
           String keyPath = data["keyPath"];
           String imageUrl = data["presignedURL"];
 
-          showImage(context, imageUrl);
+          String fileExt = keyPath.split('.').last;
+
+          String fileName = (keyPath.split('/').last);
+          print(fileName);
+
+          if(fileExt.compareTo("pdf")==0){
+            print("file extension ====== "+fileExt);
+            // openPDF(imageUrl);
+            // showPDF();
+            // startDownloading(fileName, imageUrl);
+
+            // var tempDir = await getTemporaryDirectory();
+            // String fullPath = tempDir.path + fileName;
+            // print('full path ${fullPath}')
+
+            dirpath();
+            downloadInFolder(fileName, imageUrl);
+
+          }else {
+            showImage(context, imageUrl);
+          }
         }
       } catch (ex) {}
     }
+
+  void dirpath() async {
+    path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    print(path);
+  }
 
   void showImage(context, imageUrl) {
     showDialog(
@@ -189,6 +229,166 @@ class _BookingDetailsState extends State<BookingDetails> {
         });
   }
 
+  Future<void> downloadInFolder(String fileName, String imageUrl) async {
+    try {
+      dialog = new ProgressDialog(context);
+      dialog.style(message: 'Please wait...');
+      await dialog.show();
+
+      Response response = await dio.get(imageUrl,
+        onReceiveProgress: showDownloadProgress,
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 500;
+            }),
+      );
+      print(response.headers);
+      File file = File(path+"/"+fileName);
+      var raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data);
+      await raf.close();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showDownloadProgress(received, total) {
+    int counter = 0;
+    if (total != -1) {
+      print((received / total * 100).toStringAsFixed(0) + "%");
+    }
+    String count = (received / total * 100).toStringAsFixed(0);
+    if(counter==0) {
+      if (count.compareTo("100") == 0) {
+        counter+=1;
+        if(dialog!=null){
+          dialog.hide();
+        }
+        MyUtils.showCustomToast(
+            "File Downloaded. Please check downloads folder", false, context);
+      }
+    }
+  }
+
+////////////////////////////////////////////////////
+  void startDownloading(String name, String imageUrl) async {
+    // const String url =
+    //     'https://firebasestorage.googleapis.com/v0/b/e-commerce-72247.appspot.com/o/195-1950216_led-tv-png-hd-transparent-png.png?alt=media&token=0f8a6dac-1129-4b76-8482-47a6dcc0cd3e';
+
+    try {
+      String url = imageUrl;
+      // String fileName = "TV.jpg";
+
+      String path = await _getFilePath(name);
+
+      await dio.download(
+        url,
+        path,
+        onReceiveProgress: (recivedBytes, totalBytes) {
+          setState(() {
+            progress = recivedBytes / totalBytes;
+          });
+
+
+          print(progress);
+        },
+        deleteOnError: true,
+      ).then((_) {
+        Navigator.pop(context);
+      });
+    }catch(ex){
+      print(ex);
+    }
+  }
+
+  Future<String> _getFilePath(String filename) async {
+    final dir = await getApplicationDocumentsDirectory();
+    return "${dir.path}/$filename";
+  }
+
+  void showPDF() {
+    showDialog(
+        context: context,
+        builder: (context)
+    {
+      // return Scaffold(
+      //   appBar: AppBar(
+      //     title: const Text('PDFViewer'),
+      //   ),
+      //   body: Center(
+      //     child: doc != null ? PDFViewer(
+      //       document: doc,
+      //       zoomSteps: 1,
+      //       //uncomment below line to preload all pages
+      //       // lazyLoad: false,
+      //       // uncomment below line to scroll vertically
+      //       // scrollDirection: Axis.vertical,
+      //
+      //       //uncomment below code to replace bottom navigation with your own
+      //       /* navigationBuilder:
+      //                     (context, page, totalPages, jumpToPage, animateToPage) {
+      //                   return ButtonBar(
+      //                     alignment: MainAxisAlignment.spaceEvenly,
+      //                     children: <Widget>[
+      //                       IconButton(
+      //                         icon: Icon(Icons.first_page),
+      //                         onPressed: () {
+      //                           jumpToPage()(page: 0);
+      //                         },
+      //                       ),
+      //                       IconButton(
+      //                         icon: Icon(Icons.arrow_back),
+      //                         onPressed: () {
+      //                           animateToPage(page: page - 2);
+      //                         },
+      //                       ),
+      //                       IconButton(
+      //                         icon: Icon(Icons.arrow_forward),
+      //                         onPressed: () {
+      //                           animateToPage(page: page);
+      //                         },
+      //                       ),
+      //                       IconButton(
+      //                         icon: Icon(Icons.last_page),
+      //                         onPressed: () {
+      //                           jumpToPage(page: totalPages - 1);
+      //                         },
+      //                       ),
+      //                     ],
+      //                   );
+      //                 }, */
+      //     ) :
+      //     Container(child: Text("No PDF"),),
+      //   ),
+      // );
+      String downloadingprogress = (progress * 100).toInt().toString();
+      return AlertDialog(
+        backgroundColor: Colors.black,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator.adaptive(),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Downloading: $downloadingprogress%",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    );
+  }
+////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -880,48 +1080,51 @@ class _BookingDetailsState extends State<BookingDetails> {
                 // ),
               ),
 ///////////////////////////////////////////////////////////////////
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
-                child: Divider(
-                  indent: 0,
-                  endIndent: 0,
-                  height: 2,
-                  color: Color(ColorValues.GREY_TEXT_COLOR),
-                ),
-              ),
-
-              Container(
-                child: Text(
-                  'View Invoice',
-                  style: TextStyle(
-                    fontSize: Values.HEADING_SIZE,
-                    fontFamily: "Regular",
-                    fontWeight: FontWeight.bold,
-                    color: Color(
-                        ColorValues.THEME_TEXT_COLOR),
-                  ),
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 15, 0, 25),
-                child: Divider(
-                  indent: 0,
-                  endIndent: 0,
-                  height: 2,
-                  color: Color(ColorValues.GREY_TEXT_COLOR),
-                ),
-              ),
+            // Invoice code
+            //   Container(
+            //     margin: EdgeInsets.fromLTRB(0, 25, 0, 15),
+            //     child: Divider(
+            //       indent: 0,
+            //       endIndent: 0,
+            //       height: 2,
+            //       color: Color(ColorValues.GREY_TEXT_COLOR),
+            //     ),
+            //   ),
+            //
+            //   Container(
+            //     child: Text(
+            //       'View Invoice',
+            //       style: TextStyle(
+            //         fontSize: Values.HEADING_SIZE,
+            //         fontFamily: "Regular",
+            //         fontWeight: FontWeight.bold,
+            //         color: Color(
+            //             ColorValues.THEME_TEXT_COLOR),
+            //       ),
+            //     ),
+            //   ),
+            //
+            //   Container(
+            //     margin: EdgeInsets.fromLTRB(0, 15, 0, 25),
+            //     child: Divider(
+            //       indent: 0,
+            //       endIndent: 0,
+            //       height: 2,
+            //       color: Color(ColorValues.GREY_TEXT_COLOR),
+            //     ),
+            //   ),
+     /////////////////////////////////////////
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
 
                   Container(
+                    margin: EdgeInsets.only(top: 15),
                     child:Image(image: AssetImage("assets/images/contact.png"),color: Color(
                         ColorValues.THEME_TEXT_COLOR),height: 23,width: 23,),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 10),
+                    margin: EdgeInsets.only(left: 10, top: 15),
                     child: Text(
                       'Reach out to us ',
                       style: TextStyle(
@@ -939,6 +1142,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               ),
               GestureDetector(
                 onTap: () {
+                  goToContactPage();
                 },
                 child: Container(
                   margin: EdgeInsets.only(
