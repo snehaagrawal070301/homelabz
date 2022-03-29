@@ -189,8 +189,13 @@ class _BookingDetailsState extends State<BookingDetails> {
             // String fullPath = tempDir.path + fileName;
             // print('full path ${fullPath}')
 
-            dirpath();
-            downloadInFolder(fileName, imageUrl);
+            // working code
+            // dirpath();
+            // downloadInFolder(fileName, imageUrl);
+
+            //working code
+            var tempDir = await getTemporaryDirectory();
+            downloadPDF(fileName, imageUrl, tempDir.path + fileName);
 
           }else {
             showImage(context, imageUrl);
@@ -229,28 +234,59 @@ class _BookingDetailsState extends State<BookingDetails> {
         });
   }
 
-  Future<void> downloadInFolder(String fileName, String imageUrl) async {
-    try {
-      dialog = new ProgressDialog(context);
-      dialog.style(message: 'Please wait...');
-      await dialog.show();
+  // Future<void> downloadInFolder(String fileName, String imageUrl) async {
+  //   try {
+  //     dialog = new ProgressDialog(context);
+  //     dialog.style(message: 'Please wait...');
+  //     await dialog.show();
+  //
+  //     Response response = await dio.get(imageUrl,
+  //       onReceiveProgress: showDownloadProgress,
+  //       //Received data with List<int>
+  //       options: Options(
+  //           responseType: ResponseType.bytes,
+  //           followRedirects: false,
+  //           // validateStatus: (status) {
+  //           //   return status < 500;
+  //           // }),
+  //     );
+  //     print(response.headers);
+  //     File file = File(path+"/"+fileName);
+  //     var raf = file.openSync(mode: FileMode.write);
+  //     // response.data is List<int> type
+  //     raf.writeFromSync(response.data);
+  //     await raf.close();
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-      Response response = await dio.get(imageUrl,
-        onReceiveProgress: showDownloadProgress,
-        //Received data with List<int>
+  void updateProgress(done, total) {
+    progress = done / total;
+    setState(() {
+      if (progress >= 1) {
+        MyUtils.showCustomToast(
+            "File Downloaded. Please check downloads folder", false, context);
+      } else {
+        print('Download progress: ' + (progress * 100).toStringAsFixed(0) + '% done.');
+      }
+    });
+  }
+
+  Future<void> downloadPDF(String fileName, String imageUrl, String savePath) async {
+    try {
+      Response response = await dio.get(
+        imageUrl,
+        onReceiveProgress: updateProgress,
         options: Options(
             responseType: ResponseType.bytes,
             followRedirects: false,
-            validateStatus: (status) {
-              return status < 500;
-            }),
+            validateStatus: (status) { return status < 500; }
+        ),
       );
-      print(response.headers);
-      File file = File(path+"/"+fileName);
-      var raf = file.openSync(mode: FileMode.write);
-      // response.data is List<int> type
-      raf.writeFromSync(response.data);
-      await raf.close();
+      var file = File(savePath).openSync(mode: FileMode.write);
+      file.writeFromSync(response.data);
+      await file.close();
     } catch (e) {
       print(e);
     }

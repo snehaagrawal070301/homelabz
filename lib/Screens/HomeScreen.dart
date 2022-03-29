@@ -60,15 +60,16 @@ class HomeScreenState extends State<HomeScreen> {
     // fToast = FToast();
     // fToast.init(context);
     //
-    // registerNotification();
-    //
-    // var initializationSettingsAndroid =
-    // AndroidInitializationSettings('flutter_devs');
-    // var initializationSettingsIOs = IOSInitializationSettings();
-    // var initSetttings = InitializationSettings(
-    //     android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
-    // flutterLocalNotificationsPlugin.initialize(initSetttings,
-    //     onSelectNotification: onSelectNotification);
+
+    registerNotification();
+
+    var initializationSettingsAndroid =
+    AndroidInitializationSettings('logo');
+    var initializationSettingsIOs = IOSInitializationSettings();
+    var initSetttings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+    flutterLocalNotificationsPlugin.initialize(initSetttings,
+        onSelectNotification: onSelectNotification);
 
   }
 
@@ -105,15 +106,16 @@ class HomeScreenState extends State<HomeScreen> {
         }
         setState(() {
         });
-        registerNotification();
 
-        var initializationSettingsAndroid =
-        AndroidInitializationSettings('flutter_devs');
-        var initializationSettingsIOs = IOSInitializationSettings();
-        var initSetttings = InitializationSettings(
-            android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
-        flutterLocalNotificationsPlugin.initialize(initSetttings,
-            onSelectNotification: onSelectNotification);
+        // registerNotification();
+        //
+        // var initializationSettingsAndroid =
+        // AndroidInitializationSettings('flutter_devs');
+        // var initializationSettingsIOs = IOSInitializationSettings();
+        // var initSetttings = InitializationSettings(
+        //     android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+        // flutterLocalNotificationsPlugin.initialize(initSetttings,
+        //     onSelectNotification: onSelectNotification);
 
       }else if(response.statusCode == 401){
         showAlertForToken(context);
@@ -189,10 +191,14 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void getFcmToken() async {
-    _firebaseMessaging.getToken().then((token) {
-      fcmToken = token;
-      print("token : " + fcmToken);
-    });
+    try {
+      _firebaseMessaging.getToken().then((token) {
+        fcmToken = token;
+        print("token : " + fcmToken);
+      });
+    }catch(ex){
+    print("Failed to handle file name: " + ex.toString());
+    }
   }
 
   showNotification(title,description) async {
@@ -1292,8 +1298,8 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void callLoginApi(String mobileNumber) async {
-    // getFcmToken();
-    // print("FCM Token :" + fcmToken);
+    getFcmToken();
+    print("FCM Token :" + fcmToken);
 
     ProgressDialog dialog = new ProgressDialog(context);
     dialog.style(message: 'Please wait...');
@@ -1310,7 +1316,7 @@ class HomeScreenState extends State<HomeScreen> {
         Constants.MOBILE_NUM: mobileNumber,
         Constants.OTP: otp.text,
         Constants.ROLE: Constants.ROLE_ID,
-        // Constants.DEVICE_ID: fcmToken
+        Constants.DEVICE_ID: fcmToken
 
 //        ConstantMsg.MOBILE_NUM: "1111111110",
 //        ConstantMsg.OTP: 123456

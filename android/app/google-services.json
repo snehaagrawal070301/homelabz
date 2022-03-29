@@ -40,6 +40,13 @@
             {
               "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "634797801673-advkfr0s45ak0o8t0jgnvhd1k5t2dab4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homelabz.phlebotomist"
+              }
             }
           ]
         }
@@ -80,6 +87,13 @@
             {
               "client_id": "634797801673-jg3aslskqkbdt7n9ifncla24f82qrkma.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "634797801673-advkfr0s45ak0o8t0jgnvhd1k5t2dab4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homelabz.phlebotomist"
+              }
             }
           ]
         }
