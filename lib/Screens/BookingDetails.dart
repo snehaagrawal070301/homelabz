@@ -248,7 +248,8 @@ class _BookingDetailsState extends State<BookingDetails> {
             followRedirects: false,
             // validateStatus: (status) {
             //   return status < 500;
-            // }),
+            // }
+          ),
       );
       print(response.headers);
       File file = File(path+"/"+fileName);

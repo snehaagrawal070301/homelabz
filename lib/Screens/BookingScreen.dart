@@ -25,8 +25,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import 'PDFViewScreen.dart';
-
 class UploadData {
   File imageFile;
   String fileExt, imageName;
@@ -78,6 +76,7 @@ class BookingScreenState extends State<BookingScreen> {
   String _fileName;
   List<PlatformFile> listOfImages;
   PDFDocument doc;
+  int apiCounter = 0;
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -610,84 +609,90 @@ class BookingScreenState extends State<BookingScreen> {
   }
 
   void callBookAppointmentApiByDate(bool isASAP) async {
-    try {
-      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
-      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
-      IOClient _ioClient = new IOClient(_client);
+    if(apiCounter==0) {
+      apiCounter = 1;
+      try {
+        HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+        _client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => false;
+        IOClient _ioClient = new IOClient(_client);
 
-      var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
-      Map<String, String> headers = {
-        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
-        Constants.HEADER_AUTH: "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
-      };
-      print(preferences.getString(Constants.ACCESS_TOKEN));
-      Map patient = {
-        Constants.ID: preferences.get(Constants.ID),
-      };
-      Map bookedBy = {
-        Constants.ID: preferences.getString(Constants.ID),
-      };
-      Map lab = {
-        Constants.ID: selectedLabId,
-      };
-
-      List docList;
-      if (urlList != null && urlList.length > 0) {
-        Map userMap = {Constants.ID: preferences.getString(Constants.ID)};
-        docList = [];
-        for (int i = 0; i < urlList.length; i++) {
-          Map list1 = {
-            "category": "BOOKING",
-            "name": urlList[i].keyName,
-            "path": urlList[i].keyPath,
-            "user": userMap
-          };
-          docList.add(list1);
-        }
-      }
-
-      Map doctor;
-      if (selectedDoctorId != null) {
-        doctor = {
-          Constants.ID: selectedDoctorId,
+        var url = Uri.parse(ApiConstants.BOOK_APPOINTMENT);
+        Map<String, String> headers = {
+          Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+          Constants.HEADER_AUTH: "bearer " +
+              preferences.getString(Constants.ACCESS_TOKEN),
         };
-      }
+        print(preferences.getString(Constants.ACCESS_TOKEN));
+        Map patient = {
+          Constants.ID: preferences.get(Constants.ID),
+        };
+        Map bookedBy = {
+          Constants.ID: preferences.getString(Constants.ID),
+        };
+        Map lab = {
+          Constants.ID: selectedLabId,
+        };
 
-      Map mapBody = {
-        Constants.PATIENT: patient,
-        Constants.BOOKED_BY: bookedBy,
-        Constants.LAB: lab,
-        if (selectedDoctorId != null) Constants.DOCTOR: doctor,
-        Constants.ADDRESS: searchAddress,
-        Constants.DATE: widget.date,
-        Constants.TIME_FROM: widget.startTime,
-        Constants.TIME_TO: widget.endTime,
-        Constants.GENDER: gender,
-        Constants.REMARKS: remarks.text,
-        Constants.IS_ASAP: isASAP,
-        Constants.DOB: convertedDateTime,
-        if (urlList != null && urlList.length > 0) Constants.DOC_LIST: docList,
-      };
+        List docList;
+        if (urlList != null && urlList.length > 0) {
+          Map userMap = {Constants.ID: preferences.getString(Constants.ID)};
+          docList = [];
+          for (int i = 0; i < urlList.length; i++) {
+            Map list1 = {
+              "category": "BOOKING",
+              "name": urlList[i].keyName,
+              "path": urlList[i].keyPath,
+              "user": userMap
+            };
+            docList.add(list1);
+          }
+        }
 
-      print(mapBody);
-      // make POST request
-      var response =
-          await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
+        Map doctor;
+        if (selectedDoctorId != null) {
+          doctor = {
+            Constants.ID: selectedDoctorId,
+          };
+        }
 
-      String body = response.body;
-      var data = json.decode(body);
-      print(body);
+        Map mapBody = {
+          Constants.PATIENT: patient,
+          Constants.BOOKED_BY: bookedBy,
+          Constants.LAB: lab,
+          if (selectedDoctorId != null) Constants.DOCTOR: doctor,
+          Constants.ADDRESS: searchAddress,
+          Constants.DATE: widget.date,
+          Constants.TIME_FROM: widget.startTime,
+          Constants.TIME_TO: widget.endTime,
+          Constants.GENDER: gender,
+          Constants.REMARKS: remarks.text,
+          Constants.IS_ASAP: isASAP,
+          Constants.DOB: convertedDateTime,
+          if (urlList != null && urlList.length > 0) Constants
+              .DOC_LIST: docList,
+        };
 
-      if (response.statusCode == 200) {
-        int id = data["id"];
-        print(id);
-        callPaymentScreen(id);
-      } else {
+        print(mapBody);
+        // make POST request
+        var response =
+        await _ioClient.post(url, headers: headers, body: json.encode(mapBody));
+
+        String body = response.body;
         var data = json.decode(body);
-        MyUtils.showCustomToast(data['mobileMessage'], true, context);
+        print(body);
+
+        if (response.statusCode == 200) {
+          int id = data["id"];
+          print(id);
+          callPaymentScreen(id);
+        } else {
+          var data = json.decode(body);
+          MyUtils.showCustomToast(data['mobileMessage'], true, context);
+        }
+      } catch (e) {
+        print("Error+++++" + e.toString());
       }
-    } catch (e) {
-      print("Error+++++" + e.toString());
     }
   }
 
