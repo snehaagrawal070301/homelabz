@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     //print(_dob.text);
     //print(convertedDateTime);
-    _address.text = "Indore, MP";
+    _address.text = "";
     getSharedPreferences();
   }
 

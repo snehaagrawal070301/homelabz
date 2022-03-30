@@ -68,7 +68,7 @@ class BookingUpdateState extends State<BookingUpdate> {
   LabResponse labName;
   DoctorResponse doctorName;
   SharedPreferences preferences;
-  String searchAddress = "Indore, MP";
+  String searchAddress = "";
   bool _multiPick = true;
   bool _loadingPath = false;
   List<PlatformFile> listOfImages;

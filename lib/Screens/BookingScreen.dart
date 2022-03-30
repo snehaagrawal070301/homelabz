@@ -70,7 +70,7 @@ class BookingScreenState extends State<BookingScreen> {
   LabResponse labName;
   DoctorResponse doctorName;
   SharedPreferences preferences;
-  String searchAddress = "Indore, MP";
+  String searchAddress = "";
   bool _loadingPath = false;
   bool _multiPick = true;
   String _fileName;
