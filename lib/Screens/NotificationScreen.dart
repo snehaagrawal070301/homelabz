@@ -32,66 +32,78 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
-    getNotificationsList();
+    getNotificationsList(false);
   }
 
-  Future<void> getNotificationsList() async {
-    ProgressDialog dialog = new ProgressDialog(context);
-    dialog.style(message: 'Please wait...');
-    await dialog.show();
+  Future<void> hideLoaderOnRefresh() async {
+    await getNotificationsList(true);
+  }
 
-    try {
-      setState(() {
-        isData = true;
-      });
+  Future<void> getNotificationsList(bool isRefresh) async {
+    ProgressDialog dialog;
+    if(!isRefresh) {
+      dialog = new ProgressDialog(context);
+      dialog.style(message: 'Please wait...');
+      await dialog.show();
+    }
 
-      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
-      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
-      IOClient _ioClient = new IOClient(_client);
-
-      var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
-          preferences.getString(Constants.ID).toString());
-
-      print(preferences.getString(Constants.ACCESS_TOKEN));
-      print(preferences.getString(Constants.ID));
-
-      Map<String, String> headers = {
-        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
-        Constants.HEADER_AUTH:
-        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
-      };
-      // make GET request
-      var response = await _ioClient.get(url, headers: headers,);
-      // check the status code for the result
-      String body = response.body;
-      print(body);
-
-      if (response.statusCode == 200) {
-        dataList = [];
-        var data = json.decode(body);
-        List list = data;
-
-        for (var obj in list) {
-          NotificationModel model = NotificationModel.fromJson(obj);
-          dataList.add(model);
-        }
-
+      try {
         setState(() {
           isData = true;
         });
-      } else {
+
+        HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+        _client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => false;
+        IOClient _ioClient = new IOClient(_client);
+
+        var url = Uri.parse(ApiConstants.GET_NOTIFICATION_LIST +
+            preferences.getString(Constants.ID).toString());
+
+        print(preferences.getString(Constants.ACCESS_TOKEN));
+        print(preferences.getString(Constants.ID));
+
+        Map<String, String> headers = {
+          Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+          Constants.HEADER_AUTH:
+          "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        };
+        // make GET request
+        var response = await _ioClient.get(url, headers: headers,);
+        // check the status code for the result
+        String body = response.body;
+        print(body);
+
+        if (response.statusCode == 200) {
+          dataList = [];
+          var data = json.decode(body);
+          List list = data;
+
+          for (var obj in list) {
+            NotificationModel model = NotificationModel.fromJson(obj);
+            dataList.add(model);
+          }
+
+          setState(() {
+            isData = true;
+          });
+        } else {
+          setState(() {
+            isData = false;
+          });
+          var data = json.decode(body);
+          MyUtils.showCustomToast(data['mobileMessage'], true, context);
+        }
+        if(!isRefresh) {
+          await dialog.hide();
+        }
+      } catch (ex) {
         setState(() {
-          isData = false;
+          isData = true;
         });
-        var data = json.decode(body);
-        MyUtils.showCustomToast(data['mobileMessage'], true, context);
-      }
-      await dialog.hide();
-    } catch (ex) {
-      setState(() {
-        isData = true;
-      });
-      await dialog.hide();
+        if(!isRefresh) {
+          await dialog.hide();
+        }
     }
   }
 
@@ -148,7 +160,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: RefreshIndicator(
-                  onRefresh: getNotificationsList,
+                  color: Color(ColorValues.THEME_COLOR),
+                  backgroundColor: Color(ColorValues.WHITE),
+                  onRefresh: hideLoaderOnRefresh,
+                  // onRefresh: getNotificationsList,
                   child: dataList != null && dataList.length > 0
                       ? ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),

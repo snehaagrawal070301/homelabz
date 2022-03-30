@@ -284,6 +284,8 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                         AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
                   if (_list != null && _list.length > 0) {
                     return RefreshIndicator(
+                      color: Color(ColorValues.THEME_COLOR),
+                      backgroundColor: Color(ColorValues.WHITE),
                       onRefresh: hideLoaderOnRefresh,
                       child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),

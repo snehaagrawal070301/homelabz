@@ -16,7 +16,6 @@ import 'package:http/io_client.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'PaymentScreen.dart';
 
 class BookingDetails extends StatefulWidget {
@@ -37,6 +36,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   double progress = 0.0;
   var path;
   ProgressDialog dialog;
+  String fileName;
 
   @override
   void initState() {
@@ -176,7 +176,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 
           String fileExt = keyPath.split('.').last;
 
-          String fileName = (keyPath.split('/').last);
+          fileName = (keyPath.split('/').last);
           print(fileName);
 
           if(fileExt.compareTo("pdf")==0){
@@ -189,11 +189,11 @@ class _BookingDetailsState extends State<BookingDetails> {
             // String fullPath = tempDir.path + fileName;
             // print('full path ${fullPath}')
 
-            // working code
-            dirpath();
+            // working code//
+            dirPath();
             downloadInFolder(fileName, imageUrl);
 
-            //working code
+            //working code//
             // var tempDir = await getTemporaryDirectory();
             // downloadPDF(fileName, imageUrl, tempDir.path + fileName);
 
@@ -204,9 +204,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       } catch (ex) {}
     }
 
-  void dirpath() async {
+  void dirPath() async {
     path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
-    print(path);
+    print("public dir-----"+path);
   }
 
   void showImage(context, imageUrl) {
@@ -246,13 +246,15 @@ class _BookingDetailsState extends State<BookingDetails> {
         options: Options(
             responseType: ResponseType.bytes,
             followRedirects: false,
-            // validateStatus: (status) {
-            //   return status < 500;
-            // }
+            validateStatus: (status) {
+              return status < 500;
+            }
           ),
       );
       print(response.headers);
-      File file = File(path+"/"+fileName);
+      path = path+fileName;
+      print("path ======= "+path);
+      File file = File(path);
       var raf = file.openSync(mode: FileMode.write);
       // response.data is List<int> type
       raf.writeFromSync(response.data);
@@ -268,10 +270,17 @@ class _BookingDetailsState extends State<BookingDetails> {
       if (progress >= 1) {
         MyUtils.showCustomToast(
             "File Downloaded. Please check downloads folder", false, context);
+        openPdf();
       } else {
         print('Download progress: ' + (progress * 100).toStringAsFixed(0) + '% done.');
       }
     });
+  }
+
+  Future<void> openPdf() async {
+    var tempDir = await getTemporaryDirectory();
+    print("tempDir path ======== ${tempDir}");
+    // await Pspdfkit.present(tempDir.path + fileName);
   }
 
   Future<void> downloadPDF(String fileName, String imageUrl, String savePath) async {
