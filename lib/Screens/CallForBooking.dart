@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:homelabz/Screens/BottomNavBar.dart';
+import 'package:homelabz/Models/GlobalDataModel.dart';
 import 'package:homelabz/components/MyUtils.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/apiConstants.dart';
-import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,7 +15,9 @@ class CallForBooking extends StatefulWidget {
 }
 
 class _CallForBookingState extends State<CallForBooking> {
-  String _url = 'tel:+919876543210';
+  String _url = 'tel:9876543210';
+  String mob;
+  List<GlobalDataModel> globalDataList;
 
 //  var newString = _url.substring(0, 5);
 
@@ -24,6 +25,50 @@ class _CallForBookingState extends State<CallForBooking> {
   void initState() {
     super.initState();
     callApi();
+  }
+
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
+
+  void callApi() async {
+    try {
+      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
+      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+      IOClient _ioClient = new IOClient(_client);
+
+      var url = Uri.parse(ApiConstants.CALL_API);
+      Map<String, String> headers = {
+        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
+      };
+      // make POST request
+      var response = await _ioClient.get(url, headers: headers);
+      // check the status code for the result
+      String body = response.body;
+      print(body);
+      if (response.statusCode == 200) {
+        globalDataList = [];
+
+        var data = json.decode(body);
+        List list = data;
+        for (var obj in list) {
+          GlobalDataModel model = GlobalDataModel.fromJson(obj);
+          globalDataList.add(model);
+
+          if(model.code.compareTo("TOLL_FREE_NUMBER")==0){
+            mob = model.value;
+          }
+        }
+        setState(() {
+
+        });
+      }else{
+        // var data = json.decode(body);
+        // MyUtils.showCustomToast(data['mobileMessage'], true, context);
+      }
+    } catch (ex) {
+      print("ERROR+++++++++++++  ${ex}");
+    }
   }
 
   @override
@@ -93,7 +138,7 @@ class _CallForBookingState extends State<CallForBooking> {
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Text(
-                      "Tel:  +919876543210",
+                      "Tel:  ${mob}",
                       style: TextStyle(
                           fontSize: 16,
                           color: Color(ColorValues.BLACK_COLOR),
@@ -281,37 +326,5 @@ class _CallForBookingState extends State<CallForBooking> {
 //          ]),
 //    ),
 //    );
-  }
-
-  void _launchURL() async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
-
-  void callApi() async {
-    try {
-      HttpClient _client = HttpClient(context: await MyUtils.globalContext);
-      _client.badCertificateCallback = (X509Certificate cert, String host, int port) => false;
-      IOClient _ioClient = new IOClient(_client);
-
-      var url = Uri.parse(ApiConstants.CALL_API);
-      Map<String, String> headers = {
-        Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
-      };
-      // make POST request
-      var response = await _ioClient.get(url, headers: headers,);
-      // check the status code for the result
-      String body = response.body;
-      print(body);
-//      var data = json.decode(body);
-//      print(data);
-      if (response.statusCode == 200) {
-        print("success");
-//        _labs = [];
-//        LabResponse model = LabResponse.fromJson(json.decode(body));
-//        _labs.add(model);
-      }
-    } catch (ex) {
-      print("ERROR+++++++++++++  ${ex}");
-    }
   }
 }

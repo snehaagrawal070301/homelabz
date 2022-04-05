@@ -1346,6 +1346,14 @@ class HomeScreenState extends State<HomeScreen> {
 
           preferences.setString(Constants.MOBILE_NUM,
               data['userModel']['mobileNumber'].toString());
+
+          String isConsent = data['userModel']['isConsent'].toString();
+          if(isConsent.compareTo("true")==0) {
+            preferences.setString(Constants.IS_CONSENT,
+                data['userModel']['isConsent'].toString());
+          }
+          print(" consent ==== "+isConsent);
+
           print(preferences.getString(Constants.ID));
           print(preferences.getString(Constants.ACCESS_TOKEN));
         }

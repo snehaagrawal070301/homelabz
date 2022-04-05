@@ -35,5 +35,7 @@ class ApiConstants{
   static final String DELETE_FILE = BaseURL+"vault/deleteFile";
   static final String DELETE_SERVER_FILE = BaseURL+"document/delete";
   static final String BOOKING_UPDATE_API = BaseURL+"booking/updateBookingByPatient";
+  static final String UPDATE_CONSENT = BaseURL+"user/updateConsent";
+  // {"id":163,"isConsent":true}
 
 }

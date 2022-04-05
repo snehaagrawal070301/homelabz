@@ -5,10 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PDFViewScreen extends StatefulWidget {
-  final File file;
-  final String url;
+  // final File file;
+  // final String url;
 
-  const PDFViewScreen(this.file, this.url);
+  // const PDFViewScreen(this.file, this.url);
+  const PDFViewScreen();
 
   @override
   _PDFViewScreenState createState() => _PDFViewScreenState();
@@ -26,7 +27,9 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
 
   Future<void> loadDocument() async {
     // File file = File(widget.file.absolute);
-    document = await PDFDocument.fromFile(widget.file.absolute);
+    // document = await PDFDocument.fromFile(widget.file.absolute);
+    document = await PDFDocument.fromURL("https://pspdfkit.com/downloads/pspdfkit-flutter-quickstart-guide.pdf");
+    // document = await PDFDocument.fromAsset('assets/sample.pdf');
     setState(() {
       _isLoading = false;
     });

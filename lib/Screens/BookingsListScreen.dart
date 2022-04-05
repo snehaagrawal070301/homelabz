@@ -5,9 +5,11 @@ import 'package:homelabz/Models/BookingListResponse.dart';
 import 'package:homelabz/Screens/AsapScreen.dart';
 import 'package:homelabz/Screens/BookingDetails.dart';
 import 'package:homelabz/Screens/ChooseDateScreen.dart';
+import 'package:homelabz/Screens/ConsentFormScreen.dart';
 import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
+import 'package:homelabz/Screens/PDFViewScreen.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/ValidationMsgs.dart';
@@ -28,6 +30,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
   List<UpcomingBookingList> _list;
   BookingListResponse _model;
   var isData = true;
+  String isConsent;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
   getSharedPreferences() async {
     preferences = await SharedPreferences.getInstance();
+    isConsent = preferences.getString(Constants.IS_CONSENT);
     callBookingList(false);
   }
 
@@ -46,10 +50,10 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
   Future<void> callBookingList(bool isRefresh) async {
     ProgressDialog dialog;
-    if(!isRefresh){
-    dialog = new ProgressDialog(context);
-    dialog.style(message: 'Please wait...');
-    await dialog.show();
+    if (!isRefresh) {
+      dialog = new ProgressDialog(context);
+      dialog.style(message: 'Please wait...');
+      await dialog.show();
     }
 
     try {
@@ -66,7 +70,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
       Map<String, String> headers = {
         Constants.HEADER_CONTENT_TYPE: Constants.HEADER_VALUE,
         Constants.HEADER_AUTH:
-            "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
+        "bearer " + preferences.getString(Constants.ACCESS_TOKEN),
       };
       Map map = {
         Constants.PATIENT_ID: preferences.getString(Constants.ID),
@@ -74,7 +78,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
       };
       // make POST request
       var response =
-          await _ioClient.post(url, headers: headers, body: json.encode(map));
+      await _ioClient.post(url, headers: headers, body: json.encode(map));
       // check the status code for the result
       String body = response.body;
       print(body);
@@ -94,14 +98,14 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
         var data = json.decode(body);
         MyUtils.showCustomToast(data['mobileMessage'], true, context);
       }
-      if(!isRefresh) {
+      if (!isRefresh) {
         await dialog.hide();
       }
     } catch (ex) {
       setState(() {
         isData = true;
       });
-      if(!isRefresh) {
+      if (!isRefresh) {
         await dialog.hide();
       }
     }
@@ -162,14 +166,15 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
         appBar: AppBar(
           backgroundColor: Color(ColorValues.WHITE_COLOR),
           leading: Builder(
-            builder: (context) => IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/images/drawer.png'),
-                color: Color(ColorValues.THEME_TEXT_COLOR),
-                size: 50,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
+            builder: (context) =>
+                IconButton(
+                  icon: ImageIcon(
+                    AssetImage('assets/images/drawer.png'),
+                    color: Color(ColorValues.THEME_TEXT_COLOR),
+                    size: 50,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
           ),
           title: Text(
             "Make an Appointment",
@@ -196,14 +201,23 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
           ],
         ),
         body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           child: Stack(clipBehavior: Clip.none, children: [
             Container(
               color: Color(ColorValues.THEME_COLOR),
               child: Container(
                   height: 120,
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   color: Color(ColorValues.THEME_COLOR),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,16 +225,35 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChooseDateScreen(false, 0)));
+                          // testing only
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             PDFViewScreen()));
+
+                          // check for consent form
+                          if (!(preferences.getString(Constants.IS_CONSENT)
+                              .compareTo("true") == 0)) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ConsentFormScreen()));
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChooseDateScreen(false, 0)));
+                          }
                         },
                         child: Container(
                           margin: EdgeInsets.all(20),
                           height: 30,
-                          width: MediaQuery.of(context).size.width * 0.50,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.50,
                           decoration: BoxDecoration(
                             color: Color(ColorValues.WHITE_COLOR),
                             borderRadius: BorderRadius.circular(10),
@@ -245,8 +278,14 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               left: 10,
               right: 10,
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 // alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: Color(ColorValues.WHITE_COLOR),
@@ -277,11 +316,17 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               bottom: 5,
               child: Container(
                 color: Colors.white,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 child: FutureBuilder<List<UpcomingBookingList>>(builder:
                     (BuildContext context,
-                        AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
+                    AsyncSnapshot<List<UpcomingBookingList>> snapshot) {
                   if (_list != null && _list.length > 0) {
                     return RefreshIndicator(
                       color: Color(ColorValues.THEME_COLOR),
@@ -295,29 +340,41 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                           itemBuilder: (BuildContext context, int pos) {
                             return GestureDetector(
                               onTap: () {
-                                _list[pos].paymentStatus == "Unpaid"
-                                    ? _list[pos].isASAP
-                                        ? Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AsapScreen(
-                                                        true, _list[pos].id)))
-                                        : Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChooseDateScreen(
-                                                        true, _list[pos].id)))
-                                    : Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                BookingDetails(_list[pos].id)));
+                                if (!(preferences.getString(Constants.IS_CONSENT)
+                                    .compareTo("true") == 0)) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConsentFormScreen()));
+                                } else {
+                                  _list[pos].paymentStatus == "Unpaid"
+                                      ? _list[pos].isASAP
+                                      ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AsapScreen(
+                                                  true, _list[pos].id)))
+                                      : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChooseDateScreen(
+                                                  true, _list[pos].id)))
+                                      : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              BookingDetails(_list[pos].id)));
+                                }
                               },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                                width: MediaQuery.of(context).size.width,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width,
                                 decoration: BoxDecoration(
                                     color: Color(ColorValues.WHITE_COLOR),
                                     borderRadius: BorderRadius.circular(10),
@@ -752,7 +809,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           margin: const EdgeInsets.symmetric(
@@ -799,262 +856,268 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                               fontFamily: "Regular",
                                               fontSize: 17),
                                         )),
-                                   Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      children: <Widget>[
                                         Container(
                                           alignment: Alignment.center,
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 5, 5, 5),
-                                              child: Image(
-                                                image: AssetImage(
-                                                    "assets/images/location.png"),
-                                                width: 13,
-                                                height: 13,
-                                                color: Color(ColorValues.BLACK_COL),
-                                                alignment: Alignment.center,
-                                              ),
-                                            ),
-                                          Flexible(
-                                            child: Container(
-                                              child: Text(
-                                                  _list[pos].lab.user.address,
-                                                  overflow: TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: Color(
-                                                              ColorValues.BLACK_COL),
-                                                          fontFamily: "Regular",
-                                                          fontSize: 14),
-                                                    ),
+                                          margin:
+                                          EdgeInsets.fromLTRB(15, 5, 5, 5),
+                                          child: Image(
+                                            image: AssetImage(
+                                                "assets/images/location.png"),
+                                            width: 13,
+                                            height: 13,
+                                            color: Color(ColorValues.BLACK_COL),
+                                            alignment: Alignment.center,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                            child: Text(
+                                              _list[pos].lab.user.address,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Color(
+                                                      ColorValues.BLACK_COL),
+                                                  fontFamily: "Regular",
+                                                  fontSize: 14),
                                             ),
                                           ),
-                                        ],
-                                      ),
-
+                                        ),
+                                      ],
+                                    ),
                                     _list[pos].date == null
                                         ? Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            20, 15, 10, 20),
+                                        decoration: BoxDecoration(
+                                            color:
+                                            Color(ColorValues.GRAY_BG),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0))),
+                                        child: Container(
                                             margin: EdgeInsets.fromLTRB(
-                                                20, 15, 10, 20),
-                                            decoration: BoxDecoration(
-                                                color:
-                                                    Color(ColorValues.GRAY_BG),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0))),
-                                            child: Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    20, 15, 10, 15),
-                                                child: Text(
-                                                    ValidationMsgs
-                                                        .PHLEBOTOMIST_MSG,
-                                                    style: TextStyle(
-                                                      color: Color(ColorValues
-                                                          .BLACK_COL),
-                                                      fontSize: 14,
-                                                    ))))
+                                                20, 15, 10, 15),
+                                            child: Text(
+                                                ValidationMsgs
+                                                    .PHLEBOTOMIST_MSG,
+                                                style: TextStyle(
+                                                  color: Color(ColorValues
+                                                      .BLACK_COL),
+                                                  fontSize: 14,
+                                                ))))
                                         : Container(
-                                            margin: EdgeInsets.only(
-                                                top: 20, left: 30, bottom: 20),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                // _list[pos].isASAP == true ?
+                                      margin: EdgeInsets.only(
+                                          top: 20, left: 30, bottom: 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          // _list[pos].isASAP == true ?
 
-                                                _list[pos].date == null
-                                                    ? Container(
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        // height: 70,
-                                                        width: 35,
-                                                        color: Color(ColorValues
-                                                            .DATE_BG),
-                                                        child: Text(
-                                                          "A\nS\nA\nP",
-                                                          style: TextStyle(
-                                                              color: Color(
-                                                                  ColorValues
-                                                                      .THEME_COLOR),
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ))
-                                                    : Container(
-                                                        padding:
-                                                            EdgeInsets.fromLTRB(
-                                                                5, 10, 5, 10),
-                                                        width: 45,
-                                                        // height: 85,
-                                                        color: Color(ColorValues
-                                                            .DATE_BG),
-                                                        child: Center(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                MyUtils.getDayOfWeek(
-                                                                    "${_list[pos].date}"),
-                                                                // "TUE",
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        ColorValues
-                                                                            .LIGHT_TEXT_COLOR),
-                                                                    fontSize:
-                                                                        11),
-                                                              ),
-                                                              Text(
-                                                                MyUtils.getDateOfMonth(
-                                                                    "${_list[pos].date}"),
-                                                                // "25",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        21,
-                                                                    color: Color(
-                                                                        0xff21CDC0),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                              Text(
-                                                                MyUtils.getMonthName(
-                                                                    "${_list[pos].date}"),
-                                                                // "Feb",
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        ColorValues
-                                                                            .LIGHT_TEXT_COLOR),
-                                                                    fontSize:
-                                                                        11),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-
-                                                Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 0,
-                                                            horizontal: 7),
-                                                    height: 67,
-                                                    child: VerticalDivider(
+                                          _list[pos].date == null
+                                              ? Container(
+                                              padding:
+                                              EdgeInsets.all(5),
+                                              // height: 70,
+                                              width: 35,
+                                              color: Color(ColorValues
+                                                  .DATE_BG),
+                                              child: Text(
+                                                "A\nS\nA\nP",
+                                                style: TextStyle(
+                                                    color: Color(
+                                                        ColorValues
+                                                            .THEME_COLOR),
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                                textAlign:
+                                                TextAlign.center,
+                                              ))
+                                              : Container(
+                                            padding:
+                                            EdgeInsets.fromLTRB(
+                                                5, 10, 5, 10),
+                                            width: 45,
+                                            // height: 85,
+                                            color: Color(ColorValues
+                                                .DATE_BG),
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .center,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .center,
+                                                children: [
+                                                  Text(
+                                                    MyUtils.getDayOfWeek(
+                                                        "${_list[pos].date}"),
+                                                    // "TUE",
+                                                    style: TextStyle(
                                                         color: Color(
-                                                            ColorValues.GREY))),
-
-                                                _list[pos].phlebotomist == null
-                                                    ? Expanded(
-                                                        child: Container(
-                                                            margin: EdgeInsets.fromLTRB(
-                                                                2, 5, 15, 10),
-                                                            decoration: BoxDecoration(
-                                                                color: Color(
-                                                                    ColorValues
-                                                                        .GRAY_BG),
-                                                                borderRadius:
-                                                                    BorderRadius.all(Radius.circular(
-                                                                        10.0))),
-                                                            child: Container(
-                                                                margin:
-                                                                    EdgeInsets.fromLTRB(
-                                                                        15,
-                                                                        15,
-                                                                        10,
-                                                                        20),
-                                                                child: Text(
-                                                                    ValidationMsgs
-                                                                        .PHLEBOTOMIST_MSG,
-                                                                    style: TextStyle(
-                                                                      color: Color(
-                                                                          ColorValues
-                                                                              .BLACK_COL),
-                                                                      fontSize:
-                                                                          14,
-                                                                    )))),
-                                                      )
-                                                    : Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                            Text(
-                                                              _list[pos].phlebotomist ==
-                                                                      null
-                                                                  ? "Phlebotomist"
-                                                                  : _list[pos]
-                                                                              .phlebotomist
-                                                                              .name ==
-                                                                          null
-                                                                      ? "Phlebotomist"
-                                                                      : _list[pos]
-                                                                          .phlebotomist
-                                                                          .name,
-                                                              // "Phelbotomist Name",
-                                                              style: TextStyle(
-                                                                  color: Color(
-                                                                      ColorValues
-                                                                          .BLACK_TEXT_COL),
-                                                                  fontFamily:
-                                                                      "Regular",
-                                                                  fontSize: 13),
-                                                            ),
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      top: 5,
-                                                                      bottom:
-                                                                          10),
-                                                              child: Row(
-                                                                children: [
-                                                                  Image(
-                                                                      image: AssetImage(
-                                                                          "assets/images/clock.png"),
-                                                                      height:
-                                                                          17,
-                                                                      width:
-                                                                          17),
-                                                                  SizedBox(
-                                                                    width: 7,
-                                                                  ),
-                                                                  Text(
-                                                                      MyUtils.changeTimeFormat(
-                                                                              "${_list[pos].timeFrom}") +
-                                                                          " - " +
-                                                                          MyUtils.changeTimeFormat(
-                                                                              "${_list[pos].timeTo}"),
-                                                                      // "04:00PM",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            "Regular",
-                                                                        fontSize:
-                                                                            12,
-                                                                        color: Color(
-                                                                            0xff3D4461),
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ]),
-                                              ],
+                                                            ColorValues
+                                                                .LIGHT_TEXT_COLOR),
+                                                        fontSize:
+                                                        11),
+                                                  ),
+                                                  Text(
+                                                    MyUtils.getDateOfMonth(
+                                                        "${_list[pos].date}"),
+                                                    // "25",
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        21,
+                                                        color: Color(
+                                                            0xff21CDC0),
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  ),
+                                                  Text(
+                                                    MyUtils.getMonthName(
+                                                        "${_list[pos].date}"),
+                                                    // "Feb",
+                                                    style: TextStyle(
+                                                        color: Color(
+                                                            ColorValues
+                                                                .LIGHT_TEXT_COLOR),
+                                                        fontSize:
+                                                        11),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
+
+                                          Container(
+                                              margin:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 0,
+                                                  horizontal: 7),
+                                              height: 67,
+                                              child: VerticalDivider(
+                                                  color: Color(
+                                                      ColorValues.GREY))),
+
+                                          _list[pos].phlebotomist == null
+                                              ? Expanded(
+                                            child: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    2, 5, 15, 10),
+                                                decoration: BoxDecoration(
+                                                    color: Color(
+                                                        ColorValues
+                                                            .GRAY_BG),
+                                                    borderRadius:
+                                                    BorderRadius.all(Radius
+                                                        .circular(
+                                                        10.0))),
+                                                child: Container(
+                                                    margin:
+                                                    EdgeInsets.fromLTRB(
+                                                        15,
+                                                        15,
+                                                        10,
+                                                        20),
+                                                    child: Text(
+                                                        ValidationMsgs
+                                                            .PHLEBOTOMIST_MSG,
+                                                        style: TextStyle(
+                                                          color: Color(
+                                                              ColorValues
+                                                                  .BLACK_COL),
+                                                          fontSize:
+                                                          14,
+                                                        )))),
+                                          )
+                                              : Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                Text(
+                                                  _list[pos].phlebotomist ==
+                                                      null
+                                                      ? "Phlebotomist"
+                                                      : _list[pos]
+                                                      .phlebotomist
+                                                      .name ==
+                                                      null
+                                                      ? "Phlebotomist"
+                                                      : _list[pos]
+                                                      .phlebotomist
+                                                      .name,
+                                                  // "Phelbotomist Name",
+                                                  style: TextStyle(
+                                                      color: Color(
+                                                          ColorValues
+                                                              .BLACK_TEXT_COL),
+                                                      fontFamily:
+                                                      "Regular",
+                                                      fontSize: 13),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets
+                                                      .only(
+                                                      top: 5,
+                                                      bottom:
+                                                      10),
+                                                  child: Row(
+                                                    children: [
+                                                      Image(
+                                                          image: AssetImage(
+                                                              "assets/images/clock.png"),
+                                                          height:
+                                                          17,
+                                                          width:
+                                                          17),
+                                                      SizedBox(
+                                                        width: 7,
+                                                      ),
+                                                      Text(
+                                                          MyUtils
+                                                              .changeTimeFormat(
+                                                              "${_list[pos]
+                                                                  .timeFrom}") +
+                                                              " - " +
+                                                              MyUtils
+                                                                  .changeTimeFormat(
+                                                                  "${_list[pos]
+                                                                      .timeTo}"),
+                                                          // "04:00PM",
+                                                          style:
+                                                          TextStyle(
+                                                            fontFamily:
+                                                            "Regular",
+                                                            fontSize:
+                                                            12,
+                                                            color: Color(
+                                                                0xff3D4461),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ]),
+                                        ],
+                                      ),
+                                    ),
                                     Center(
                                       child: Container(
                                         margin:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                        EdgeInsets.fromLTRB(0, 0, 0, 20),
                                         child: Image(
                                           image: AssetImage(
                                               "assets/images/dashedLine.png"),
@@ -1065,7 +1128,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                     ),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.fromLTRB(
@@ -1074,9 +1137,9 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                             _list[pos].amount == null
                                                 ? ""
                                                 : "\$ " +
-                                                    _list[pos]
-                                                        .amount
-                                                        .toString(),
+                                                _list[pos]
+                                                    .amount
+                                                    .toString(),
                                             // "Confirmed",
                                             style: TextStyle(
                                                 fontSize: 13,
@@ -1091,56 +1154,56 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                           margin: EdgeInsets.fromLTRB(
                                               10, 0, 10, 20),
                                           child: _list[pos].paymentStatus ==
-                                                  null
+                                              null
                                               ? ""
                                               : _list[pos].paymentStatus ==
-                                                      "Paid"
-                                                  ? Text(
-                                                      _list[pos].paymentStatus ==
-                                                              null
-                                                          ? ""
-                                                          : _list[pos]
-                                                              .paymentStatus,
-                                                      // "Confirmed",
-                                                      style: TextStyle(
-                                                          fontSize: 13,
-                                                          color: Color(ColorValues
-                                                              .THEME_TEXT_COLOR),
-                                                          fontFamily:
-                                                              "Regular"),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    )
-                                                  : Container(
-                                                      decoration: BoxDecoration(
-                                                          color: Color(ColorValues
-                                                              .THEME_TEXT_COLOR),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 15,
-                                                                vertical: 7),
-                                                        child: Text(
-                                                          "Pay Now",
-                                                          // "Confirmed",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              color: Color(
-                                                                  ColorValues
-                                                                      .WHITE),
-                                                              // Color(ColorValues.),
-                                                              fontFamily:
-                                                                  "Regular"),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    ),
+                                              "Paid"
+                                              ? Text(
+                                            _list[pos].paymentStatus ==
+                                                null
+                                                ? ""
+                                                : _list[pos]
+                                                .paymentStatus,
+                                            // "Confirmed",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Color(ColorValues
+                                                    .THEME_TEXT_COLOR),
+                                                fontFamily:
+                                                "Regular"),
+                                            textAlign:
+                                            TextAlign.center,
+                                          )
+                                              : Container(
+                                            decoration: BoxDecoration(
+                                                color: Color(ColorValues
+                                                    .THEME_TEXT_COLOR),
+                                                borderRadius:
+                                                BorderRadius
+                                                    .circular(
+                                                    10)),
+                                            child: Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .symmetric(
+                                                  horizontal: 15,
+                                                  vertical: 7),
+                                              child: Text(
+                                                "Pay Now",
+                                                // "Confirmed",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Color(
+                                                        ColorValues
+                                                            .WHITE),
+                                                    // Color(ColorValues.),
+                                                    fontFamily:
+                                                    "Regular"),
+                                                textAlign:
+                                                TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -1154,21 +1217,21 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                     return Center(
                       child: isData
                           ? new Container(
-                              child: Center(
-                                child: Column(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(30.0),
-                                    child: Image(
-                                      height: 250,
-                                      width: 200,
-                                      image: AssetImage(
-                                          "assets/images/Nodatafound.jpg"),
-                                    ),
-                                  ),
-                                  Text("No data available!"),
-                                ]),
+                        child: Center(
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(30.0),
+                              child: Image(
+                                height: 250,
+                                width: 200,
+                                image: AssetImage(
+                                    "assets/images/Nodatafound.jpg"),
                               ),
-                            )
+                            ),
+                            Text("No data available!"),
+                          ]),
+                        ),
+                      )
                           : new Container(),
                     );
                   }

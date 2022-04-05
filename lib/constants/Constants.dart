@@ -54,6 +54,7 @@ class Constants{
   static final String CAT_SAMPLE = "TEST_SAMPLE";
   static final String USER = "user";
   static final String NUMBER_OF_FILES = "noOfFiles";
+  static final String IS_CONSENT = "isConsent";
 
 
   //_________________VALIDATION MESSAGES___________________
@@ -67,5 +68,6 @@ class Constants{
   static final String PRESCRIPTION_VALIDATION = "Please attach prescription";
   static final String REMARKS_VALIDATION = "Please attach prescription or add remarks";
   static final String SLOT_VALIDATION = "Please choose slot!";
+  static final String TnC_VALIDATION = "Please accept terms and conditions";
 
 }
