@@ -1265,7 +1265,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (otp.text != null && otp.text.length > 0) {
+                      if (otp.text.toString() != null && otp.text.length > 0) {
                         callLoginApi(mobileNumber);
                       } else {
                         MyUtils.showCustomToast(Constants.OTP_VALIDATION, true, context);
@@ -1314,7 +1314,7 @@ class HomeScreenState extends State<HomeScreen> {
       Map<String, String> headers = {"Content-type": "application/json"};
       Map mapBody = {
         Constants.MOBILE_NUM: mobileNumber,
-        Constants.OTP: otp.text,
+        Constants.OTP: otp.text.toString(),
         Constants.ROLE: Constants.ROLE_ID,
         Constants.DEVICE_ID: fcmToken
 
@@ -1348,11 +1348,16 @@ class HomeScreenState extends State<HomeScreen> {
               data['userModel']['mobileNumber'].toString());
 
           String isConsent = data['userModel']['isConsent'].toString();
-          if(isConsent.compareTo("true")==0) {
+          print(" consent ==== "+isConsent);
+
+          if(isConsent.compareTo("null")==0) {
+            preferences.setString(Constants.IS_CONSENT,"false");
+            print(" consent ==== "+"false");
+          }else{
             preferences.setString(Constants.IS_CONSENT,
                 data['userModel']['isConsent'].toString());
+            print(" consent ==== "+data['userModel']['isConsent'].toString());
           }
-          print(" consent ==== "+isConsent);
 
           print(preferences.getString(Constants.ID));
           print(preferences.getString(Constants.ACCESS_TOKEN));
