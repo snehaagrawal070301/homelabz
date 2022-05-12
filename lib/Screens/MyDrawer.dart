@@ -181,7 +181,7 @@ class _MyDrawerState extends State<MyDrawer> {
       print(response.statusCode);
       String body = response.body;
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 401) {
         print(body);
         // Fluttertoast.showToast(
         //   msg: "Logout",
