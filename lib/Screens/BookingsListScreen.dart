@@ -9,7 +9,8 @@ import 'package:homelabz/Screens/ConsentFormScreen.dart';
 import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
-import 'package:homelabz/Screens/PDFViewScreen.dart';
+import 'package:homelabz/Screens/PDFViewerPage.dart';
+import 'package:homelabz/Screens/PDF_API.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
 import 'package:homelabz/constants/ValidationMsgs.dart';
@@ -155,6 +156,10 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
         });
   }
 
+  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+    MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+  );
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -224,7 +229,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           // testing only
                           // Navigator.push(
                           //     context,
@@ -235,10 +240,14 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                           // check for consent form
                           if (!(preferences.getString(Constants.IS_CONSENT)
                               .compareTo("true") == 0)) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ConsentFormScreen()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => ConsentFormScreen()));
+                            final path = 'assets/images/sample.pdf';
+                            final file = await PDFApi.loadAsset(path);
+                            openPDF(context, file);
+
                           } else {
                             Navigator.push(
                                 context,
