@@ -9,7 +9,6 @@ import 'package:homelabz/Screens/ConsentFormScreen.dart';
 import 'package:homelabz/Screens/MyDrawer.dart';
 import 'package:homelabz/Screens/NotificationScreen.dart';
 import 'package:homelabz/Screens/BottomNavBar.dart';
-import 'package:homelabz/Screens/PDFViewerPage.dart';
 import 'package:homelabz/Screens/PDF_API.dart';
 import 'package:homelabz/components/ColorValues.dart';
 import 'package:homelabz/constants/Constants.dart';
@@ -157,7 +156,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
   }
 
   void openPDF(BuildContext context, File file) => Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => PDFViewerPage(file: file)),
+    MaterialPageRoute(builder: (context) => ConsentFormScreen(file: file)),
   );
 
   @override
