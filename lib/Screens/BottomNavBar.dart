@@ -15,28 +15,31 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
-    return ConvexAppBar(
-      color: Color(ColorValues.THEME_COLOR),
-      backgroundColor: Color(ColorValues.THEME_COLOR),
-      items: [
-        TabItem(icon: Icons.home, title: "Home"),
-      ],
-      onTap: (int i) {
+    return Container(
+      height: 35,
+      child: ConvexAppBar(
+        color: Color(ColorValues.THEME_COLOR),
+        backgroundColor: Color(ColorValues.THEME_COLOR),
+        items: [
+          TabItem(icon: Icons.home, title: "Home"),
+        ],
+        onTap: (int i) {
 //        Navigator.pushReplacement(
 //            context,
 //            MaterialPageRoute(
 //                builder: (context) => HomeScreen()));
-        // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-        if (widget.screenName != "") {
-          if (widget.screenName.compareTo("homeScreen") == 0) {
-            // do nothing
-          }else if(widget.screenName.compareTo("bookingScreen") == 0) {
-            showAlertDialog(context);
+          // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+          if (widget.screenName != "") {
+            if (widget.screenName.compareTo("homeScreen") == 0) {
+              // do nothing
+            }else if(widget.screenName.compareTo("bookingScreen") == 0) {
+              showAlertDialog(context);
+            }
+          } else {
+            makeRoutePage(context: context, pageRef: HomeScreen());
           }
-        } else {
-          makeRoutePage(context: context, pageRef: HomeScreen());
-        }
-      },
+        },
+      ),
     );
   }
 

@@ -573,10 +573,14 @@ class BookingUpdateState extends State<BookingUpdate> {
     setState(() {
       _loadingPath = false;
       for (var obj in listOfImages) {
-        // Size check < 5 MB
+        // Size check > 5 MB (5000000)
         print("size ======= ${obj.size}");
-        File file = File(obj.path);
-        setData(file);
+        if(obj.size<5000000) {
+          File file = File(obj.path);
+          setData(file);
+        }else{
+          MyUtils.showCustomToast("File is too big to upload. try with other file", true, context);
+        }
       }
     });
   }
@@ -1308,7 +1312,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                         Container(
                           margin: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 0),
                           child: Text(
-                            "Test Sample",
+                            "Prescription",
                             style: TextStyle(
                               fontSize: Values.VALUE_SIZE,
                               fontFamily: "Regular",
@@ -1400,7 +1404,7 @@ class BookingUpdateState extends State<BookingUpdate> {
                                                           ? AssetImage(
                                                           "assets/images/uploadLogo.png")
                                                           : AssetImage(
-                                                          "assets/images/ic_sample.png"),
+                                                          "assets/images/prescription_logo.jpg"),
                                                       height: 50,
                                                       width: 50,
                                                       // alignment: Alignment.centerLeft,

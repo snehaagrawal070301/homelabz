@@ -52,6 +52,7 @@ class Constants{
   static final String EMAIL = "email";
   static final String CAT_PRESCRIPTION = "BOOKING";
   static final String CAT_SAMPLE = "TEST_SAMPLE";
+  static final String CAT_REPORT = "REPORT";
   static final String USER = "user";
   static final String NUMBER_OF_FILES = "noOfFiles";
   static final String IS_CONSENT = "isConsent";

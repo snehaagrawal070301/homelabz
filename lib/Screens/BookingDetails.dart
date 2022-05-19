@@ -31,6 +31,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   SharedPreferences preferences;
   BookingDetailsModel _model;
   List<PrescriptionModel> prescriptionList = [];
+  List<PrescriptionModel> reportList = [];
   TextEditingController remarks;
   Dio dio = Dio();
   double progress = 0.0;
@@ -120,6 +121,10 @@ class _BookingDetailsState extends State<BookingDetails> {
           PrescriptionModel model = PrescriptionModel.fromJson(data[i]);
           if(model.category.compareTo(Constants.CAT_PRESCRIPTION)==0) {
             prescriptionList.add(model);
+          }
+
+          if(model.category.compareTo(Constants.CAT_REPORT)==0) {
+            reportList.add(model);
           }
 
           setState(() {});
@@ -1125,6 +1130,95 @@ class _BookingDetailsState extends State<BookingDetails> {
                 //   maxLines: 3,
                 // ),
               ),
+
+              Container(
+                margin: EdgeInsets.only(top: 25),
+                child: Text(
+                  'Report',
+                  style: TextStyle(
+                    fontSize: Values.HEADING_SIZE,
+                    fontFamily: "Regular",
+                    fontWeight: FontWeight.bold,
+                    color: Color(
+                        ColorValues.THEME_TEXT_COLOR),
+                  ),
+                ),
+              ),
+
+              Container(
+                  margin: EdgeInsets.only(
+                      top: 10, right: 5, left: 5, bottom: 20),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Color(ColorValues.WHITE),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 5.0,
+                          spreadRadius: 0.5,
+                        )
+                      ]),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: reportList.length > 0
+                              ? GridView.builder(
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio:
+                                (MediaQuery.of(context)
+                                    .size
+                                    .width) /
+                                    (MediaQuery.of(context)
+                                        .size
+                                        .height /
+                                        3),
+                              ),
+                              shrinkWrap: true,
+                              primary: false,
+                              scrollDirection: Axis.vertical,
+                              itemCount: reportList.length,
+                              itemBuilder: (BuildContext ctx, pos) {
+                                return Container(
+                                    child: Stack(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: 8,left: 15),
+                                            child: GestureDetector(
+                                                onTap: () async {
+                                                  downloadPrescription(reportList[pos].path);
+                                                },
+                                                child: Container(
+                                                    child: Stack(
+                                                      children: [
+                                                        Container(
+                                                          child: Image(
+                                                            image: AssetImage("assets/images/ic_sample.png"),
+                                                            height: 50,
+                                                            width: 50,
+                                                            alignment: Alignment.centerLeft,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ))
+                                            ),
+                                          ),
+                                        ]
+                                    ));
+                              })
+                              : Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(child: Text("No Report Available")),
+                          ),
+                        ),
+                      ])),
+
 ///////////////////////////////////////////////////////////////////
             // Invoice code
             //   Container(

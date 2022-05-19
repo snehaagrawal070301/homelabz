@@ -181,7 +181,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                 ),
           ),
           title: Text(
-            "Make an Appointment",
+            "Appointments",
             style: TextStyle(
                 fontFamily: "Regular",
                 fontSize: 18,
@@ -217,7 +217,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
             Container(
               color: Color(ColorValues.THEME_COLOR),
               child: Container(
-                  height: 120,
+                  height: 100,
                   width: MediaQuery
                       .of(context)
                       .size
@@ -281,44 +281,44 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                     ],
                   )),
             ),
+            // Positioned(
+            //   top: 80,
+            //   left: 10,
+            //   right: 10,
+            //   child: Container(
+            //     width: MediaQuery
+            //         .of(context)
+            //         .size
+            //         .width,
+            //     height: MediaQuery
+            //         .of(context)
+            //         .size
+            //         .height,
+            //     // alignment: Alignment.center,
+            //     decoration: BoxDecoration(
+            //         color: Color(ColorValues.WHITE_COLOR),
+            //         borderRadius: BorderRadius.circular(10),
+            //         boxShadow: [
+            //           BoxShadow(
+            //             color: Colors.grey,
+            //             blurRadius: 7.0,
+            //             spreadRadius: 1.0,
+            //           )
+            //         ]),
+            //     child: Container(
+            //         padding: EdgeInsets.all(10),
+            //         color: Colors.white,
+            //         child: Text(
+            //           _list == null ? "" : "Upcoming Appointments",
+            //           style: TextStyle(
+            //               color: Color(ColorValues.BLACK_COLOR),
+            //               fontSize: 14,
+            //               fontFamily: "Regular"),
+            //         )),
+            //   ),
+            // ),
             Positioned(
-              top: 80,
-              left: 10,
-              right: 10,
-              child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                // alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Color(ColorValues.WHITE_COLOR),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 7.0,
-                        spreadRadius: 1.0,
-                      )
-                    ]),
-                child: Container(
-                    padding: EdgeInsets.all(10),
-                    color: Colors.white,
-                    child: Text(
-                      _list == null ? "" : "Upcoming Appointments",
-                      style: TextStyle(
-                          color: Color(ColorValues.BLACK_COLOR),
-                          fontSize: 14,
-                          fontFamily: "Regular"),
-                    )),
-              ),
-            ),
-            Positioned(
-              top: 120,
+              top: 70,
               left: 15,
               right: 15,
               bottom: 5,
@@ -357,7 +357,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                               ConsentFormScreen()));
                                 } else {
                                   _list[pos].paymentStatus == "Unpaid"
-                                      ? _list[pos].isASAP
+                                      ? _list[pos].isASAP!=null? _list[pos].isASAP
                                       ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -370,7 +370,12 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                           builder: (context) =>
                                               ChooseDateScreen(
                                                   true, _list[pos].id)))
-                                      : Navigator.push(
+                                      :Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AsapScreen(
+                                                  true, _list[pos].id))): Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
@@ -378,7 +383,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                                 }
                               },
                               child: Container(
-                                margin: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                                margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 width: MediaQuery
                                     .of(context)
                                     .size

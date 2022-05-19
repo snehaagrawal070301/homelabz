@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -53,6 +54,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ProgressDialog dialog;
   String imageUrl;
   String oldImagePath;
+  List<PlatformFile> listOfImages;
+  bool _loadingPath = false;
 
   @override
   void initState() {
@@ -182,6 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Photo Library'),
                       onTap: () {
+                        // _openFileExplorer();
                         _imgFromGallery();
                         Navigator.of(context).pop();
                       }),
@@ -237,6 +241,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
       uploadFlag = true;
     });
   }
+
+  // void _openFileExplorer() async {
+  //   setState(() => _loadingPath = true);
+  //   try {
+  //     listOfImages = (await FilePicker.platform.pickFiles(
+  //         allowMultiple: false,
+  //         type: FileType.custom,
+  //         allowedExtensions: ['jpg', 'png', 'jpeg']))
+  //         ?.files;
+  //   } on PlatformException catch (e) {
+  //     print("Unsupported operation" + e.toString());
+  //   } catch (ex) {
+  //     print(ex);
+  //   }
+  //   if (!mounted) return;
+  //     for (var obj in listOfImages) {
+  //       // Size check > 5 MB (5000000)
+  //       print("size ======= ${obj.size}");
+  //       if(obj.size<5000000) {
+  //         // File file = File(obj.path);
+  //         // // setData(file);
+  //         setState(() {
+  //           _loadingPath = false;
+  //         imageFile = imageFile;
+  //         uploadFlag = true;
+  //         });
+  //       }else{
+  //         MyUtils.showCustomToast("File is too big to upload. try with other file", true, context);
+  //       }
+  //     }
+  //
+  // }
 
   Future<void> getPreSignedUrl(String fileExt) async {
     String imageName =

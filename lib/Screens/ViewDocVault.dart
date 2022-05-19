@@ -134,10 +134,14 @@ class _ViewDocVaultState extends State<ViewDocVault> {
     setState(() {
       _loadingPath = false;
       for (var obj in listOfImages) {
-        // Size check < 5 MB
+        // Size check > 5 MB (5000000)
         print("size ======= ${obj.size}");
-        File file = File(obj.path);
-        setData(file);
+        if(obj.size<5000000) {
+          File file = File(obj.path);
+          setData(file);
+        }else{
+          MyUtils.showCustomToast("File is too big to upload. try with other file", true, context);
+        }
       }
     });
   }
