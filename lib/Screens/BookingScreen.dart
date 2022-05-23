@@ -233,6 +233,7 @@ class BookingScreenState extends State<BookingScreen> {
   void validateData() {
     if (selectedLabId != null) {
       if (searchAddress != null && searchAddress.length > 0) {
+        preferences.setString("address", searchAddress);
         if (convertedDateTime != null && convertedDateTime.length > 0) {
           if (gender != null && gender.length > 0) {
             if (imageList != null && imageList.length > 1) {

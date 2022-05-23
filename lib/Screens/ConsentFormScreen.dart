@@ -131,7 +131,7 @@ class _ConsentFormScreenState extends State<ConsentFormScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text('Consent Form'),
         actions: pages >= 2
             ? [
           Center(child: Text(text)),
@@ -153,11 +153,12 @@ class _ConsentFormScreenState extends State<ConsentFormScreen> {
             : null,
       ),
       body:         Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          new Container(
+      Expanded(
+      child: new Container(
 
-            height: 300.0,
+           // height: 300.0,
             padding: EdgeInsets.all(0.0),
             child: PDFView(
               filePath: widget.file.path,
@@ -165,6 +166,7 @@ class _ConsentFormScreenState extends State<ConsentFormScreen> {
               // swipeHorizontal: true,
               // pageSnap: false,
               // pageFling: false,
+
               onRender: (pages) => setState(() => this.pages = pages),
               onViewCreated: (controller) =>
                   setState(() => this.controller = controller),
@@ -172,82 +174,91 @@ class _ConsentFormScreenState extends State<ConsentFormScreen> {
                   setState(() => this.indexPage = indexPage),
             ),
           ),
-          Container(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: Checkbox(
-                      checkColor: Color(ColorValues.WHITE),
-                      activeColor: Color(ColorValues.THEME_TEXT_COLOR),
-                      value: this.isConsent,
-                      onChanged: (bool value) {
-                        setState(() {
-                          this.isConsent = value;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                      child: Text("I accept all the terms and conditions!",
-                          style:
-                          TextStyle(fontFamily: "Regular", fontSize: 16),
-                          textAlign: TextAlign.center)),
-                ]),
           ),
-          Container(
-            //  alignment: Alignment.bottomRight,
-            margin: EdgeInsets.all(10.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Cancel",
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: "Regular",
-                              fontSize: 16,
-                              color: Color(ColorValues.BLACK_COL)),
-                        ),
-                      )),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, right: 15, top: 20, bottom: 20),
-                    height: 40,
-                    width: MediaQuery.of(context).size.width / 4,
-                    decoration: isConsent
-                        ? BoxDecoration(
-                      color: const Color(ColorValues.THEME_TEXT_COLOR),
-                      borderRadius: BorderRadius.circular(5),
-                    )
-                        : BoxDecoration(
-                      color: const Color(ColorValues.GRAY),
-                      borderRadius: BorderRadius.circular(5),
+    Align(
+    alignment: Alignment.bottomCenter,
+    child: new Column(children: [
+      Container(
+        child:
+
+
+        Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: Checkbox(
+                  checkColor: Color(ColorValues.WHITE),
+                  activeColor: Color(ColorValues.THEME_TEXT_COLOR),
+                  value: this.isConsent,
+                  onChanged: (bool value) {
+                    setState(() {
+                      this.isConsent = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                  child: Text("I accept all the terms and conditions!",
+                      style:
+                      TextStyle(fontFamily: "Regular", fontSize: 16),
+                      textAlign: TextAlign.center)),
+            ]),
+      ),
+      Container(
+        //  alignment: Alignment.bottomRight,
+        margin: EdgeInsets.all(10.0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Cancel",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          fontFamily: "Regular",
+                          fontSize: 16,
+                          color: Color(ColorValues.BLACK_COL)),
                     ),
-                    child: TextButton(
-                      onPressed: () {
-                        if (isConsent) {
-                          // Update Consent api
-                          updateConsent();
-                        } else {
-                          MyUtils.showCustomToast(
-                              Constants.TnC_VALIDATION, true, context);
-                        }
-                      },
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(
-                            color: Color(ColorValues.WHITE), fontSize: 16),
-                      ),
-                    ),
+                  )),
+              Container(
+                margin: EdgeInsets.only(
+                    left: 20, right: 15, top: 20, bottom: 20),
+                height: 40,
+                width: MediaQuery.of(context).size.width / 4,
+                decoration: isConsent
+                    ? BoxDecoration(
+                  color: const Color(ColorValues.THEME_TEXT_COLOR),
+                  borderRadius: BorderRadius.circular(5),
+                )
+                    : BoxDecoration(
+                  color: const Color(ColorValues.GRAY),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    if (isConsent) {
+                      // Update Consent api
+                      updateConsent();
+                    } else {
+                      MyUtils.showCustomToast(
+                          Constants.TnC_VALIDATION, true, context);
+                    }
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        color: Color(ColorValues.WHITE), fontSize: 16),
                   ),
-                ]),
+                ),
+              ),
+            ]),
+      ),
+    ],)
           ),
         ],
       ),

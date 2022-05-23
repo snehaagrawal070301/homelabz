@@ -16,7 +16,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35,
       child: ConvexAppBar(
         color: Color(ColorValues.THEME_COLOR),
         backgroundColor: Color(ColorValues.THEME_COLOR),
